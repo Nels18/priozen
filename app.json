@@ -10,9 +10,9 @@
     "newArchEnabled": true,
     "ios": {
       "icon": {
-        "dark": "./assets/images/ios-dark.png",
-        "light": "./assets/images/ios-light.png",
-        "tinted": "./assets/images/ios-tinted.png"
+        "dark": "./assets/images/ios-icon-dark.png",
+        "light": "./assets/images/ios-icon-light.png",
+        "tinted": "./assets/images/ios-icon-tinted.png"
       },
       "supportsTablet": true
     },
