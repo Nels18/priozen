@@ -9,7 +9,7 @@ module.exports = defineConfig([
   expoConfig,
   ...tseslint.configs.recommendedTypeChecked,
   {
-    ignores: ['dist/*'],
+    ignores: ['dist/*', 'eslint.config.js', '.validate-branch-namerc.js'],
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
@@ -62,6 +62,10 @@ module.exports = defineConfig([
         {
           selector: 'variable',
           format: ['camelCase', 'UPPER_CASE'],
+        },
+        {
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'],
         },
         {
           selector: 'typeLike',
