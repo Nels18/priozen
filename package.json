@@ -15,7 +15,8 @@
     "test:coverage": "vitest run --coverage",
     "commit": "czg",
     "commitlint": "commitlint --edit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "version": "npx auto-changelog -p && git add CHANGELOG.md"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -52,6 +53,7 @@
     "@commitlint/config-conventional": "^20.5.0",
     "@types/react": "~19.1.0",
     "@vitest/coverage-v8": "^4.1.5",
+    "auto-changelog": "^2.5.0",
     "cz-git": "^1.12.0",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
