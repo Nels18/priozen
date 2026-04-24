@@ -9,6 +9,9 @@
 # production
 /build
 
+# documentation
+/docs
+
 # expo
 /.expo/
 /dist/
