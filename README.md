@@ -1,12 +1,37 @@
-# Priolist — Your priority list, simplified.
+<h1 align="center">Priolist — Your priority list, simplified.</h1>
 
-<img src="assets/images/ios-icon-light.png" alt="Priolist logo" align="right" width="80"/>
+<p align="center">
+  <img src="assets/images/ios-icon-light.png" alt="priolist-logo" width="120px" height="120px"/>
+  <br>
+  <em>Priolist is a hybrid app (iOS, Android, Web) built with Expo and React Native,
+    <br> using Expo Router for file-based navigation and NativeWind for styling.</em>
+  <br>
+</p>
 
-Priolist is a hybrid app (iOS, Android, Web) built with [Expo](https://expo.dev) and [React Native](https://reactnative.dev), using [Expo Router](https://expo.github.io/router) for file-based navigation and [NativeWind](https://www.nativewind.dev) for styling.
+<p align="center">
+  <a href="CONTRIBUTING.md">Contributing Guidelines</a>
+  ·
+  <a href="CHANGELOG.md">Changelog</a>
+  ·
+  <a href="https://github.com/Nels18/priolist/issues">Submit an Issue</a>
+  <br>
+  <br>
+</p>
 
-[Contributing Guidelines](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Submit an Issue](#)
+<p align="center">
+  <a href="https://github.com/Nels18/priolist/actions/workflows/ci.yml">
+    <img src="https://github.com/Nels18/priolist/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  </a>
+  <a href="https://github.com/Nels18/priolist/releases">
+    <img src="https://img.shields.io/github/v/release/Nels18/priolist?label=version" alt="Latest release" />
+  </a>
+  <img src="https://img.shields.io/badge/Expo-55-000020?logo=expo&logoColor=white" alt="Expo SDK" />
+  <img src="https://img.shields.io/badge/React_Native-0.81-61DAFB?logo=react&logoColor=white" alt="React Native" />
+  <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Node.js-22+-339933?logo=nodedotjs&logoColor=white" alt="Node.js" />
+</p>
 
-[![CI](https://github.com/Nels18/priolist/actions/workflows/ci.yml/badge.svg)](https://github.com/Nels18/priolist/actions/workflows/ci.yml)
+<hr>
 
 ## Quickstart
 
