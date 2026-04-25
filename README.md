@@ -1,6 +1,59 @@
-# Priolist
+# Priolist — Your priority list, simplified.
 
-Hybrid app (iOS, Android, Web) built with [Expo](https://expo.dev) and [React Native](https://reactnative.dev).
+<img src="assets/images/ios-icon-light.png" alt="Priolist logo" align="right" width="80"/>
+
+Priolist is a hybrid app (iOS, Android, Web) built with [Expo](https://expo.dev) and [React Native](https://reactnative.dev), using [Expo Router](https://expo.github.io/router) for file-based navigation and [NativeWind](https://www.nativewind.dev) for styling.
+
+[Contributing Guidelines](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) · [Submit an Issue](#)
+
+[![CI](https://github.com/Nels18/priolist/actions/workflows/ci.yml/badge.svg)](https://github.com/Nels18/priolist/actions/workflows/ci.yml)
+
+## Quickstart
+
+```bash
+npm install && npm start
+```
+
+Open the Expo Go app on your device, or press `i` for iOS simulator, `a` for Android emulator, `w` for web.
+
+## Documentation
+
+API documentation is generated with [TypeDoc](https://typedoc.org) from TypeScript source files.
+
+```bash
+npm run docs   # Generate docs into the docs/ folder
+```
+
+## Development Setup
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 22+
+- [EAS CLI](https://docs.expo.dev/eas/): `npm install -g eas-cli`
+
+### Installation
+
+```bash
+npm install
+```
+
+### Running the app
+
+```bash
+npm start           # Start the Expo dev server
+npm run ios         # iOS simulator
+npm run android     # Android emulator
+npm run web         # Browser
+```
+
+### Code quality
+
+```bash
+npm run lint            # ESLint + Prettier
+npm run test            # Unit tests (Vitest)
+npm run test:watch      # Tests in watch mode
+npm run test:coverage   # Coverage report
+```
 
 ## Tech Stack
 
@@ -14,54 +67,34 @@ Hybrid app (iOS, Android, Web) built with [Expo](https://expo.dev) and [React Na
 | Linting        | [ESLint](https://eslint.org) + [Prettier](https://prettier.io)                                                        |
 | Build & Deploy | [EAS Build](https://docs.expo.dev/build/introduction) + [EAS Hosting](https://docs.expo.dev/eas/hosting/introduction) |
 
-## Prerequisites
+## CI/CD Pipeline
 
-- Node.js 22+
-- [EAS CLI](https://docs.expo.dev/eas/): `npm install -g eas-cli`
-
-## Installation
-
-```bash
-npm install
+```
+PR → CI (lint + tests on changed files)
+       ↓
+merge main
+       ↓
+GitHub Actions Release (versioning + tag)
+       ↓
+       ├─ EAS deploy-web          → Web (EAS Hosting)
+       └─ EAS release-production  → iOS + Android → Stores
 ```
 
-## Development
+| Workflow                 | Trigger                        | Action                                         |
+| ------------------------ | ------------------------------ | ---------------------------------------------- |
+| `ci.yml`                 | Push / PR on `main`, `develop` | Lint + tests + coverage                        |
+| `release.yml`            | Manual                         | Version bump + docs + Git tag                  |
+| `preview-builds.yml`     | PR to `main`                   | Build iOS + Android preview (internal)         |
+| `release-production.yml` | Tag `v*`                       | Build iOS + Android → approval → submit stores |
+| `deploy-web.yml`         | Tag `v*`                       | Web deployment via EAS Hosting                 |
 
-```bash
-npm start           # Start the Expo dev server
-npm run ios         # Run on iOS simulator
-npm run android     # Run on Android emulator
-npm run web         # Run in the browser
-```
+## Changelog
 
-## Code Quality
-
-```bash
-npm run lint            # ESLint + Prettier
-npm run test            # Unit tests (Vitest)
-npm run test:watch      # Tests in watch mode
-npm run test:coverage   # Code coverage
-```
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for branch naming conventions, commit message guidelines, and the pull request process.
-
-```bash
-npm run commit   # Interactive conventional commit interface
-```
-
-## Documentation
-
-Documentation is generated with [TypeDoc](https://typedoc.org) from TypeScript source files.
-
-```bash
-npm run docs   # Generate docs into the docs/ folder
-```
+[Learn about the latest improvements](CHANGELOG.md).
 
 ## Release
 
-Releases are managed via GitHub Actions. Go to **GitHub → Actions → Release → Run workflow** and choose the version type:
+Releases are managed via **GitHub → Actions → Release → Run workflow**. Choose the version type:
 
 | Type    | When to use     | Example           |
 | ------- | --------------- | ----------------- |
@@ -69,48 +102,10 @@ Releases are managed via GitHub Actions. Go to **GitHub → Actions → Release 
 | `minor` | New feature     | `1.0.0` → `1.1.0` |
 | `major` | Breaking change | `1.0.0` → `2.0.0` |
 
-The workflow automatically:
+## Contributing
 
-1. Runs tests
-2. Generates documentation
-3. Bumps the version + creates a Git tag
-4. Pushes the tag → triggers EAS Workflows
+Read the [contributing guidelines](CONTRIBUTING.md) before opening a pull request.
 
-## CI/CD
-
-### GitHub Actions
-
-| Workflow      | Trigger                        | Action                  |
-| ------------- | ------------------------------ | ----------------------- |
-| `ci.yml`      | Push / PR on `main`, `develop` | Lint + tests + coverage |
-| `release.yml` | Manual                         | Versioning + docs + tag |
-
-### EAS Workflows
-
-| Workflow                 | Trigger      | Action                                         |
-| ------------------------ | ------------ | ---------------------------------------------- |
-| `preview-builds.yml`     | PR to `main` | Build iOS + Android (internal preview)         |
-| `release-production.yml` | Tag `v*`     | Build iOS + Android → approval → Submit stores |
-| `deploy-web.yml`         | Tag `v*`     | Web deployment via EAS Hosting                 |
-
-### Full Pipeline
-
-```
-PR → CI (lint + tests)
-       ↓
-merge main
-       ↓
-GitHub Actions Release (versioning + tag)
-       ↓
-       ├─ EAS deploy-web          → Web in production
-       └─ EAS release-production  → iOS + Android → Stores
-```
-
-## Project Structure
-
-```
-app/                  # Screens and navigation (Expo Router)
-assets/               # Images, fonts
-.eas/workflows/       # EAS Workflows (mobile + web CI/CD)
-.github/workflows/    # GitHub Actions (CI + release)
+```bash
+npm run commit   # Interactive conventional commit interface
 ```
