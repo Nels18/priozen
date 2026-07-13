@@ -28,7 +28,7 @@ export const userHandler = [
     if (!body.currentPassword || !body.newPassword) {
       return HttpResponse.json(
         { message: 'Both passwords are required.' },
-        { status: 400 },
+        { status: 422 },
       );
     }
 

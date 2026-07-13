@@ -33,7 +33,7 @@ export const foldersHandler = [
     if (!body.name?.trim()) {
       return HttpResponse.json(
         { message: 'Name is required.' },
-        { status: 400 },
+        { status: 422 },
       );
     }
 

@@ -105,13 +105,13 @@ describe('POST /tasks', () => {
     expect(body.deletedAt).toBeNull();
   });
 
-  it('rejects a missing or blank title with 400', async (): Promise<void> => {
+  it('rejects a missing or blank title with 422', async (): Promise<void> => {
     const response = await fetch('http://test.local/tasks', {
       method: 'POST',
       body: JSON.stringify({ title: '   ' }),
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
   });
 });
 

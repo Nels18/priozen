@@ -37,13 +37,13 @@ describe('PATCH /user/me', () => {
 });
 
 describe('PATCH /user/me/password', () => {
-  it('rejects a missing password with 400', async (): Promise<void> => {
+  it('rejects a missing password with 422', async (): Promise<void> => {
     const response = await fetch('http://test.local/user/me/password', {
       method: 'PATCH',
       body: JSON.stringify({ currentPassword: 'password123' }),
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
   });
 
   it('rejects an incorrect current password with 401', async (): Promise<void> => {

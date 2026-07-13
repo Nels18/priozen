@@ -30,13 +30,13 @@ describe('POST /auth/login', () => {
     expect(body.user).toBeTruthy();
   });
 
-  it('rejects a missing email or password with 400', async (): Promise<void> => {
+  it('rejects a missing email or password with 422', async (): Promise<void> => {
     const response = await fetch('http://test.local/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email: 'nelson@priolist.app' }),
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
   });
 
   it('rejects invalid credentials with 401', async (): Promise<void> => {
@@ -72,13 +72,13 @@ describe('POST /auth/register', () => {
     expect(body.user.email).toBe('ada@priolist.app');
   });
 
-  it('rejects an incomplete payload with 400', async (): Promise<void> => {
+  it('rejects an incomplete payload with 422', async (): Promise<void> => {
     const response = await fetch('http://test.local/auth/register', {
       method: 'POST',
       body: JSON.stringify({ email: 'ada@priolist.app' }),
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
   });
 
   it('rejects an already-used email with 409', async (): Promise<void> => {
@@ -108,16 +108,16 @@ describe('POST /auth/forgot-password', () => {
 });
 
 describe('POST /auth/reset-password', () => {
-  it('rejects a missing token or password with 400', async (): Promise<void> => {
+  it('rejects a missing token or password with 422', async (): Promise<void> => {
     const response = await fetch('http://test.local/auth/reset-password', {
       method: 'POST',
       body: JSON.stringify({ password: 'new-password' }),
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
   });
 
-  it('rejects an invalid token with 400', async (): Promise<void> => {
+  it('rejects an invalid token with 422', async (): Promise<void> => {
     const response = await fetch('http://test.local/auth/reset-password', {
       method: 'POST',
       body: JSON.stringify({
@@ -126,7 +126,7 @@ describe('POST /auth/reset-password', () => {
       }),
     });
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
   });
 
   it('accepts a valid token', async (): Promise<void> => {

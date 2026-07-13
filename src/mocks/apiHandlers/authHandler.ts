@@ -15,7 +15,7 @@ export const authHandler = [
     if (!body.email || !body.password) {
       return HttpResponse.json(
         { message: 'Email and password are required.' },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
@@ -42,7 +42,7 @@ export const authHandler = [
     if (!body.email || !body.password || !body.firstName || !body.lastName) {
       return HttpResponse.json(
         { message: 'All fields are required.' },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
@@ -87,14 +87,14 @@ export const authHandler = [
     if (!body.token || !body.password) {
       return HttpResponse.json(
         { message: 'Token and password are required.' },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
     if (body.token === 'invalid-token') {
       return HttpResponse.json(
         { message: 'Token is invalid or has expired.' },
-        { status: 400 },
+        { status: 422 },
       );
     }
 

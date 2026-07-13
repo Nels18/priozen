@@ -64,7 +64,7 @@ export const tasksHandler = [
     if (!body.title?.trim()) {
       return HttpResponse.json(
         { message: 'Title is required.' },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
