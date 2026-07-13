@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "priolist",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "bundleIdentifier": "com.priolist.app",
       "icon": {
@@ -24,7 +23,6 @@
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
