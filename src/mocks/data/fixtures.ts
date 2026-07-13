@@ -1,8 +1,5 @@
 export type EisenhowerQuadrant =
-  | 'critical'
-  | 'schedule'
-  | 'delegate'
-  | 'secondary';
+  'critical' | 'schedule' | 'delegate' | 'secondary';
 
 export interface User {
   id: string;
