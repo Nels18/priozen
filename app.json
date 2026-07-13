@@ -9,6 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "bundleIdentifier": "com.priolist.app",
       "icon": {
         "dark": "./assets/images/ios-icon-dark.png",
         "light": "./assets/images/ios-icon-light.png",
@@ -17,6 +18,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.priolist.app",
       "adaptiveIcon": {
         "backgroundColor": "#4F46E5",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
