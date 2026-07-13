@@ -47,6 +47,9 @@ app-example
 .env*.local
 .env
 
+# claude code local settings
+.claude/settings.local.json
+
 # typescript
 *.tsbuildinfo
 
