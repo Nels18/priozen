@@ -1,11 +1,12 @@
 import { http, HttpResponse } from 'msw';
+import { tasksRoutes } from '../../api/routes';
 import type { Task } from '../data/fixtures';
 import { database } from '../database';
 import { createId, randomDelay } from '../utils';
 
 export const tasksHandler = [
   // GET /tasks
-  http.get('*/tasks', async ({ request }) => {
+  http.get(`*${tasksRoutes.list()}`, async ({ request }) => {
     await randomDelay(200, 600);
     const url = new URL(request.url);
     const search = url.searchParams.get('search')?.toLowerCase();
@@ -45,7 +46,7 @@ export const tasksHandler = [
   }),
 
   // GET /tasks/:id
-  http.get('*/tasks/:id', async ({ params }) => {
+  http.get(`*${tasksRoutes.detail(':id')}`, async ({ params }) => {
     await randomDelay(150, 400);
     const task = database.getTask(params.id);
 
@@ -57,7 +58,7 @@ export const tasksHandler = [
   }),
 
   // POST /tasks
-  http.post('*/tasks', async ({ request }) => {
+  http.post(`*${tasksRoutes.list()}`, async ({ request }) => {
     await randomDelay(300, 600);
     const body = (await request.json()) as Partial<Task>;
 
@@ -86,7 +87,7 @@ export const tasksHandler = [
   }),
 
   // PATCH /tasks/:id
-  http.patch('*/tasks/:id', async ({ params, request }) => {
+  http.patch(`*${tasksRoutes.detail(':id')}`, async ({ params, request }) => {
     await randomDelay(200, 500);
     const body = (await request.json()) as Partial<Task>;
     const updated = database.updateTask(params.id, body);
@@ -99,7 +100,7 @@ export const tasksHandler = [
   }),
 
   // DELETE /tasks/:id — soft delete (move to trash)
-  http.delete('*/tasks/:id', async ({ params }) => {
+  http.delete(`*${tasksRoutes.detail(':id')}`, async ({ params }) => {
     await randomDelay(200, 500);
     const updated = database.updateTask(params.id, {
       deletedAt: new Date().toISOString(),
@@ -113,7 +114,7 @@ export const tasksHandler = [
   }),
 
   // POST /tasks/:id/restore
-  http.post('*/tasks/:id/restore', async ({ params }) => {
+  http.post(`*${tasksRoutes.restore(':id')}`, async ({ params }) => {
     await randomDelay(200, 500);
     const updated = database.updateTask(params.id, {
       deletedAt: null,
@@ -127,7 +128,7 @@ export const tasksHandler = [
   }),
 
   // DELETE /tasks/:id/permanent
-  http.delete('*/tasks/:id/permanent', async ({ params }) => {
+  http.delete(`*${tasksRoutes.permanent(':id')}`, async ({ params }) => {
     await randomDelay(200, 500);
     const isRemoved = database.removeTask(params.id);
 
@@ -139,7 +140,7 @@ export const tasksHandler = [
   }),
 
   // DELETE /tasks/trash/empty
-  http.delete('*/tasks/trash/empty', async () => {
+  http.delete(`*${tasksRoutes.trashEmpty()}`, async () => {
     await randomDelay(300, 600);
     database.emptyTrash();
     return HttpResponse.json({ message: 'Trash emptied.' });

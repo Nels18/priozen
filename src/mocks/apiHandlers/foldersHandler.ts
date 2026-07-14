@@ -1,17 +1,18 @@
 import { http, HttpResponse } from 'msw';
+import { foldersRoutes } from '../../api/routes';
 import type { Folder } from '../data/fixtures';
 import { database } from '../database';
 import { createId, randomDelay } from '../utils';
 
 export const foldersHandler = [
   // GET /folders
-  http.get('*/folders', async () => {
+  http.get(`*${foldersRoutes.list()}`, async () => {
     await randomDelay(200, 500);
     return HttpResponse.json(database.getFolders());
   }),
 
   // GET /folders/:id
-  http.get('*/folders/:id', async ({ params }) => {
+  http.get(`*${foldersRoutes.detail(':id')}`, async ({ params }) => {
     await randomDelay(150, 400);
     const folder = database.getFolder(params.id as string);
 
@@ -26,7 +27,7 @@ export const foldersHandler = [
   }),
 
   // POST /folders
-  http.post('*/folders', async ({ request }) => {
+  http.post(`*${foldersRoutes.list()}`, async ({ request }) => {
     await randomDelay(300, 600);
     const body = (await request.json()) as Partial<Folder>;
 
@@ -50,7 +51,7 @@ export const foldersHandler = [
   }),
 
   // PATCH /folders/:id
-  http.patch('*/folders/:id', async ({ params, request }) => {
+  http.patch(`*${foldersRoutes.detail(':id')}`, async ({ params, request }) => {
     await randomDelay(200, 500);
     const body = (await request.json()) as Partial<Folder>;
     const updated = database.updateFolder(params.id as string, body);
@@ -66,7 +67,7 @@ export const foldersHandler = [
   }),
 
   // DELETE /folders/:id
-  http.delete('*/folders/:id', async ({ params }) => {
+  http.delete(`*${foldersRoutes.detail(':id')}`, async ({ params }) => {
     await randomDelay(200, 500);
     const isRemoved = database.deleteFolder(params.id as string);
 
