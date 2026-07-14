@@ -11,7 +11,11 @@ function MocksProvider({
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    if (process.env.NODE_ENV !== 'development') {
+    const isMocksEnabled = process.env.EXPO_PUBLIC_USE_MOCKS
+      ? process.env.EXPO_PUBLIC_USE_MOCKS === 'true'
+      : process.env.NODE_ENV === 'development';
+
+    if (!isMocksEnabled) {
       setIsReady(true);
       return;
     }
