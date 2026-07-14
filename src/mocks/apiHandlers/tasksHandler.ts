@@ -48,7 +48,7 @@ export const tasksHandler = [
   // GET /tasks/:id
   http.get(`*${tasksRoutes.detail(':id')}`, async ({ params }) => {
     await randomDelay(150, 400);
-    const task = database.getTask(params.id);
+    const task = database.getTask(params.id as string);
 
     if (!task) {
       return HttpResponse.json({ message: 'Task not found.' }, { status: 404 });
@@ -90,7 +90,7 @@ export const tasksHandler = [
   http.patch(`*${tasksRoutes.detail(':id')}`, async ({ params, request }) => {
     await randomDelay(200, 500);
     const body = (await request.json()) as Partial<Task>;
-    const updated = database.updateTask(params.id, body);
+    const updated = database.updateTask(params.id as string, body);
 
     if (!updated) {
       return HttpResponse.json({ message: 'Task not found.' }, { status: 404 });
@@ -102,7 +102,7 @@ export const tasksHandler = [
   // DELETE /tasks/:id — soft delete (move to trash)
   http.delete(`*${tasksRoutes.detail(':id')}`, async ({ params }) => {
     await randomDelay(200, 500);
-    const updated = database.updateTask(params.id, {
+    const updated = database.updateTask(params.id as string, {
       deletedAt: new Date().toISOString(),
     });
 
@@ -116,7 +116,7 @@ export const tasksHandler = [
   // POST /tasks/:id/restore
   http.post(`*${tasksRoutes.restore(':id')}`, async ({ params }) => {
     await randomDelay(200, 500);
-    const updated = database.updateTask(params.id, {
+    const updated = database.updateTask(params.id as string, {
       deletedAt: null,
     });
 
@@ -130,7 +130,7 @@ export const tasksHandler = [
   // DELETE /tasks/:id/permanent
   http.delete(`*${tasksRoutes.permanent(':id')}`, async ({ params }) => {
     await randomDelay(200, 500);
-    const isRemoved = database.removeTask(params.id);
+    const isRemoved = database.removeTask(params.id as string);
 
     if (!isRemoved) {
       return HttpResponse.json({ message: 'Task not found.' }, { status: 404 });

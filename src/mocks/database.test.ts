@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Folder, Task } from './data/fixtures';
 import {
   mockFolders,
   mockSubTasks,
   mockTasks,
   mockUser,
 } from './data/fixtures';
+import { makeDumbFolder } from './factories/folderFactory';
+import { makeDumbTask } from './factories/taskFactory';
 
 // The mock database is a module-level singleton, so each test re-imports a
 // fresh instance to avoid state leaking between assertions.
@@ -58,14 +59,13 @@ describe('folders', () => {
   });
 
   it('adds a new folder', () => {
-    const newFolder: Folder = {
+    const newFolder = makeDumbFolder({
       id: 'folder-new',
       name: 'Loisirs',
       color: '#000000',
       userId: mockUser.id,
-      taskCount: 0,
       createdAt: new Date().toISOString(),
-    };
+    });
     databaseModule.database.addFolder(newFolder);
     expect(databaseModule.database.getFolders()).toHaveLength(
       mockFolders.length + 1,
@@ -112,19 +112,14 @@ describe('tasks', () => {
   });
 
   it('adds a new task at the front of the list', () => {
-    const newTask: Task = {
+    const newTask = makeDumbTask({
       id: 'task-new',
       title: 'Nouvelle tâche',
-      description: null,
       quadrant: 'secondary',
-      folderId: null,
       userId: mockUser.id,
-      dueDate: null,
-      isDone: false,
-      deletedAt: null,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    };
+    });
     databaseModule.database.addTask(newTask);
     const tasks = databaseModule.database.getTasks();
     expect(tasks).toHaveLength(mockTasks.length + 1);
