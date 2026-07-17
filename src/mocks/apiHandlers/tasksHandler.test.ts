@@ -1,13 +1,85 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { tasksRoutes } from '../../api/routes';
 import type { Task } from '../data/fixtures';
-import { mockTasks } from '../data/fixtures';
+import { makeDumbTask } from '../factories/taskFactory';
 
 // Each test re-imports the mock server so the underlying database singleton
 // starts from the seeded fixtures instead of leaking state across tests.
 let serverModule: typeof import('../server');
 
 const BASE_URL = 'http://test.local';
+
+const expectedTasks: Task[] = [
+  makeDumbTask({
+    quadrant: 'critical',
+    folderId: 'folder-3',
+    description: 'Intégrer le formulaire avec validation et appel API.',
+  }),
+  makeDumbTask({
+    id: 'task-2',
+    title: 'Préparer la réunion client',
+    quadrant: 'critical',
+    folderId: 'folder-2',
+    createdAt: '2026-04-19T09:00:00.000Z',
+    updatedAt: '2026-04-19T09:00:00.000Z',
+  }),
+  makeDumbTask({
+    id: 'task-3',
+    title: 'Mettre en place les tests unitaires',
+    description: 'Couvrir les composants Auth avec Vitest.',
+    folderId: 'folder-3',
+    createdAt: '2026-04-18T08:00:00.000Z',
+    updatedAt: '2026-04-18T08:00:00.000Z',
+  }),
+  makeDumbTask({
+    id: 'task-4',
+    title: 'Rédiger la documentation technique',
+    folderId: 'folder-3',
+    createdAt: '2026-04-17T08:00:00.000Z',
+    updatedAt: '2026-04-17T08:00:00.000Z',
+  }),
+  makeDumbTask({
+    id: 'task-5',
+    title: 'Répondre aux emails en attente',
+    quadrant: 'delegate',
+    createdAt: '2026-04-22T07:00:00.000Z',
+    updatedAt: '2026-04-22T07:00:00.000Z',
+  }),
+  makeDumbTask({
+    id: 'task-6',
+    title: 'Trier les favoris du navigateur',
+    quadrant: 'secondary',
+    folderId: 'folder-1',
+    createdAt: '2026-04-15T12:00:00.000Z',
+    updatedAt: '2026-04-15T12:00:00.000Z',
+  }),
+  makeDumbTask({
+    id: 'task-7',
+    title: 'Setup CI/CD GitHub Actions',
+    description: 'Configuration des workflows CI et release.',
+    quadrant: 'critical',
+    folderId: 'folder-3',
+    isDone: true,
+    createdAt: '2026-04-10T10:00:00.000Z',
+    updatedAt: '2026-04-24T18:00:00.000Z',
+  }),
+  makeDumbTask({
+    id: 'task-8',
+    title: 'Configurer ESLint et Prettier',
+    folderId: 'folder-3',
+    isDone: true,
+    createdAt: '2026-04-05T10:00:00.000Z',
+    updatedAt: '2026-04-08T10:00:00.000Z',
+  }),
+  makeDumbTask({
+    id: 'task-9',
+    title: 'Ancienne tâche supprimée',
+    quadrant: 'secondary',
+    deletedAt: '2026-04-20T10:00:00.000Z',
+    createdAt: '2026-04-01T10:00:00.000Z',
+    updatedAt: '2026-04-20T10:00:00.000Z',
+  }),
+];
 
 beforeEach(async (): Promise<void> => {
   vi.resetModules();
@@ -19,11 +91,11 @@ afterEach((): void => {
   serverModule.server.close();
 });
 
-const activeTasks = mockTasks.filter((task) => task.deletedAt === null);
-const trashedTasks = mockTasks.filter((task) => task.deletedAt !== null);
-const [firstTask] = mockTasks;
+const activeTasks = expectedTasks.filter((task) => task.deletedAt === null);
+const trashedTasks = expectedTasks.filter((task) => task.deletedAt !== null);
+const [firstTask] = expectedTasks;
 const [trashedTask] = trashedTasks;
-const searchTarget = mockTasks.find((task) =>
+const searchTarget = expectedTasks.find((task) =>
   task.title.toLowerCase().includes('connexion'),
 )!;
 

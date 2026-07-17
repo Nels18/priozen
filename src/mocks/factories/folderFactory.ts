@@ -4,6 +4,17 @@ import { createId } from '../utils';
 
 const FOLDER_COLORS = ['#6366F1', '#F59E0B', '#10B981', '#EF4444', '#0EA5E9'];
 
+const FOLDER_NAMES = [
+  'Perso',
+  'Travail',
+  'Maison',
+  'Famille',
+  'Projets',
+  'Administratif',
+  'Loisirs',
+  'Santé',
+];
+
 // Deterministic — stable values for unit tests.
 export const makeDumbFolder = (overrides: Partial<Folder> = {}): Folder => ({
   id: 'folder-1',
@@ -18,7 +29,7 @@ export const makeDumbFolder = (overrides: Partial<Folder> = {}): Folder => ({
 // Randomized — realistic seed data, not for test assertions.
 export const makeFolder = (overrides: Partial<Folder> = {}): Folder => ({
   id: createId('folder'),
-  name: faker.word.words({ count: { min: 1, max: 2 } }),
+  name: faker.helpers.arrayElement(FOLDER_NAMES),
   color: faker.helpers.arrayElement(FOLDER_COLORS),
   userId: 'user-1',
   taskCount: faker.number.int({ min: 0, max: 12 }),

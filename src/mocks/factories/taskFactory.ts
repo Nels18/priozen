@@ -1,5 +1,5 @@
 import { fakerFR as faker } from '@faker-js/faker';
-import type { EisenhowerQuadrant, Task } from '../data/fixtures';
+import type { EisenhowerQuadrant, Folder, Task } from '../data/fixtures';
 import { createId, randomBool } from '../utils';
 
 const QUADRANTS: EisenhowerQuadrant[] = [
@@ -7,6 +7,29 @@ const QUADRANTS: EisenhowerQuadrant[] = [
   'schedule',
   'delegate',
   'secondary',
+];
+
+const TASK_TITLES = [
+  'Préparer la présentation client',
+  'Relancer le fournisseur pour la facture',
+  'Mettre à jour le tableau de bord mensuel',
+  'Organiser la réunion d’équipe',
+  'Trier la boîte mail',
+  'Réviser le plan de sprint',
+  'Rédiger le compte-rendu de réunion',
+  'Planifier les congés de l’équipe',
+  'Faire le point sur le budget trimestriel',
+  'Contacter le support technique',
+  'Nettoyer le bureau',
+  'Renouveler l’abonnement logiciel',
+  'Préparer la checklist de déploiement',
+  'Répondre aux commentaires de code',
+  'Mettre à jour la documentation utilisateur',
+  'Faire les courses pour la semaine',
+  'Prendre rendez-vous chez le dentiste',
+  'Réserver les billets de train',
+  'Payer les factures du mois',
+  'Ranger le garage',
 ];
 
 // Deterministic — stable values for unit tests.
@@ -31,7 +54,7 @@ export const makeTask = (overrides: Partial<Task> = {}): Task => {
 
   return {
     id: createId('task'),
-    title: faker.hacker.phrase(),
+    title: faker.helpers.arrayElement(TASK_TITLES),
     description: randomBool(0.5) ? faker.lorem.sentence() : null,
     quadrant: faker.helpers.arrayElement(QUADRANTS),
     folderId: null,
@@ -47,5 +70,12 @@ export const makeTask = (overrides: Partial<Task> = {}): Task => {
   };
 };
 
-export const makeTasks = (count: number): Task[] =>
-  Array.from({ length: count }, () => makeTask());
+export const makeTasks = (count: number, folders: Folder[] = []): Task[] =>
+  Array.from({ length: count }, () =>
+    makeTask({
+      folderId:
+        folders.length > 0 && randomBool(0.6)
+          ? faker.helpers.arrayElement(folders).id
+          : null,
+    }),
+  );

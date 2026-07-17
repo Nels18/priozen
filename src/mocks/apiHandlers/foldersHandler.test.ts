@@ -1,12 +1,30 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { foldersRoutes } from '../../api/routes';
-import { mockFolders } from '../data/fixtures';
+import { makeDumbFolder } from '../factories/folderFactory';
 
 // Each test re-imports the mock server so the underlying database singleton
 // starts from the seeded fixtures instead of leaking state across tests.
 let serverModule: typeof import('../server');
 
 const BASE_URL = 'http://test.local';
+
+const expectedFolders = [
+  makeDumbFolder({ taskCount: 4 }),
+  makeDumbFolder({
+    id: 'folder-2',
+    name: 'Travail',
+    color: '#F59E0B',
+    taskCount: 6,
+    createdAt: '2026-01-11T00:00:00.000Z',
+  }),
+  makeDumbFolder({
+    id: 'folder-3',
+    name: 'Priolist App',
+    color: '#10B981',
+    taskCount: 5,
+    createdAt: '2026-01-12T00:00:00.000Z',
+  }),
+];
 
 beforeEach(async (): Promise<void> => {
   vi.resetModules();
@@ -18,14 +36,14 @@ afterEach((): void => {
   serverModule.server.close();
 });
 
-const [firstFolder] = mockFolders;
+const [firstFolder] = expectedFolders;
 
 describe('GET /folders', () => {
   it('returns the seeded folders', async (): Promise<void> => {
     const response = await fetch(`${BASE_URL}${foldersRoutes.list()}`);
     expect(response.status).toBe(200);
     const body = (await response.json()) as unknown[];
-    expect(body).toHaveLength(mockFolders.length);
+    expect(body).toHaveLength(expectedFolders.length);
   });
 });
 

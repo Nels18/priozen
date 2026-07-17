@@ -1,12 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { userRoutes } from '../../api/routes';
-import { mockUser } from '../data/fixtures';
+import { makeDumbUser } from '../factories/userFactory';
 
 // Each test re-imports the mock server so the underlying database singleton
 // starts from the seeded fixtures instead of leaking state across tests.
 let serverModule: typeof import('../server');
 
 const BASE_URL = 'http://test.local';
+const expectedUser = makeDumbUser();
 
 beforeEach(async (): Promise<void> => {
   vi.resetModules();
@@ -23,7 +24,7 @@ describe('GET /user/me', () => {
     const response = await fetch(`${BASE_URL}${userRoutes.me()}`);
     expect(response.status).toBe(200);
     const body = (await response.json()) as { email: string };
-    expect(body.email).toBe(mockUser.email);
+    expect(body.email).toBe(expectedUser.email);
   });
 });
 

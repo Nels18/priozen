@@ -80,6 +80,25 @@ npm run test:watch      # Tests in watch mode
 npm run test:coverage   # Coverage report
 ```
 
+## Mock API (MSW)
+
+The backend and PostgreSQL database aren't ready yet. The app runs standalone against a mocked API powered by [Mock Service Worker](https://mswjs.io), so every screen can be built and tested end-to-end without a real server.
+
+- **Native (iOS/Android)** — [`src/mocks/native.ts`](src/mocks/native.ts) uses `msw/native` (not `msw/node`, which depends on Node internals unavailable on Hermes) plus polyfills in [`src/mocks/msw.polyfills.ts`](src/mocks/msw.polyfills.ts) (`fast-text-encoding`, `react-native-url-polyfill`, and stubs for `MessageEvent`/`Event`/`EventTarget`/`BroadcastChannel`).
+- **Web** — [`src/mocks/worker.ts`](src/mocks/worker.ts) uses `msw/browser` with the generated `public/mockServiceWorker.js`.
+- Both start from [`app/_layout.tsx`](app/_layout.tsx) via `startMocks()` ([`src/mocks/utils.ts`](src/mocks/utils.ts)).
+- **Handlers** are split by domain in [`src/mocks/apiHandlers/`](src/mocks/apiHandlers/) (`authHandler`, `tasksHandler`, `foldersHandler`, `userHandler`), backed by an in-memory store ([`src/mocks/database.ts`](src/mocks/database.ts)) seeded from [`src/mocks/data/fixtures.ts`](src/mocks/data/fixtures.ts).
+- A random network delay simulates latency so loading states are visible in dev; it's skipped automatically under `NODE_ENV=test`.
+
+### Toggling mocks
+
+Mocks are active by default in development (`NODE_ENV=development`). Override explicitly with the `EXPO_PUBLIC_USE_MOCKS` env var:
+
+```bash
+EXPO_PUBLIC_USE_MOCKS=false npm start   # disable mocks (e.g. to hit a real/staging API)
+EXPO_PUBLIC_USE_MOCKS=true npm run web  # force mocks even outside development
+```
+
 ## Tech Stack
 
 | Category       | Technology                                                                                                            |

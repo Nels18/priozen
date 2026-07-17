@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { authRoutes } from '../../api/routes';
-import { MOCK_TOKEN, mockUser } from '../data/fixtures';
+import { makeDumbUser } from '../factories/userFactory';
 
 // Each test re-imports the mock server so the underlying database singleton
 // starts from the seeded fixtures instead of leaking state across tests.
@@ -8,6 +8,8 @@ let serverModule: typeof import('../server');
 
 const VALID_PASSWORD = 'password123';
 const BASE_URL = 'http://test.local';
+const expectedUser = makeDumbUser();
+const MOCK_TOKEN = 'mock-jwt-token-priolist-dev';
 
 beforeEach(async (): Promise<void> => {
   vi.resetModules();
@@ -24,7 +26,7 @@ describe('POST /auth/login', () => {
     const response = await fetch(`${BASE_URL}${authRoutes.login()}`, {
       method: 'POST',
       body: JSON.stringify({
-        email: mockUser.email,
+        email: expectedUser.email,
         password: VALID_PASSWORD,
       }),
     });
@@ -38,7 +40,7 @@ describe('POST /auth/login', () => {
   it('rejects a missing email or password with 422', async (): Promise<void> => {
     const response = await fetch(`${BASE_URL}${authRoutes.login()}`, {
       method: 'POST',
-      body: JSON.stringify({ email: mockUser.email }),
+      body: JSON.stringify({ email: expectedUser.email }),
     });
 
     expect(response.status).toBe(422);
@@ -48,7 +50,7 @@ describe('POST /auth/login', () => {
     const response = await fetch(`${BASE_URL}${authRoutes.login()}`, {
       method: 'POST',
       body: JSON.stringify({
-        email: mockUser.email,
+        email: expectedUser.email,
         password: 'wrong-password',
       }),
     });
@@ -90,9 +92,9 @@ describe('POST /auth/register', () => {
     const response = await fetch(`${BASE_URL}${authRoutes.register()}`, {
       method: 'POST',
       body: JSON.stringify({
-        firstName: 'Nelson',
-        lastName: 'Belgarde',
-        email: mockUser.email,
+        firstName: expectedUser.firstName,
+        lastName: expectedUser.lastName,
+        email: expectedUser.email,
         password: VALID_PASSWORD,
       }),
     });

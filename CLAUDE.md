@@ -71,27 +71,53 @@ Non encore déclarées comme thème NativeWind dans `tailwind.config.js` (thème
 - Styles via classes NativeWind (`className`), pas de StyleSheet sauf cas non couvert par Tailwind
 - Alias d'import `@/*` disponible (voir `tsconfig.json`)
 
-## Structure des données (à venir de l'API)
+## Structure des données (contrat mocké MSW — à confirmer avec le futur backend)
+
+Contrat actuellement implémenté par les fixtures/handlers MSW (`src/mocks/data/fixtures.ts`) : camelCase, quadrant Eisenhower encodé en un seul enum `quadrant` plutôt qu'en deux booléens séparés.
 
 ```typescript
-interface Task {
+type EisenhowerQuadrant = 'critical' | 'schedule' | 'delegate' | 'secondary';
+
+interface User {
   id: string;
-  title: string;
-  description?: string;
-  due_date?: string;
-  is_urgent: boolean;
-  is_important: boolean;
-  folder_id?: string;
-  is_done: boolean;
-  created_at: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  createdAt: string;
 }
 
 interface Folder {
   id: string;
   name: string;
   color: string; // hex
+  userId: string;
+  taskCount: number;
+  createdAt: string;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  description: string | null;
+  quadrant: EisenhowerQuadrant;
+  folderId: string | null;
+  userId: string;
+  dueDate: string | null;
+  isDone: boolean;
+  deletedAt: string | null; // soft delete (corbeille)
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface SubTask {
+  id: string;
+  taskId: string;
+  title: string;
+  isDone: boolean;
 }
 ```
+
+Le tableau des badges Eisenhower ci-dessus (Critique/À planifier/À déléguer/Secondaire) correspond respectivement à `quadrant: 'critical' | 'schedule' | 'delegate' | 'secondary'`.
 
 ## Commandes utiles
 

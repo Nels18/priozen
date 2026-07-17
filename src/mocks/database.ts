@@ -8,6 +8,13 @@ import {
   type Task,
   type User,
 } from './data/fixtures';
+import { makeFolders } from './factories/folderFactory';
+import { makeSubTasksForTasks } from './factories/subTaskFactory';
+import { makeTasks } from './factories/taskFactory';
+
+const isTestEnv = process.env.NODE_ENV === 'test';
+const DEV_FOLDER_COUNT = 6;
+const DEV_TASK_COUNT = 30;
 
 interface Database {
   getUser: () => User;
@@ -30,9 +37,21 @@ interface Database {
 const setup = (): Database => {
   // Deep copies of seed data — isolated per session
   let user: User = { ...mockUser };
-  const folders: Folder[] = mockFolders.map((f) => ({ ...f }));
-  let tasks: Task[] = mockTasks.map((t) => ({ ...t }));
-  const subTasks: SubTask[] = mockSubTasks.map((s) => ({ ...s }));
+  const folders: Folder[] = isTestEnv
+    ? mockFolders.map((f) => ({ ...f }))
+    : makeFolders(DEV_FOLDER_COUNT);
+  let tasks: Task[] = isTestEnv
+    ? mockTasks.map((t) => ({ ...t }))
+    : makeTasks(DEV_TASK_COUNT, folders);
+  const subTasks: SubTask[] = isTestEnv
+    ? mockSubTasks.map((s) => ({ ...s }))
+    : makeSubTasksForTasks(tasks);
+
+  if (!isTestEnv) {
+    folders.forEach((folder) => {
+      folder.taskCount = tasks.filter((t) => t.folderId === folder.id).length;
+    });
+  }
 
   return {
     // ─── User ────────────────────────────────────────────────────────────────
