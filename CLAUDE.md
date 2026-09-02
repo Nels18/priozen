@@ -1,5 +1,72 @@
 # Priolist — Contexte projet
 
+## Statut actuel (mis à jour)
+
+- ✅ Maquettes complètes (toutes les vues, light + dark)
+- ✅ Palette définie — tokens light/dark documentés
+- ✅ Icônes et favicons exportés (iOS light/dark/tinted, Android, Splash, Favicons)
+- ✅ 33 tickets Trello (11 epics, 103 points) — CSV + DOCX générés
+- ✅ Architecture déploiement : EAS (mobile) + Vercel (web) + Scaleway (backend)
+- ✅ CLAUDE.md rédigé et intégré au projet Expo
+- 🔄 Nom Priozen en cours de vérification (App Store, domaine, EUIPO)
+- ✅ MSW-00 — Setup infrastructure MSW terminé (handlers auth/tasks/folders/user, native.ts + worker.ts, `startMocks()` intégré dans `app/_layout.tsx`)
+- 🔄 MSW-01 — Génération de données mockées (factories Faker.js pour users/tasks/folders/subtasks) en cours
+- ⏳ Backend : pas encore prêt
+
+## Assets produits
+
+- ✅ `ios-light.png` — 1024×1024, fond blanc
+- ✅ `ios-dark.png` — 1024×1024, fond #0A0918
+- ✅ `ios-tinted.png` — 1024×1024, fond noir + logo blanc (iOS 18)
+- ✅ `adaptive-icon.png` — 1024×1024, fond transparent (Android foreground)
+- ✅ `monochrome-icon.png` — 1024×1024, fond transparent, noir uniquement
+- ✅ `splash-icon-light.png` / `splash-icon-dark.png` — 200×200, fond transparent
+- ✅ `favicon.ico` — multi-size 16+32+48
+- ✅ `favicon-32x32.png`, `favicon-180x180.png`, `favicon-dark-32x32.png`
+
+## CI/CD — Architecture validée
+
+```
+Pull Request ouverte
+        │
+GitHub Actions (OPS-02)
+  ├── lint + typecheck
+  ├── tests Vitest
+  └── expo export --platform web
+        │
+Merge sur main
+        │
+        ├── GitHub Actions → Vercel (web)
+        ├── GitHub Actions → Scaleway (backend)
+        └── EAS Build → App Store / Play Store
+```
+
+- GitHub Actions : lint + tests + build web (OPS-02)
+- GitHub Actions → Vercel (web) + Scaleway (backend) sur merge main (OPS-03a)
+- EAS Build + EAS Submit : compilation et soumission stores (OPS-03b)
+- EAS Update : mises à jour OTA sans passer par les stores
+- Ticket manquant à créer : EAS-01 (configuration eas.json, profils dev/preview/prod)
+
+## Tickets Trello — détail par epic (33 tickets · 11 epics · 103 points)
+
+| Epic                          | Tickets | Points |
+| ----------------------------- | ------- | ------ |
+| MSW — Infrastructure mocking  | 2       | 6 pts  |
+| EPIC 1 — Authentification     | 4       | 13 pts |
+| EPIC 2 — Dashboard principal  | 4       | 21 pts |
+| EPIC 3 — Gestion des tâches   | 2       | 8 pts  |
+| EPIC 4 — Gestion des dossiers | 2       | 6 pts  |
+| EPIC 5 — Profil utilisateur   | 1       | 3 pts  |
+| EPIC 6 — Mode Concentration   | 1       | 5 pts  |
+| EPIC 7 — Analytics            | 1       | 8 pts  |
+| EPIC 8 — Mobile               | 2       | 8 pts  |
+| EPIC 9 — États vides & UX     | 3       | 7 pts  |
+| DevOps + Déploiement          | 11      | 18 pts |
+
+## Prochaine tâche
+
+MSW-01 — Génération de données mockées via factories (en cours). MSW-00 (setup infra MSW) est terminé.
+
 ## Présentation
 
 Application de gestion de tâches basée sur la méthode Eisenhower.
@@ -23,15 +90,17 @@ Le frontend tourne seul avec des données mockées (MSW — `msw/node` pour iOS/
 
 ## Palette de couleurs
 
-- `--primary` : #4F46E5 (indigo 600)
-- `--primary-hover` : #4338CA
-- `--success` : #10B981 (émeraude)
-- `--bg-page` : #F9FAFB
-- `--bg-card` : #FFFFFF
-- `--bg-sidebar` : #1E1B4B (indigo nuit)
-- `--text-primary` : #1E293B
-- `--text-muted` : #64748B
-- `--border` : #E2E8F0
+| Token             | Light   | Dark    |
+| ----------------- | ------- | ------- |
+| `--primary`       | #4F46E5 | #818CF8 |
+| `--primary-hover` | #4338CA | #6366F1 |
+| `--success`       | #10B981 | #10B981 |
+| `--bg-page`       | #F9FAFB | #0A0918 |
+| `--bg-card`       | #FFFFFF | #13111F |
+| `--bg-sidebar`    | #1E1B4B | #0A0918 |
+| `--text-primary`  | #1E293B | #E0E7FF |
+| `--text-muted`    | #64748B | #94A3B8 |
+| `--border`        | #E2E8F0 | #312E81 |
 
 Non encore déclarées comme thème NativeWind dans `tailwind.config.js` (thème vide pour l'instant) — à ajouter dans `theme.extend.colors` si besoin de classes utilitaires dédiées.
 
