@@ -1,9 +1,9 @@
-<h1 align="center">Priolist — Your priority list, simplified.</h1>
+<h1 align="center">Priozen — Your priority list, simplified.</h1>
 
 <p align="center">
-  <img src="assets/images/ios-icon-light.png" alt="priolist-logo" width="120px" height="120px"/>
+  <img src="assets/images/ios-icon-light.png" alt="priozen-logo" width="120px" height="120px"/>
   <br>
-  <em>Priolist is a hybrid app (iOS, Android, Web) built with Expo and React Native,
+  <em>Priozen is a hybrid app (iOS, Android, Web) built with Expo and React Native,
     <br> using Expo Router for file-based navigation and NativeWind for styling.</em>
   <br>
 </p>
@@ -13,17 +13,17 @@
   ·
   <a href="CHANGELOG.md">Changelog</a>
   ·
-  <a href="https://github.com/Nels18/priolist/issues">Submit an Issue</a>
+  <a href="https://github.com/Nels18/priozen/issues">Submit an Issue</a>
   <br>
   <br>
 </p>
 
 <p align="center">
-  <a href="https://github.com/Nels18/priolist/actions/workflows/ci.yml">
-    <img src="https://github.com/Nels18/priolist/actions/workflows/ci.yml/badge.svg" alt="CI" />
+  <a href="https://github.com/Nels18/priozen/actions/workflows/ci.yml">
+    <img src="https://github.com/Nels18/priozen/actions/workflows/ci.yml/badge.svg" alt="CI" />
   </a>
-  <a href="https://github.com/Nels18/priolist/releases">
-    <img src="https://img.shields.io/github/v/release/Nels18/priolist?label=version" alt="Latest release" />
+  <a href="https://github.com/Nels18/priozen/releases">
+    <img src="https://img.shields.io/github/v/release/Nels18/priozen?label=version" alt="Latest release" />
   </a>
   <img src="https://img.shields.io/badge/Expo-55-000020?logo=expo&logoColor=white" alt="Expo SDK" />
   <img src="https://img.shields.io/badge/React_Native-0.81-61DAFB?logo=react&logoColor=white" alt="React Native" />

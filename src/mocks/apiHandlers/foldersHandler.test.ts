@@ -19,7 +19,7 @@ const expectedFolders = [
   }),
   makeDumbFolder({
     id: 'folder-3',
-    name: 'Priolist App',
+    name: 'Priozen App',
     color: '#10B981',
     taskCount: 5,
     createdAt: '2026-01-12T00:00:00.000Z',
