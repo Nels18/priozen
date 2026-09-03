@@ -9,7 +9,12 @@ module.exports = defineConfig([
   expoConfig,
   ...tseslint.configs.recommendedTypeChecked,
   {
-    ignores: ['dist/*', 'eslint.config.js', '.validate-branch-namerc.js'],
+    ignores: [
+      'dist/*',
+      'eslint.config.js',
+      '.validate-branch-namerc.js',
+      'public/mockServiceWorker.js',
+    ],
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
