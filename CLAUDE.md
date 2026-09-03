@@ -8,9 +8,16 @@
 - ✅ 33 tickets Trello (11 epics, 103 points) — CSV + DOCX générés
 - ✅ Architecture déploiement : EAS (mobile) + Vercel (web) + Scaleway (backend)
 - ✅ CLAUDE.md rédigé et intégré au projet Expo
-- 🔄 Nom Priozen en cours de vérification (App Store, domaine, EUIPO)
+- ✅ Nom **Priozen** vérifié et sécurisé :
+  - Domaine `priozen.app` acheté (OVH — 10,19€ TTC/an), DNSSEC inclus
+  - `contact@priozen.app` configuré dans Apple Mail
+  - App Store — libre
+  - Play Store — libre
+  - EUIPO classe 42 — libre
+  - Instagram/TikTok @priozen — libres
+  - ⚠️ X (Twitter) @priozen — compte fantôme, squatté → enregistrer **@priozenapp** à la place
 - ✅ MSW-00 — Setup infrastructure MSW terminé (handlers auth/tasks/folders/user, native.ts + worker.ts, `startMocks()` intégré dans `app/_layout.tsx`)
-- 🔄 MSW-01 — Génération de données mockées (factories Faker.js pour users/tasks/folders/subtasks) en cours
+- ✅ MSW-01 — Génération de données mockées (factories Faker.js pour users/tasks/folders/subtasks) terminé
 - ⏳ Backend : pas encore prêt
 
 ## Assets produits
@@ -65,7 +72,7 @@ Merge sur main
 
 ## Prochaine tâche
 
-MSW-01 — Génération de données mockées via factories (en cours). MSW-00 (setup infra MSW) est terminé.
+AUTH-01 — Page Connexion (prochain ticket du backlog). MSW-00 et MSW-01 sont terminés.
 
 ## Présentation
 
