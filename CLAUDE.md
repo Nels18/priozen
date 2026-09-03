@@ -1,4 +1,4 @@
-# Priolist — Contexte projet
+# Priozen — Contexte projet
 
 ## Statut actuel (mis à jour)
 
@@ -77,7 +77,7 @@ AUTH-01 — Page Connexion (prochain ticket du backlog). MSW-00 et MSW-01 sont t
 ## Présentation
 
 Application de gestion de tâches basée sur la méthode Eisenhower.
-Nom du projet : **Priolist** (anciennement ZenTask Pro).
+Nom du projet : **Priozen** (anciennement ZenTask Pro, puis Priolist).
 
 ## Stack technique
 

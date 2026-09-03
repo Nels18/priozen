@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Priolist",
-    "slug": "Priolist",
+    "name": "Priozen",
+    "slug": "Priozen",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "priolist",
+    "scheme": "priozen",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "bundleIdentifier": "com.priolist.app",
+      "bundleIdentifier": "com.priozen.app",
       "icon": {
         "dark": "./assets/images/ios-icon-dark.png",
         "light": "./assets/images/ios-icon-light.png",
@@ -17,7 +17,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.priolist.app",
+      "package": "com.priozen.app",
       "adaptiveIcon": {
         "backgroundColor": "#4F46E5",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
