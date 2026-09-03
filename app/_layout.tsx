@@ -1,24 +1,43 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import type { JSX } from 'react';
+import { useEffect, useState } from 'react';
+import '../global.css';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+function MocksProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element | null {
+  const [isReady, setIsReady] = useState(false);
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+  useEffect(() => {
+    const isMocksEnabled = process.env.EXPO_PUBLIC_USE_MOCKS
+      ? process.env.EXPO_PUBLIC_USE_MOCKS === 'true'
+      : process.env.NODE_ENV === 'development';
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+    if (!isMocksEnabled) {
+      setIsReady(true);
+      return;
+    }
 
+    import('@/src/mocks')
+      .then(({ startMocks }) => startMocks())
+      .then(() => setIsReady(true))
+      .catch((error: unknown) => {
+        console.error('Failed to start mocks', error);
+        setIsReady(true);
+      });
+  }, []);
+
+  if (!isReady) return null;
+
+  return <>{children}</>;
+}
+
+export default function RootLayout(): JSX.Element {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <MocksProvider>
+      <Stack />
+    </MocksProvider>
   );
 }
