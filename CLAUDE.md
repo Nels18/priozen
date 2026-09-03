@@ -79,6 +79,8 @@ AUTH-01 — Page Connexion (prochain ticket du backlog). MSW-00 et MSW-01 sont t
 Application de gestion de tâches basée sur la méthode Eisenhower.
 Nom du projet : **Priozen** (anciennement ZenTask Pro, puis Priolist).
 
+⚠️ **Exception EAS** : le projet EAS existant (`projectId: 0cb7e9a8-7547-4f3e-be66-ed5a78ee8ed0`, avec un historique de builds iOS/Android réels) garde le **slug `Priolist`** dans `app.json` — aucune commande `eas` ne permet de renommer le slug d'un projet existant (`eas init --force` écrase le slug local pour matcher le serveur, pas l'inverse). Le `name` (Priozen) et les bundle identifiers (`com.priozen.app`) sont bien à jour ; seul le slug technique (URL `expo.dev/.../Priolist`, invisible aux utilisateurs finaux) reste sur l'ancien nom, en attendant un éventuel renommage via le support Expo.
+
 ## Stack technique
 
 - **Frontend** : Expo (React Native) + expo-router + TypeScript
