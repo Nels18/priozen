@@ -9,7 +9,7 @@ let serverModule: typeof import('../server');
 const VALID_PASSWORD = 'password123';
 const BASE_URL = 'http://test.local';
 const expectedUser = makeDumbUser();
-const MOCK_TOKEN = 'mock-jwt-token-priolist-dev';
+const MOCK_TOKEN = 'mock-jwt-token-priozen-dev';
 
 beforeEach(async (): Promise<void> => {
   vi.resetModules();
@@ -66,7 +66,7 @@ describe('POST /auth/register', () => {
       body: JSON.stringify({
         firstName: 'Ada',
         lastName: 'Lovelace',
-        email: 'ada@priolist.app',
+        email: 'ada@priozen.app',
         password: 'password123',
       }),
     });
@@ -76,13 +76,13 @@ describe('POST /auth/register', () => {
       token: string;
       user: { email: string };
     };
-    expect(body.user.email).toBe('ada@priolist.app');
+    expect(body.user.email).toBe('ada@priozen.app');
   });
 
   it('rejects an incomplete payload with 422', async (): Promise<void> => {
     const response = await fetch(`${BASE_URL}${authRoutes.register()}`, {
       method: 'POST',
-      body: JSON.stringify({ email: 'ada@priolist.app' }),
+      body: JSON.stringify({ email: 'ada@priozen.app' }),
     });
 
     expect(response.status).toBe(422);
@@ -107,7 +107,7 @@ describe('POST /auth/forgot-password', () => {
   it('always responds with 200 to avoid email enumeration', async (): Promise<void> => {
     const response = await fetch(`${BASE_URL}${authRoutes.forgotPassword()}`, {
       method: 'POST',
-      body: JSON.stringify({ email: 'unknown@priolist.app' }),
+      body: JSON.stringify({ email: 'unknown@priozen.app' }),
     });
 
     expect(response.status).toBe(200);

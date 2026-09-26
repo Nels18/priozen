@@ -45,7 +45,7 @@ export const mockUser: User = {
   id: 'user-1',
   firstName: 'Nelson',
   lastName: 'Belgarde',
-  email: 'nelson@priolist.app',
+  email: 'nelson@priozen.app',
   createdAt: '2026-01-01T00:00:00.000Z',
 };
 
@@ -70,7 +70,7 @@ export const mockFolders: Folder[] = [
   },
   {
     id: 'folder-3',
-    name: 'Priolist App',
+    name: 'Priozen App',
     color: '#10B981',
     userId: 'user-1',
     taskCount: 5,
@@ -235,4 +235,4 @@ export const mockSubTasks: SubTask[] = [
 
 // ─── Auth token ────────────────────────────────────────────────────────────────
 
-export const MOCK_TOKEN = 'mock-jwt-token-priolist-dev';
+export const MOCK_TOKEN = 'mock-jwt-token-priozen-dev';

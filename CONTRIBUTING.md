@@ -1,4 +1,4 @@
-# Contributing to Priolist
+# Contributing to Priozen
 
 Please read these guidelines before submitting any contribution.
 

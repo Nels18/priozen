@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Priolist",
+    "name": "Priozen",
     "slug": "Priolist",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "priolist",
+    "scheme": "priozen",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "bundleIdentifier": "com.priolist.app",
+      "bundleIdentifier": "com.priozen.app",
       "icon": {
         "dark": "./assets/images/ios-icon-dark.png",
         "light": "./assets/images/ios-icon-light.png",
@@ -17,7 +17,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.priolist.app",
+      "package": "com.priozen.app",
       "adaptiveIcon": {
         "backgroundColor": "#4F46E5",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -54,6 +54,7 @@
       "eas": {
         "projectId": "0cb7e9a8-7547-4f3e-be66-ed5a78ee8ed0"
       }
-    }
+    },
+    "owner": "nels18"
   }
 }

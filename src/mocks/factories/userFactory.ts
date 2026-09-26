@@ -7,7 +7,7 @@ export const makeDumbUser = (overrides: Partial<User> = {}): User => ({
   id: 'user-1',
   firstName: 'Nelson',
   lastName: 'Belgarde',
-  email: 'nelson@priolist.app',
+  email: 'nelson@priozen.app',
   createdAt: '2026-01-01T00:00:00.000Z',
   ...overrides,
 });
