@@ -209,3 +209,15 @@ npm run test           # Vitest
 npm run test:watch     # Vitest en mode watch
 npm run test:coverage  # Vitest avec couverture
 ```
+
+## Pull requests
+
+Conventions lues par le skill `/pr-message` (skill personnel, générique) :
+
+- **Langue** : description des PR en **français** ; titre en anglais au format Conventional Commits (`feat(auth): add login page (AUTH-01)`), car il devient le message du squash merge
+- **Branche de base** : `develop` (seul `develop` est mergé dans `main`, garde CI)
+- **Ticket** : Jira `https://priozen.atlassian.net/browse/PRIO-XX`, clé dans le footer `Refs: PRIO-XX` des commits ; le code ticket (`AUTH-01`, `DASH-02`…) figure dans le nom de branche et le résumé du ticket
+- **Sections** (titres en français, avec emoji) : 💡 Contexte · 🏗️ Ce qui a été fait · 🛠️ Détails techniques · 🧪 Comment tester · 📸 Rendu Visuel (tableau Desktop / Mobile) · 💬 Notes pour le relecteur
+- **Comment tester** : données mockées MSW, utilisateur `martin@priozen.app` / `password123` ; préciser light/dark et mobile/desktop pour toute PR qui touche l'UI
+- **Maquette** à citer dans le contexte pour une PR UI : https://claude.ai/artifact/UWBMeXCP5cPEhwteH7VoCV
+- Après ouverture de la PR : passer le ticket Jira en « En cours de revue »
