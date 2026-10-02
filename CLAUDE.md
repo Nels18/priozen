@@ -18,6 +18,7 @@
   - ⚠️ X (Twitter) @priozen — compte fantôme, squatté → enregistrer **@priozenapp** à la place
 - ✅ MSW-00 — Setup infrastructure MSW terminé (handlers auth/tasks/folders/user, native.ts + worker.ts, `startMocks()` intégré dans `app/_layout.tsx`)
 - ✅ MSW-01 — Génération de données mockées (factories Faker.js pour users/tasks/folders/subtasks) terminé
+- ✅ AUTH-01 — Page Connexion (thème NativeWind, polices, i18n fr/en, client API) — en revue
 - ⏳ Backend : pas encore prêt
 
 ## Assets produits
@@ -72,7 +73,7 @@ Merge sur main
 
 ## Prochaine tâche
 
-AUTH-01 — Page Connexion (prochain ticket du backlog). MSW-00 et MSW-01 sont terminés.
+Objectif POC (label Jira `POC`) : AUTH-01 → DASH-01 → DASH-02 → TASK-01, puis DEVOPS-12 (build web en CI) et DEVOPS-04 (Vercel). AUTH-01 (page Connexion) est en revue ; prochaine tâche : DASH-01 — Layout global.
 
 ## Présentation
 
@@ -111,7 +112,9 @@ Le frontend tourne seul avec des données mockées (MSW — `msw/node` pour iOS/
 | `--text-muted`    | #64748B | #94A3B8 |
 | `--border`        | #E2E8F0 | #312E81 |
 
-Non encore déclarées comme thème NativeWind dans `tailwind.config.js` (thème vide pour l'instant) — à ajouter dans `theme.extend.colors` si besoin de classes utilitaires dédiées.
+Déclarées comme variables CSS dans `global.css` (bascule light/dark automatique via `prefers-color-scheme`) et exposées en classes NativeWind dans `tailwind.config.js` : `bg-page`, `bg-card`, `bg-input`, `bg-sidebar`, `text-text`, `text-muted`, `border-border`, `bg-primary` / `primary-hover` / `primary-light`, et par quadrant `critical`, `schedule`, `delegate`, `secondary` (+ variante `-bg`). Toujours utiliser ces classes sémantiques, jamais de couleur en dur ni de variante `dark:`.
+
+Maquette de référence (responsive mobile / tablette / bureau) : https://claude.ai/artifact/UWBMeXCP5cPEhwteH7VoCV
 
 ## Badges Eisenhower
 
@@ -124,8 +127,8 @@ Non encore déclarées comme thème NativeWind dans `tailwind.config.js` (thème
 
 ## Typographie
 
-- Titres : DM Serif Display
-- Interface : Inter ou DM Sans
+- Titres : DM Serif Display → classe `font-serif`
+- Interface : Inter → `font-sans`, `font-sans-medium`, `font-sans-semibold`, `font-sans-bold` (une famille par graisse : le natif ne synthétise pas les graisses des polices custom ; chargées dans `app/_layout.tsx`)
 
 ## Architecture des vues (à construire avec expo-router)
 
@@ -148,6 +151,10 @@ Non encore déclarées comme thème NativeWind dans `tailwind.config.js` (thème
 - Composants en PascalCase, hooks en camelCase avec préfixe `use`
 - Styles via classes NativeWind (`className`), pas de StyleSheet sauf cas non couvert par Tailwind
 - Alias d'import `@/*` disponible (voir `tsconfig.json`)
+- **Aucun texte affiché en dur** : tout passe par i18next (`src/i18n/`). Un namespace par domaine (`common`, `auth`, `dashboard`…), un fichier JSON par langue et par namespace dans `src/i18n/locales/{fr,en}/`. Le français est la langue de référence (les types des clés en dérivent) ; chaque clé doit exister en `fr` et en `en` (test de parité). Nouveau namespace → créer les deux JSON puis l'enregistrer dans `src/i18n/resources.ts`.
+- Les fonctions pures (validation, mapping d'erreurs) retournent des **clés** de traduction, jamais du texte ; l'écran traduit au rendu
+- Appels API via `apiRequest` (`src/api/client.ts`), base URL = `EXPO_PUBLIC_API_URL` (définie dans `.env.development` pour le dev mocké)
+- Données de test : utilisateur fictif **Martin Dupont / martin@priozen.app** (mot de passe mock `password123`) — ne jamais utiliser de vrai nom
 
 ## Structure des données (contrat mocké MSW — à confirmer avec le futur backend)
 
