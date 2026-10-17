@@ -43,9 +43,9 @@ export interface SubTask {
 
 export const mockUser: User = {
   id: 'user-1',
-  firstName: 'Nelson',
-  lastName: 'Belgarde',
-  email: 'nelson@priozen.app',
+  firstName: 'Martin',
+  lastName: 'Dupont',
+  email: 'martin@priozen.app',
   createdAt: '2026-01-01T00:00:00.000Z',
 };
 

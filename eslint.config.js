@@ -94,5 +94,16 @@ module.exports = defineConfig([
       '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
+  {
+    // Type-aware rules need a TS program, which only .ts/.tsx files get
+    // (see parserOptions above): turn them off for plain JS config files.
+    files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
+    ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    // Expo/Metro/Babel/Tailwind configs are CommonJS and must use require().
+    files: ['**/*.js', '**/*.cjs'],
+    rules: { '@typescript-eslint/no-require-imports': 'off' },
+  },
   prettierConfig,
 ]);
