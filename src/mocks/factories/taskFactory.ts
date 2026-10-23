@@ -48,6 +48,8 @@ export const makeDumbTask = (overrides: Partial<Task> = {}): Task => ({
   ...overrides,
 });
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+
 // Randomized — realistic seed data, not for test assertions.
 export const makeTask = (overrides: Partial<Task> = {}): Task => {
   const createdAt = faker.date.past({ years: 1 }).toISOString();
@@ -59,8 +61,14 @@ export const makeTask = (overrides: Partial<Task> = {}): Task => {
     quadrant: faker.helpers.arrayElement(QUADRANTS),
     folderId: null,
     userId: 'user-1',
+    // From a week ago to two weeks ahead, so the dev data includes overdue tasks.
     dueDate: randomBool(0.6)
-      ? faker.date.soon({ days: 14 }).toISOString()
+      ? faker.date
+          .between({
+            from: Date.now() - 7 * DAY_MS,
+            to: Date.now() + 14 * DAY_MS,
+          })
+          .toISOString()
       : null,
     isDone: randomBool(0.3),
     deletedAt: null,
