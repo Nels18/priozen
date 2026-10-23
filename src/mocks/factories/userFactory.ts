@@ -1,10 +1,11 @@
 import { fakerFR as faker } from '@faker-js/faker';
 import type { User } from '../../types/models';
+import { MOCK_USER_ID } from '../data/fixtures';
 import { createId } from '../utils';
 
 // Deterministic — stable values for unit tests.
 export const makeDumbUser = (overrides: Partial<User> = {}): User => ({
-  id: 'user-1',
+  id: MOCK_USER_ID,
   firstName: 'Martin',
   lastName: 'Dupont',
   email: 'martin@priozen.app',

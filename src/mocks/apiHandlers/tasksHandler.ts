@@ -1,6 +1,8 @@
 import { http, HttpResponse } from 'msw';
 import { tasksRoutes } from '../../api/routes';
 import type { Task } from '../../types/models';
+import { EISENHOWER_QUADRANTS } from '../../types/models';
+import { MOCK_USER_ID } from '../data/fixtures';
 import { database } from '../database';
 import { createId, randomDelay } from '../utils';
 
@@ -25,13 +27,9 @@ export const tasksHandler = [
       result = result.filter((t) => t.title.toLowerCase().includes(search));
 
     if (sort === 'priority') {
-      const order: Record<string, number> = {
-        critical: 0,
-        schedule: 1,
-        delegate: 2,
-        secondary: 3,
-      };
-      result.sort((a, b) => order[a.quadrant] - order[b.quadrant]);
+      const rank = (task: Task): number =>
+        EISENHOWER_QUADRANTS.indexOf(task.quadrant);
+      result.sort((a, b) => rank(a) - rank(b));
     } else if (sort === 'date') {
       result.sort((a, b) => {
         if (!a.dueDate) return 1;
@@ -75,7 +73,7 @@ export const tasksHandler = [
       description: body.description ?? null,
       quadrant: body.quadrant ?? 'schedule',
       folderId: body.folderId ?? null,
-      userId: 'user-1',
+      userId: MOCK_USER_ID,
       dueDate: body.dueDate ?? null,
       isDone: false,
       deletedAt: null,

@@ -1,13 +1,8 @@
 import { fakerFR as faker } from '@faker-js/faker';
-import type { EisenhowerQuadrant, Folder, Task } from '../../types/models';
-import { createId, randomBool } from '../utils';
-
-const QUADRANTS: EisenhowerQuadrant[] = [
-  'critical',
-  'schedule',
-  'delegate',
-  'secondary',
-];
+import type { Folder, Task } from '../../types/models';
+import { EISENHOWER_QUADRANTS } from '../../types/models';
+import { MOCK_USER_ID } from '../data/fixtures';
+import { createId, DAY_MS, randomBool } from '../utils';
 
 const TASK_TITLES = [
   'Préparer la présentation client',
@@ -39,7 +34,7 @@ export const makeDumbTask = (overrides: Partial<Task> = {}): Task => ({
   description: null,
   quadrant: 'schedule',
   folderId: null,
-  userId: 'user-1',
+  userId: MOCK_USER_ID,
   dueDate: null,
   isDone: false,
   deletedAt: null,
@@ -47,8 +42,6 @@ export const makeDumbTask = (overrides: Partial<Task> = {}): Task => ({
   updatedAt: '2026-04-20T10:00:00.000Z',
   ...overrides,
 });
-
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 // Randomized — realistic seed data, not for test assertions.
 export const makeTask = (overrides: Partial<Task> = {}): Task => {
@@ -58,9 +51,9 @@ export const makeTask = (overrides: Partial<Task> = {}): Task => {
     id: createId('task'),
     title: faker.helpers.arrayElement(TASK_TITLES),
     description: randomBool(0.5) ? faker.lorem.sentence() : null,
-    quadrant: faker.helpers.arrayElement(QUADRANTS),
+    quadrant: faker.helpers.arrayElement(EISENHOWER_QUADRANTS),
     folderId: null,
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     // From a week ago to two weeks ahead, so the dev data includes overdue tasks.
     dueDate: randomBool(0.6)
       ? faker.date
