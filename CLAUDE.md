@@ -18,7 +18,8 @@
   - ⚠️ X (Twitter) @priozen — compte fantôme, squatté → enregistrer **@priozenapp** à la place
 - ✅ MSW-00 — Setup infrastructure MSW terminé (handlers auth/tasks/folders/user, native.ts + worker.ts, `startMocks()` intégré dans `app/_layout.tsx`)
 - ✅ MSW-01 — Génération de données mockées (factories Faker.js pour users/tasks/folders/subtasks) terminé
-- ✅ AUTH-01 — Page Connexion (thème NativeWind, polices, i18n fr/en, client API) — en revue
+- ✅ AUTH-01 — Page Connexion (thème NativeWind, polices, i18n fr/en, client API)
+- 🔄 DASH-01 — Layout global responsive (sidebar, en-tête, panneau droit, nav mobile) — en revue
 - ⏳ Backend : pas encore prêt
 
 ## Assets produits
@@ -73,7 +74,7 @@ Merge sur main
 
 ## Prochaine tâche
 
-Objectif POC (label Jira `POC`) : AUTH-01 → DASH-01 → DASH-02 → TASK-01, puis DEVOPS-12 (build web en CI) et DEVOPS-04 (Vercel). AUTH-01 (page Connexion) est en revue ; prochaine tâche : DASH-01 — Layout global.
+Objectif POC (label Jira `POC`) : AUTH-01 → DASH-01 → DASH-02 → TASK-01, puis DEVOPS-12 (build web en CI) et DEVOPS-04 (Vercel). AUTH-01 terminé, DASH-01 (layout global) en revue ; prochaine tâche : DASH-02 — Liste de tâches groupées par quadrant.
 
 ## Présentation
 
@@ -114,6 +115,10 @@ Le frontend tourne seul avec des données mockées (MSW — `msw/node` pour iOS/
 
 Déclarées comme variables CSS dans `global.css` (bascule light/dark automatique via `prefers-color-scheme`) et exposées en classes NativeWind dans `tailwind.config.js` : `bg-page`, `bg-card`, `bg-input`, `bg-sidebar`, `text-text`, `text-muted`, `border-border`, `bg-primary` / `primary-hover` / `primary-light`, et par quadrant `critical`, `schedule`, `delegate`, `secondary` (+ variante `-bg`). Toujours utiliser ces classes sémantiques, jamais de couleur en dur ni de variante `dark:`.
 
+- Couleurs identiques dans les deux thèmes (blanc, premier plan de la sidebar) : `src/theme/fixedColors.js`, utilisé par `tailwind.config.js` (`text-sidebar-text`, `bg-sidebar-active`…) et par les composants qui attendent une couleur brute
+- Props de couleur brute qui suivent le thème (icônes, `placeholderTextColor`) : `useIconColors()` (`src/theme/useIconColors.ts`), à garder synchronisé avec `global.css`
+- Couleurs par quadrant : `QUADRANT_CLASSES` (`src/tasks/quadrants.ts`) — pastille, badge, texte ; ne jamais réécrire les classes `bg-critical`… à la main
+
 Maquette de référence (responsive mobile / tablette / bureau) : https://claude.ai/artifact/UWBMeXCP5cPEhwteH7VoCV
 
 ## Badges Eisenhower
@@ -129,8 +134,19 @@ Maquette de référence (responsive mobile / tablette / bureau) : https://claude
 
 - Titres : DM Serif Display → classe `font-serif`
 - Interface : Inter → `font-sans`, `font-sans-medium`, `font-sans-semibold`, `font-sans-bold` (une famille par graisse : le natif ne synthétise pas les graisses des polices custom ; chargées dans `app/_layout.tsx`)
+- Taille `text-caption` (13px) pour le texte secondaire de la maquette (libellés, liens, légendes) — pas de `text-[13px]`
 
-## Architecture des vues (à construire avec expo-router)
+## Architecture des vues (expo-router)
+
+Deux groupes de routes (les parenthèses n'apparaissent pas dans l'URL), chacun avec un `_layout.tsx` qui sert de garde :
+
+- `app/(auth)/` — écrans publics sans sidebar (`login`, `register`, `forgot-password`, `cgu`) ; un utilisateur connecté est renvoyé vers `/`
+- `app/(protected)/` — écrans connectés, rendus dans l'`AppShell` (`src/components/layout/`) ; sans session → `/login`
+- URL centralisées dans `ROUTES` (`src/navigation/routes.ts`) — jamais de chemin en dur ; les 5 entrées de navigation (sidebar + onglets mobiles) dans `NAV_ITEMS` (`src/navigation/navItems.ts`)
+- Mise en page responsive selon `useScreenSize()` (`src/layout/screenSize.ts`) : `small` < 768px (en-tête + onglets en bas + bouton « + »), `medium` 768–1279px (sidebar 240px + en-tête), `large` ≥ 1280px (sidebar 260px + en-tête + panneau droit 280px) — c'est la largeur disponible, pas le type d'appareil
+- Contenu d'un écran connecté dans `<Screen>` (défilement + marges par taille) ; écran pas encore livré → `<ScreenPlaceholder ticket="…">`
+
+Vues :
 
 - `/login` — Connexion
 - `/register` — Inscription (stepper 3 étapes + RGPD)
@@ -147,18 +163,20 @@ Maquette de référence (responsive mobile / tablette / bureau) : https://claude
 
 - Toujours utiliser les variables d'environnement Expo (`EXPO_PUBLIC_API_URL`) pour l'URL API
 - Ne jamais hardcoder d'URL
-- Données mockées via MSW (`src/mocks/`) : handlers par domaine (`apiHandlers/tasksHandler.ts`, `authHandler.ts`, `userHandler.ts`, `foldersHandler.ts`), fixtures dans `src/mocks/data/fixtures.ts`
+- Données mockées via MSW (`src/mocks/`) : handlers par domaine (`apiHandlers/tasksHandler.ts`, `authHandler.ts`, `userHandler.ts`, `foldersHandler.ts`), fixtures dans `src/mocks/data/fixtures.ts` (avec `MOCK_USER_ID`, `MOCK_PASSWORD`, `MOCK_TOKEN`) ; en dev, données aléatoires générées par les factories Faker
+- Les mocks importent les types depuis `src/types/models.ts` ; le code de l'app n'importe **jamais** depuis `src/mocks/`
+- Tests : URL d'API `TEST_API_URL` (`src/test/constants.ts`) ; les valeurs attendues des assertions restent écrites en dur
 - Composants en PascalCase, hooks en camelCase avec préfixe `use`
 - Styles via classes NativeWind (`className`), pas de StyleSheet sauf cas non couvert par Tailwind
 - Alias d'import `@/*` disponible (voir `tsconfig.json`)
 - **Aucun texte affiché en dur** : tout passe par i18next (`src/i18n/`). Un namespace par domaine (`common`, `auth`, `dashboard`…), un fichier JSON par langue et par namespace dans `src/i18n/locales/{fr,en}/`. Le français est la langue de référence (les types des clés en dérivent) ; chaque clé doit exister en `fr` et en `en` (test de parité). Nouveau namespace → créer les deux JSON puis l'enregistrer dans `src/i18n/resources.ts`.
 - Les fonctions pures (validation, mapping d'erreurs) retournent des **clés** de traduction, jamais du texte ; l'écran traduit au rendu
 - Appels API via `apiRequest` (`src/api/client.ts`), base URL = `EXPO_PUBLIC_API_URL` (définie dans `.env.development` pour le dev mocké)
-- Données de test : utilisateur fictif **Martin Dupont / martin@priozen.app** (mot de passe mock `password123`) — ne jamais utiliser de vrai nom
+- Données de test : utilisateur fictif **Martin Dupont / martin@priozen.app** (mot de passe mock `password123`, constante `MOCK_PASSWORD`) — ne jamais utiliser de vrai nom
 
-## Structure des données (contrat mocké MSW — à confirmer avec le futur backend)
+## Structure des données (contrat d'API — à confirmer avec le futur backend)
 
-Contrat actuellement implémenté par les fixtures/handlers MSW (`src/mocks/data/fixtures.ts`) : camelCase, quadrant Eisenhower encodé en un seul enum `quadrant` plutôt qu'en deux booléens séparés.
+Défini dans `src/types/models.ts`, partagé par l'app, le client API et les mocks MSW : camelCase, quadrant Eisenhower encodé en un seul enum `quadrant` plutôt qu'en deux booléens séparés. `EISENHOWER_QUADRANTS` donne les quadrants dans l'ordre de priorité.
 
 ```typescript
 type EisenhowerQuadrant = 'critical' | 'schedule' | 'delegate' | 'secondary';

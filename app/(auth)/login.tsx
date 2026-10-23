@@ -6,6 +6,7 @@ import { Text, View } from 'react-native';
 import { useAuth } from '@/src/auth/AuthProvider';
 import type { LoginErrorKey, LoginFieldErrors } from '@/src/auth/loginForm';
 import { getLoginErrorKey, validateLoginForm } from '@/src/auth/loginForm';
+import { ROUTES } from '@/src/navigation/routes';
 import { AuthCard } from '@/src/components/AuthCard';
 import { Button } from '@/src/components/ui/Button';
 import { Logo } from '@/src/components/ui/Logo';
@@ -29,7 +30,7 @@ export default function LoginScreen(): JSX.Element {
     setIsLoading(true);
     try {
       await signIn({ email: email.trim(), password });
-      router.replace('/');
+      router.replace(ROUTES.tasks);
     } catch (error: unknown) {
       setSubmitError(getLoginErrorKey(error));
       setIsLoading(false);
@@ -39,7 +40,7 @@ export default function LoginScreen(): JSX.Element {
   return (
     <AuthCard>
       <Logo className="mb-1 text-center text-[28px]" />
-      <Text className="mb-7 text-center font-sans text-[13px] text-muted">
+      <Text className="mb-7 text-center font-sans text-caption text-muted">
         {t('login.tagline')}
       </Text>
 
@@ -48,7 +49,7 @@ export default function LoginScreen(): JSX.Element {
           accessibilityRole="alert"
           className="mb-4 rounded-sm border border-critical/40 bg-critical-bg px-3.5 py-2.5"
         >
-          <Text className="font-sans text-[13px] text-critical">
+          <Text className="font-sans text-caption text-critical">
             ⚠ {t(submitError)}
           </Text>
         </View>
@@ -88,8 +89,8 @@ export default function LoginScreen(): JSX.Element {
 
       <View className="mb-1 items-end">
         <Link
-          href="/forgot-password"
-          className="font-sans-medium text-[13px] text-primary"
+          href={ROUTES.forgotPassword}
+          className="font-sans-medium text-caption text-primary"
         >
           {t('login.forgotPassword')}
         </Link>
@@ -102,9 +103,9 @@ export default function LoginScreen(): JSX.Element {
         className="mt-2"
       />
 
-      <Text className="mt-5 text-center font-sans text-[13px] text-muted">
+      <Text className="mt-5 text-center font-sans text-caption text-muted">
         {t('login.noAccount')}{' '}
-        <Link href="/register" className="font-sans-medium text-primary">
+        <Link href={ROUTES.register} className="font-sans-medium text-primary">
           {t('login.signUp')}
         </Link>
       </Text>

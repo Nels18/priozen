@@ -46,7 +46,7 @@ function MocksProvider({
 
 export default function RootLayout(): JSX.Element | null {
   // Keys are the font family names used by tailwind.config.js (fontFamily).
-  const [hasLoadedFonts] = useFonts({
+  const [hasLoadedFonts, fontError] = useFonts({
     dmSerifDisplay: DMSerifDisplay_400Regular,
     interRegular: Inter_400Regular,
     interMedium: Inter_500Medium,
@@ -54,7 +54,9 @@ export default function RootLayout(): JSX.Element | null {
     interBold: Inter_700Bold,
   });
 
-  if (!hasLoadedFonts) return null;
+  // Wait for the fonts to avoid a flash of system font — but if they fail to
+  // load, render anyway (system font fallback) instead of a blank screen.
+  if (!hasLoadedFonts && !fontError) return null;
 
   return (
     <MocksProvider>
