@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { foldersRoutes } from '../../api/routes';
-import type { Folder } from '../data/fixtures';
+import type { Folder } from '../../types/models';
+import { MOCK_USER_ID } from '../data/fixtures';
 import { database } from '../database';
 import { createId, randomDelay } from '../utils';
 
@@ -42,7 +43,7 @@ export const foldersHandler = [
       id: createId('folder'),
       name: body.name,
       color: body.color ?? '#6366F1',
-      userId: 'user-1',
+      userId: MOCK_USER_ID,
       taskCount: 0,
       createdAt: new Date().toISOString(),
     };

@@ -1,4 +1,4 @@
-import type { User } from '../mocks/data/fixtures';
+import type { User } from '../types/models';
 import { apiRequest } from './client';
 import { authRoutes } from './routes';
 

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TextInputProps } from 'react-native';
 import { Pressable, Text, TextInput, View } from 'react-native';
+import { useIconColors } from '@/src/theme/useIconColors';
 
 interface TextFieldProps extends Omit<TextInputProps, 'secureTextEntry'> {
   label: string;
@@ -19,6 +20,7 @@ export function TextField({
   ...inputProps
 }: TextFieldProps): JSX.Element {
   const { t } = useTranslation();
+  const iconColors = useIconColors();
   const [isFocused, setIsFocused] = useState(false);
   const [isRevealed, setIsRevealed] = useState(false);
 
@@ -30,7 +32,7 @@ export function TextField({
 
   return (
     <View className="mb-4">
-      <Text className="mb-1.5 font-sans-semibold text-[13px] text-text">
+      <Text className="mb-1.5 font-sans-semibold text-caption text-text">
         {label}
       </Text>
       <View
@@ -48,7 +50,7 @@ export function TextField({
             setIsFocused(false);
             inputProps.onBlur?.(event);
           }}
-          placeholderTextColor="rgb(100 116 139)"
+          placeholderTextColor={iconColors.muted}
           className="flex-1 px-3.5 py-2.5 font-sans text-sm text-text outline-none"
         />
         {isSecret && (
@@ -64,7 +66,7 @@ export function TextField({
             <Ionicons
               name={isRevealed ? 'eye-off-outline' : 'eye-outline'}
               size={20}
-              color="rgb(100 116 139)"
+              color={iconColors.muted}
             />
           </Pressable>
         )}

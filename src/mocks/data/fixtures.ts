@@ -1,48 +1,17 @@
-export type EisenhowerQuadrant =
-  'critical' | 'schedule' | 'delegate' | 'secondary';
+import type { Folder, SubTask, Task, User } from '../../types/models';
+import { DAY_MS } from '../utils';
 
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  createdAt: string;
-}
+// ─── Mock credentials ─────────────────────────────────────────────────────────
 
-export interface Folder {
-  id: string;
-  name: string;
-  color: string;
-  userId: string;
-  taskCount: number;
-  createdAt: string;
-}
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string | null;
-  quadrant: EisenhowerQuadrant;
-  folderId: string | null;
-  userId: string;
-  dueDate: string | null;
-  isDone: boolean;
-  deletedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface SubTask {
-  id: string;
-  taskId: string;
-  title: string;
-  isDone: boolean;
-}
+/** The only user of the mocked API; every mocked entity belongs to them. */
+export const MOCK_USER_ID = 'user-1';
+/** Password accepted by POST /auth/login (and the password-change check). */
+export const MOCK_PASSWORD = 'password123';
 
 // ─── Users ────────────────────────────────────────────────────────────────────
 
 export const mockUser: User = {
-  id: 'user-1',
+  id: MOCK_USER_ID,
   firstName: 'Martin',
   lastName: 'Dupont',
   email: 'martin@priozen.app',
@@ -56,7 +25,7 @@ export const mockFolders: Folder[] = [
     id: 'folder-1',
     name: 'Perso',
     color: '#6366F1',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     taskCount: 4,
     createdAt: '2026-01-10T00:00:00.000Z',
   },
@@ -64,7 +33,7 @@ export const mockFolders: Folder[] = [
     id: 'folder-2',
     name: 'Travail',
     color: '#F59E0B',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     taskCount: 6,
     createdAt: '2026-01-11T00:00:00.000Z',
   },
@@ -72,7 +41,7 @@ export const mockFolders: Folder[] = [
     id: 'folder-3',
     name: 'Priozen App',
     color: '#10B981',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     taskCount: 5,
     createdAt: '2026-01-12T00:00:00.000Z',
   },
@@ -81,10 +50,8 @@ export const mockFolders: Folder[] = [
 // ─── Tasks ────────────────────────────────────────────────────────────────────
 
 const today = new Date().toISOString().split('T')[0];
-const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-const nextWeek = new Date(Date.now() + 7 * 86400000)
-  .toISOString()
-  .split('T')[0];
+const yesterday = new Date(Date.now() - DAY_MS).toISOString().split('T')[0];
+const nextWeek = new Date(Date.now() + 7 * DAY_MS).toISOString().split('T')[0];
 
 export const mockTasks: Task[] = [
   // Critical (urgent + important)
@@ -94,7 +61,7 @@ export const mockTasks: Task[] = [
     description: 'Intégrer le formulaire avec validation et appel API.',
     quadrant: 'critical',
     folderId: 'folder-3',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: today,
     isDone: false,
     deletedAt: null,
@@ -107,7 +74,7 @@ export const mockTasks: Task[] = [
     description: null,
     quadrant: 'critical',
     folderId: 'folder-2',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: yesterday,
     isDone: false,
     deletedAt: null,
@@ -121,7 +88,7 @@ export const mockTasks: Task[] = [
     description: 'Couvrir les composants Auth avec Vitest.',
     quadrant: 'schedule',
     folderId: 'folder-3',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: nextWeek,
     isDone: false,
     deletedAt: null,
@@ -134,7 +101,7 @@ export const mockTasks: Task[] = [
     description: null,
     quadrant: 'schedule',
     folderId: 'folder-3',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: nextWeek,
     isDone: false,
     deletedAt: null,
@@ -148,7 +115,7 @@ export const mockTasks: Task[] = [
     description: null,
     quadrant: 'delegate',
     folderId: null,
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: today,
     isDone: false,
     deletedAt: null,
@@ -162,7 +129,7 @@ export const mockTasks: Task[] = [
     description: null,
     quadrant: 'secondary',
     folderId: 'folder-1',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: null,
     isDone: false,
     deletedAt: null,
@@ -176,7 +143,7 @@ export const mockTasks: Task[] = [
     description: 'Configuration des workflows CI et release.',
     quadrant: 'critical',
     folderId: 'folder-3',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: '2026-04-24T00:00:00.000Z',
     isDone: true,
     deletedAt: null,
@@ -189,7 +156,7 @@ export const mockTasks: Task[] = [
     description: null,
     quadrant: 'schedule',
     folderId: 'folder-3',
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: null,
     isDone: true,
     deletedAt: null,
@@ -203,7 +170,7 @@ export const mockTasks: Task[] = [
     description: null,
     quadrant: 'secondary',
     folderId: null,
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
     dueDate: null,
     isDone: false,
     deletedAt: '2026-04-20T10:00:00.000Z',

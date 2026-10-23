@@ -1,6 +1,8 @@
 import { delay } from 'msw';
 import { Platform } from 'react-native';
 
+export const DAY_MS = 24 * 60 * 60 * 1000;
+
 export const randomDelay = (min = 200, max = 800): Promise<void> => {
   if (process.env.NODE_ENV === 'test') return Promise.resolve();
   return delay(Math.floor(Math.random() * (max - min) + min));

@@ -1,12 +1,9 @@
+import type { Folder, SubTask, Task, User } from '../types/models';
 import {
   mockFolders,
   mockSubTasks,
   mockTasks,
   mockUser,
-  type Folder,
-  type SubTask,
-  type Task,
-  type User,
 } from './data/fixtures';
 import { makeFolders } from './factories/folderFactory';
 import { makeSubTasksForTasks } from './factories/subTaskFactory';

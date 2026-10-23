@@ -1,5 +1,6 @@
 /** Maps a CSS variable from global.css to a color that supports opacity modifiers. */
 const token = (name) => `rgb(var(--color-${name}) / <alpha-value>)`;
+const fixedColors = require('./src/theme/fixedColors');
 
 module.exports = {
   presets: [require('nativewind/preset')],
@@ -15,7 +16,8 @@ module.exports = {
         success: token('success'),
         page: token('page'),
         card: token('card'),
-        sidebar: token('sidebar'),
+        // Background follows the theme; foreground colors are fixed.
+        sidebar: { DEFAULT: token('sidebar'), ...fixedColors.sidebar },
         input: token('input'),
         text: token('text'),
         muted: token('muted'),
@@ -34,6 +36,10 @@ module.exports = {
         'sans-medium': ['interMedium'],
         'sans-semibold': ['interSemiBold'],
         'sans-bold': ['interBold'],
+      },
+      // 13px: secondary text of the mockup (labels, links, captions).
+      fontSize: {
+        caption: '13px',
       },
       borderRadius: {
         sm: '8px',

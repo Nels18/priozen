@@ -2,6 +2,7 @@ import { Link } from 'expo-router';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
+import { ROUTES } from '@/src/navigation/routes';
 import { AuthCard } from './AuthCard';
 
 interface ComingSoonProps {
@@ -18,12 +19,12 @@ export function ComingSoon({ title, ticket }: ComingSoonProps): JSX.Element {
       <Text className="mb-2 text-center font-serif text-[22px] text-text">
         {title}
       </Text>
-      <Text className="mb-6 text-center font-sans text-[13px] text-muted">
+      <Text className="mb-6 text-center font-sans text-caption text-muted">
         {t('comingSoon', { ticket })}
       </Text>
       <Link
-        href="/login"
-        className="text-center font-sans-medium text-[13px] text-primary"
+        href={ROUTES.login}
+        className="text-center font-sans-medium text-caption text-primary"
       >
         {t('auth:backToLogin')}
       </Link>

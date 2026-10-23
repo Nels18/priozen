@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TEST_API_URL } from '../../test/constants';
+import { MOCK_PASSWORD } from '../data/fixtures';
 import { userRoutes } from '../../api/routes';
 import { makeDumbUser } from '../factories/userFactory';
 
@@ -6,7 +8,6 @@ import { makeDumbUser } from '../factories/userFactory';
 // starts from the seeded fixtures instead of leaking state across tests.
 let serverModule: typeof import('../server');
 
-const BASE_URL = 'http://test.local';
 const expectedUser = makeDumbUser();
 
 beforeEach(async (): Promise<void> => {
@@ -21,7 +22,7 @@ afterEach((): void => {
 
 describe('GET /user/me', () => {
   it('returns the current user', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${userRoutes.me()}`);
+    const response = await fetch(`${TEST_API_URL}${userRoutes.me()}`);
     expect(response.status).toBe(200);
     const body = (await response.json()) as { email: string };
     expect(body.email).toBe(expectedUser.email);
@@ -30,7 +31,7 @@ describe('GET /user/me', () => {
 
 describe('PATCH /user/me', () => {
   it('merges the given fields into the current user', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${userRoutes.me()}`, {
+    const response = await fetch(`${TEST_API_URL}${userRoutes.me()}`, {
       method: 'PATCH',
       body: JSON.stringify({ firstName: 'Alice' }),
     });
@@ -43,16 +44,16 @@ describe('PATCH /user/me', () => {
 
 describe('PATCH /user/me/password', () => {
   it('rejects a missing password with 422', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${userRoutes.password()}`, {
+    const response = await fetch(`${TEST_API_URL}${userRoutes.password()}`, {
       method: 'PATCH',
-      body: JSON.stringify({ currentPassword: 'password123' }),
+      body: JSON.stringify({ currentPassword: MOCK_PASSWORD }),
     });
 
     expect(response.status).toBe(422);
   });
 
   it('rejects an incorrect current password with 401', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${userRoutes.password()}`, {
+    const response = await fetch(`${TEST_API_URL}${userRoutes.password()}`, {
       method: 'PATCH',
       body: JSON.stringify({
         currentPassword: 'wrong-password',
@@ -64,10 +65,10 @@ describe('PATCH /user/me/password', () => {
   });
 
   it('accepts a correct current password', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${userRoutes.password()}`, {
+    const response = await fetch(`${TEST_API_URL}${userRoutes.password()}`, {
       method: 'PATCH',
       body: JSON.stringify({
-        currentPassword: 'password123',
+        currentPassword: MOCK_PASSWORD,
         newPassword: 'new-password',
       }),
     });
@@ -78,7 +79,7 @@ describe('PATCH /user/me/password', () => {
 
 describe('DELETE /user/me', () => {
   it('returns a success message', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${userRoutes.me()}`, {
+    const response = await fetch(`${TEST_API_URL}${userRoutes.me()}`, {
       method: 'DELETE',
     });
 

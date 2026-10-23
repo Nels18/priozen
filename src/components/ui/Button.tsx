@@ -1,5 +1,6 @@
 import type { JSX } from 'react';
 import { ActivityIndicator, Pressable, Text } from 'react-native';
+import fixedColors from '@/src/theme/fixedColors';
 
 interface ButtonProps {
   label: string;
@@ -25,7 +26,7 @@ export function Button({
       } ${className}`}
     >
       {isLoading ? (
-        <ActivityIndicator color="#FFFFFF" />
+        <ActivityIndicator color={fixedColors.white} />
       ) : (
         <Text className="font-sans-semibold text-[15px] text-white">
           {label}

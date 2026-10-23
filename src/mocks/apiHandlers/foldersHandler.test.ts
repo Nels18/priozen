@@ -1,12 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TEST_API_URL } from '../../test/constants';
 import { foldersRoutes } from '../../api/routes';
 import { makeDumbFolder } from '../factories/folderFactory';
 
 // Each test re-imports the mock server so the underlying database singleton
 // starts from the seeded fixtures instead of leaking state across tests.
 let serverModule: typeof import('../server');
-
-const BASE_URL = 'http://test.local';
 
 const expectedFolders = [
   makeDumbFolder({ taskCount: 4 }),
@@ -40,7 +39,7 @@ const [firstFolder] = expectedFolders;
 
 describe('GET /folders', () => {
   it('returns the seeded folders', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${foldersRoutes.list()}`);
+    const response = await fetch(`${TEST_API_URL}${foldersRoutes.list()}`);
     expect(response.status).toBe(200);
     const body = (await response.json()) as unknown[];
     expect(body).toHaveLength(expectedFolders.length);
@@ -50,7 +49,7 @@ describe('GET /folders', () => {
 describe('GET /folders/:id', () => {
   it('returns the matching folder', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${foldersRoutes.detail(firstFolder.id)}`,
+      `${TEST_API_URL}${foldersRoutes.detail(firstFolder.id)}`,
     );
     expect(response.status).toBe(200);
     const body = (await response.json()) as { name: string };
@@ -59,7 +58,7 @@ describe('GET /folders/:id', () => {
 
   it('returns 404 for an unknown folder', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${foldersRoutes.detail('missing')}`,
+      `${TEST_API_URL}${foldersRoutes.detail('missing')}`,
     );
     expect(response.status).toBe(404);
   });
@@ -67,7 +66,7 @@ describe('GET /folders/:id', () => {
 
 describe('POST /folders', () => {
   it('creates a folder with default color and task count', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${foldersRoutes.list()}`, {
+    const response = await fetch(`${TEST_API_URL}${foldersRoutes.list()}`, {
       method: 'POST',
       body: JSON.stringify({ name: 'Loisirs' }),
     });
@@ -84,7 +83,7 @@ describe('POST /folders', () => {
   });
 
   it('rejects a missing name with 422', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${foldersRoutes.list()}`, {
+    const response = await fetch(`${TEST_API_URL}${foldersRoutes.list()}`, {
       method: 'POST',
       body: JSON.stringify({}),
     });
@@ -96,7 +95,7 @@ describe('POST /folders', () => {
 describe('PATCH /folders/:id', () => {
   it('updates an existing folder', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${foldersRoutes.detail(firstFolder.id)}`,
+      `${TEST_API_URL}${foldersRoutes.detail(firstFolder.id)}`,
       {
         method: 'PATCH',
         body: JSON.stringify({ name: 'Personnel' }),
@@ -110,7 +109,7 @@ describe('PATCH /folders/:id', () => {
 
   it('returns 404 for an unknown folder', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${foldersRoutes.detail('missing')}`,
+      `${TEST_API_URL}${foldersRoutes.detail('missing')}`,
       {
         method: 'PATCH',
         body: JSON.stringify({ name: 'x' }),
@@ -124,7 +123,7 @@ describe('PATCH /folders/:id', () => {
 describe('DELETE /folders/:id', () => {
   it('deletes an existing folder', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${foldersRoutes.detail(firstFolder.id)}`,
+      `${TEST_API_URL}${foldersRoutes.detail(firstFolder.id)}`,
       { method: 'DELETE' },
     );
 
@@ -133,7 +132,7 @@ describe('DELETE /folders/:id', () => {
 
   it('returns 404 for an unknown folder', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${foldersRoutes.detail('missing')}`,
+      `${TEST_API_URL}${foldersRoutes.detail('missing')}`,
       { method: 'DELETE' },
     );
 
