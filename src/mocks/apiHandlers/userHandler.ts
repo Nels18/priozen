@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { userRoutes } from '../../api/routes';
-import type { User } from '../data/fixtures';
+import type { User } from '../../types/models';
 import { database } from '../database';
 import { randomDelay } from '../utils';
 

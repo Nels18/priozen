@@ -1,5 +1,5 @@
 import { fakerFR as faker } from '@faker-js/faker';
-import type { Folder } from '../data/fixtures';
+import type { Folder } from '../../types/models';
 import { createId } from '../utils';
 
 const FOLDER_COLORS = ['#6366F1', '#F59E0B', '#10B981', '#EF4444', '#0EA5E9'];

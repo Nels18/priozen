@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { foldersRoutes } from '../../api/routes';
-import type { Folder } from '../data/fixtures';
+import type { Folder } from '../../types/models';
 import { database } from '../database';
 import { createId, randomDelay } from '../utils';
 

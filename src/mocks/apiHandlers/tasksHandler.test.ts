@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { tasksRoutes } from '../../api/routes';
-import type { Task } from '../data/fixtures';
+import type { Task } from '../../types/models';
 import { makeDumbTask } from '../factories/taskFactory';
 
 // Each test re-imports the mock server so the underlying database singleton

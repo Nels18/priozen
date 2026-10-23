@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { tasksRoutes } from '../../api/routes';
-import type { Task } from '../data/fixtures';
+import type { Task } from '../../types/models';
 import { database } from '../database';
 import { createId, randomDelay } from '../utils';
 

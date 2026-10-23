@@ -1,5 +1,5 @@
 import { fakerFR as faker } from '@faker-js/faker';
-import type { User } from '../data/fixtures';
+import type { User } from '../../types/models';
 import { createId } from '../utils';
 
 // Deterministic — stable values for unit tests.

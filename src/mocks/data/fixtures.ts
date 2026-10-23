@@ -1,43 +1,4 @@
-export type EisenhowerQuadrant =
-  'critical' | 'schedule' | 'delegate' | 'secondary';
-
-export interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  createdAt: string;
-}
-
-export interface Folder {
-  id: string;
-  name: string;
-  color: string;
-  userId: string;
-  taskCount: number;
-  createdAt: string;
-}
-
-export interface Task {
-  id: string;
-  title: string;
-  description: string | null;
-  quadrant: EisenhowerQuadrant;
-  folderId: string | null;
-  userId: string;
-  dueDate: string | null;
-  isDone: boolean;
-  deletedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface SubTask {
-  id: string;
-  taskId: string;
-  title: string;
-  isDone: boolean;
-}
+import type { Folder, SubTask, Task, User } from '../../types/models';
 
 // ─── Users ────────────────────────────────────────────────────────────────────
 
