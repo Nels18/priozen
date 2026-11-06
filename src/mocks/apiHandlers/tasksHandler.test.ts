@@ -1,13 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TEST_API_URL } from '../../test/constants';
 import { tasksRoutes } from '../../api/routes';
-import type { Task } from '../data/fixtures';
+import type { Task } from '../../types/models';
 import { makeDumbTask } from '../factories/taskFactory';
 
 // Each test re-imports the mock server so the underlying database singleton
 // starts from the seeded fixtures instead of leaking state across tests.
 let serverModule: typeof import('../server');
-
-const BASE_URL = 'http://test.local';
 
 const expectedTasks: Task[] = [
   makeDumbTask({
@@ -101,7 +100,7 @@ const searchTarget = expectedTasks.find((task) =>
 
 describe('GET /tasks', () => {
   it('excludes soft-deleted tasks by default', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${tasksRoutes.list()}`);
+    const response = await fetch(`${TEST_API_URL}${tasksRoutes.list()}`);
     expect(response.status).toBe(200);
     const body = (await response.json()) as Task[];
     expect(body).toHaveLength(activeTasks.length);
@@ -110,7 +109,7 @@ describe('GET /tasks', () => {
 
   it('includes soft-deleted tasks when deleted=true', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.list()}?deleted=true`,
+      `${TEST_API_URL}${tasksRoutes.list()}?deleted=true`,
     );
     const body = (await response.json()) as Task[];
     expect(body).toHaveLength(trashedTasks.length);
@@ -119,7 +118,7 @@ describe('GET /tasks', () => {
 
   it('filters by folder_id', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.list()}?folder_id=folder-1`,
+      `${TEST_API_URL}${tasksRoutes.list()}?folder_id=folder-1`,
     );
     const body = (await response.json()) as Task[];
     expect(body.every((task) => task.folderId === 'folder-1')).toBe(true);
@@ -127,7 +126,7 @@ describe('GET /tasks', () => {
 
   it('filters by a case-insensitive search term', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.list()}?search=CONNEXION`,
+      `${TEST_API_URL}${tasksRoutes.list()}?search=CONNEXION`,
     );
     const body = (await response.json()) as Task[];
     expect(body).toHaveLength(1);
@@ -135,7 +134,7 @@ describe('GET /tasks', () => {
   });
 
   it('sorts by priority (critical > schedule > delegate > secondary) by default', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${tasksRoutes.list()}`);
+    const response = await fetch(`${TEST_API_URL}${tasksRoutes.list()}`);
     const body = (await response.json()) as Task[];
     const order: Record<string, number> = {
       critical: 0,
@@ -149,7 +148,9 @@ describe('GET /tasks', () => {
   });
 
   it('sorts by name when sort=name', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${tasksRoutes.list()}?sort=name`);
+    const response = await fetch(
+      `${TEST_API_URL}${tasksRoutes.list()}?sort=name`,
+    );
     const body = (await response.json()) as Task[];
     const titles = body.map((task) => task.title);
     const sortedTitles = [...titles].sort((a, b) => a.localeCompare(b));
@@ -160,7 +161,7 @@ describe('GET /tasks', () => {
 describe('GET /tasks/:id', () => {
   it('returns the matching task', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.detail(firstTask.id)}`,
+      `${TEST_API_URL}${tasksRoutes.detail(firstTask.id)}`,
     );
     expect(response.status).toBe(200);
     const body = (await response.json()) as Task;
@@ -168,14 +169,16 @@ describe('GET /tasks/:id', () => {
   });
 
   it('returns 404 for an unknown task', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${tasksRoutes.detail('missing')}`);
+    const response = await fetch(
+      `${TEST_API_URL}${tasksRoutes.detail('missing')}`,
+    );
     expect(response.status).toBe(404);
   });
 });
 
 describe('POST /tasks', () => {
   it('creates a task with sensible defaults', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${tasksRoutes.list()}`, {
+    const response = await fetch(`${TEST_API_URL}${tasksRoutes.list()}`, {
       method: 'POST',
       body: JSON.stringify({ title: 'Nouvelle tâche' }),
     });
@@ -189,7 +192,7 @@ describe('POST /tasks', () => {
   });
 
   it('rejects a missing or blank title with 422', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${tasksRoutes.list()}`, {
+    const response = await fetch(`${TEST_API_URL}${tasksRoutes.list()}`, {
       method: 'POST',
       body: JSON.stringify({ title: '   ' }),
     });
@@ -201,7 +204,7 @@ describe('POST /tasks', () => {
 describe('PATCH /tasks/:id', () => {
   it('updates an existing task', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.detail(firstTask.id)}`,
+      `${TEST_API_URL}${tasksRoutes.detail(firstTask.id)}`,
       {
         method: 'PATCH',
         body: JSON.stringify({ isDone: true }),
@@ -215,7 +218,7 @@ describe('PATCH /tasks/:id', () => {
 
   it('returns 404 for an unknown task', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.detail('missing')}`,
+      `${TEST_API_URL}${tasksRoutes.detail('missing')}`,
       {
         method: 'PATCH',
         body: JSON.stringify({ isDone: true }),
@@ -229,14 +232,14 @@ describe('PATCH /tasks/:id', () => {
 describe('DELETE /tasks/:id', () => {
   it('soft-deletes a task by setting deletedAt', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.detail(firstTask.id)}`,
+      `${TEST_API_URL}${tasksRoutes.detail(firstTask.id)}`,
       { method: 'DELETE' },
     );
 
     expect(response.status).toBe(200);
 
     const taskResponse = await fetch(
-      `${BASE_URL}${tasksRoutes.detail(firstTask.id)}`,
+      `${TEST_API_URL}${tasksRoutes.detail(firstTask.id)}`,
     );
     const body = (await taskResponse.json()) as Task;
     expect(body.deletedAt).not.toBeNull();
@@ -244,7 +247,7 @@ describe('DELETE /tasks/:id', () => {
 
   it('returns 404 for an unknown task', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.detail('missing')}`,
+      `${TEST_API_URL}${tasksRoutes.detail('missing')}`,
       { method: 'DELETE' },
     );
 
@@ -255,7 +258,7 @@ describe('DELETE /tasks/:id', () => {
 describe('POST /tasks/:id/restore', () => {
   it('clears deletedAt on the trashed task', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.restore(trashedTask.id)}`,
+      `${TEST_API_URL}${tasksRoutes.restore(trashedTask.id)}`,
       { method: 'POST' },
     );
 
@@ -266,7 +269,7 @@ describe('POST /tasks/:id/restore', () => {
 
   it('returns 404 for an unknown task', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.restore('missing')}`,
+      `${TEST_API_URL}${tasksRoutes.restore('missing')}`,
       { method: 'POST' },
     );
 
@@ -277,21 +280,21 @@ describe('POST /tasks/:id/restore', () => {
 describe('DELETE /tasks/:id/permanent', () => {
   it('removes the task entirely', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.permanent(trashedTask.id)}`,
+      `${TEST_API_URL}${tasksRoutes.permanent(trashedTask.id)}`,
       { method: 'DELETE' },
     );
 
     expect(response.status).toBe(200);
 
     const getResponse = await fetch(
-      `${BASE_URL}${tasksRoutes.detail(trashedTask.id)}`,
+      `${TEST_API_URL}${tasksRoutes.detail(trashedTask.id)}`,
     );
     expect(getResponse.status).toBe(404);
   });
 
   it('returns 404 for an unknown task', async (): Promise<void> => {
     const response = await fetch(
-      `${BASE_URL}${tasksRoutes.permanent('missing')}`,
+      `${TEST_API_URL}${tasksRoutes.permanent('missing')}`,
       { method: 'DELETE' },
     );
 
@@ -301,14 +304,14 @@ describe('DELETE /tasks/:id/permanent', () => {
 
 describe('DELETE /tasks/trash/empty', () => {
   it('drops every soft-deleted task', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${tasksRoutes.trashEmpty()}`, {
+    const response = await fetch(`${TEST_API_URL}${tasksRoutes.trashEmpty()}`, {
       method: 'DELETE',
     });
 
     expect(response.status).toBe(200);
 
     const listResponse = await fetch(
-      `${BASE_URL}${tasksRoutes.list()}?deleted=true`,
+      `${TEST_API_URL}${tasksRoutes.list()}?deleted=true`,
     );
     const body = (await listResponse.json()) as Task[];
     expect(body).toHaveLength(0);

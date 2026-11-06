@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "tasks": "Tasks",
+    "folders": "Folders",
+    "focus": "Focus",
+    "analytics": "Analytics",
+    "analyticsShort": "Stats",
+    "profile": "Profile"
+  },
+  "titles": {
+    "tasks": "Tasks",
+    "folders": "Folders",
+    "focus": "Focus mode",
+    "analytics": "Analytics",
+    "profile": "Profile"
+  },
+  "mainNavigation": "Main navigation",
+  "newTask": "New task",
+  "rightPanel": {
+    "overview": "Overview",
+    "progress": "Progress",
+    "completed": "Completed tasks",
+    "overdue": "Overdue",
+    "noOverdue": "No overdue tasks 🎉",
+    "loadError": "Couldn't load tasks."
+  }
+}

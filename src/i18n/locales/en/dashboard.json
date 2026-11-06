@@ -1,5 +1,4 @@
 {
   "greeting": "Hello,",
-  "greetingName": "{{firstName}} 👋",
-  "signOut": "Sign out"
+  "greetingName": "{{firstName}} 👋"
 }

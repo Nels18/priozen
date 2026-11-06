@@ -1,0 +1,8 @@
+{
+  "quadrants": {
+    "critical": "Critical",
+    "schedule": "Schedule",
+    "delegate": "Delegate",
+    "secondary": "Secondary"
+  }
+}

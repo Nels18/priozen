@@ -1,5 +1,5 @@
 import { fakerFR as faker } from '@faker-js/faker';
-import type { SubTask, Task } from '../data/fixtures';
+import type { SubTask, Task } from '../../types/models';
 import { createId, randomBool } from '../utils';
 
 const SUBTASK_TITLES = [

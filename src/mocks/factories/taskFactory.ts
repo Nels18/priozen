@@ -1,13 +1,8 @@
 import { fakerFR as faker } from '@faker-js/faker';
-import type { EisenhowerQuadrant, Folder, Task } from '../data/fixtures';
-import { createId, randomBool } from '../utils';
-
-const QUADRANTS: EisenhowerQuadrant[] = [
-  'critical',
-  'schedule',
-  'delegate',
-  'secondary',
-];
+import type { Folder, Task } from '../../types/models';
+import { EISENHOWER_QUADRANTS } from '../../types/models';
+import { MOCK_USER_ID } from '../data/fixtures';
+import { createId, DAY_MS, randomBool } from '../utils';
 
 const TASK_TITLES = [
   'Préparer la présentation client',
@@ -39,7 +34,7 @@ export const makeDumbTask = (overrides: Partial<Task> = {}): Task => ({
   description: null,
   quadrant: 'schedule',
   folderId: null,
-  userId: 'user-1',
+  userId: MOCK_USER_ID,
   dueDate: null,
   isDone: false,
   deletedAt: null,
@@ -56,11 +51,17 @@ export const makeTask = (overrides: Partial<Task> = {}): Task => {
     id: createId('task'),
     title: faker.helpers.arrayElement(TASK_TITLES),
     description: randomBool(0.5) ? faker.lorem.sentence() : null,
-    quadrant: faker.helpers.arrayElement(QUADRANTS),
+    quadrant: faker.helpers.arrayElement(EISENHOWER_QUADRANTS),
     folderId: null,
-    userId: 'user-1',
+    userId: MOCK_USER_ID,
+    // From a week ago to two weeks ahead, so the dev data includes overdue tasks.
     dueDate: randomBool(0.6)
-      ? faker.date.soon({ days: 14 }).toISOString()
+      ? faker.date
+          .between({
+            from: Date.now() - 7 * DAY_MS,
+            to: Date.now() + 14 * DAY_MS,
+          })
+          .toISOString()
       : null,
     isDone: randomBool(0.3),
     deletedAt: null,

@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mockUser } from '../mocks/data/fixtures';
+import { MOCK_PASSWORD, mockUser } from '../mocks/data/fixtures';
+import { TEST_API_URL } from '../test/constants';
 
 // Re-import modules per test so the MSW database singleton starts fresh.
 let serverModule: typeof import('../mocks/server');
@@ -8,7 +9,7 @@ let clientModule: typeof import('./client');
 
 beforeEach(async (): Promise<void> => {
   vi.resetModules();
-  vi.stubEnv('EXPO_PUBLIC_API_URL', 'http://test.local');
+  vi.stubEnv('EXPO_PUBLIC_API_URL', TEST_API_URL);
   serverModule = await import('../mocks/server');
   authModule = await import('./auth');
   clientModule = await import('./client');
@@ -24,7 +25,7 @@ describe('login', () => {
   it('returns the session for valid credentials', async (): Promise<void> => {
     const session = await authModule.login({
       email: mockUser.email,
-      password: 'password123',
+      password: MOCK_PASSWORD,
     });
 
     expect(session.token).toBeTruthy();

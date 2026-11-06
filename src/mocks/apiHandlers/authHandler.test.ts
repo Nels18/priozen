@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { TEST_API_URL } from '../../test/constants';
+import { MOCK_PASSWORD } from '../data/fixtures';
 import { authRoutes } from '../../api/routes';
 import { makeDumbUser } from '../factories/userFactory';
 
@@ -6,8 +8,6 @@ import { makeDumbUser } from '../factories/userFactory';
 // starts from the seeded fixtures instead of leaking state across tests.
 let serverModule: typeof import('../server');
 
-const VALID_PASSWORD = 'password123';
-const BASE_URL = 'http://test.local';
 const expectedUser = makeDumbUser();
 const MOCK_TOKEN = 'mock-jwt-token-priozen-dev';
 
@@ -23,11 +23,11 @@ afterEach((): void => {
 
 describe('POST /auth/login', () => {
   it('returns a token and the user for valid credentials', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.login()}`, {
+    const response = await fetch(`${TEST_API_URL}${authRoutes.login()}`, {
       method: 'POST',
       body: JSON.stringify({
         email: expectedUser.email,
-        password: VALID_PASSWORD,
+        password: MOCK_PASSWORD,
       }),
     });
 
@@ -38,7 +38,7 @@ describe('POST /auth/login', () => {
   });
 
   it('rejects a missing email or password with 422', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.login()}`, {
+    const response = await fetch(`${TEST_API_URL}${authRoutes.login()}`, {
       method: 'POST',
       body: JSON.stringify({ email: expectedUser.email }),
     });
@@ -47,7 +47,7 @@ describe('POST /auth/login', () => {
   });
 
   it('rejects invalid credentials with 401', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.login()}`, {
+    const response = await fetch(`${TEST_API_URL}${authRoutes.login()}`, {
       method: 'POST',
       body: JSON.stringify({
         email: expectedUser.email,
@@ -61,13 +61,13 @@ describe('POST /auth/login', () => {
 
 describe('POST /auth/register', () => {
   it('creates a new user for unused credentials', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.register()}`, {
+    const response = await fetch(`${TEST_API_URL}${authRoutes.register()}`, {
       method: 'POST',
       body: JSON.stringify({
         firstName: 'Ada',
         lastName: 'Lovelace',
         email: 'ada@priozen.app',
-        password: 'password123',
+        password: MOCK_PASSWORD,
       }),
     });
 
@@ -80,7 +80,7 @@ describe('POST /auth/register', () => {
   });
 
   it('rejects an incomplete payload with 422', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.register()}`, {
+    const response = await fetch(`${TEST_API_URL}${authRoutes.register()}`, {
       method: 'POST',
       body: JSON.stringify({ email: 'ada@priozen.app' }),
     });
@@ -89,13 +89,13 @@ describe('POST /auth/register', () => {
   });
 
   it('rejects an already-used email with 409', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.register()}`, {
+    const response = await fetch(`${TEST_API_URL}${authRoutes.register()}`, {
       method: 'POST',
       body: JSON.stringify({
         firstName: expectedUser.firstName,
         lastName: expectedUser.lastName,
         email: expectedUser.email,
-        password: VALID_PASSWORD,
+        password: MOCK_PASSWORD,
       }),
     });
 
@@ -105,10 +105,13 @@ describe('POST /auth/register', () => {
 
 describe('POST /auth/forgot-password', () => {
   it('always responds with 200 to avoid email enumeration', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.forgotPassword()}`, {
-      method: 'POST',
-      body: JSON.stringify({ email: 'unknown@priozen.app' }),
-    });
+    const response = await fetch(
+      `${TEST_API_URL}${authRoutes.forgotPassword()}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ email: 'unknown@priozen.app' }),
+      },
+    );
 
     expect(response.status).toBe(200);
   });
@@ -116,31 +119,43 @@ describe('POST /auth/forgot-password', () => {
 
 describe('POST /auth/reset-password', () => {
   it('rejects a missing token or password with 422', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.resetPassword()}`, {
-      method: 'POST',
-      body: JSON.stringify({ password: 'new-password' }),
-    });
+    const response = await fetch(
+      `${TEST_API_URL}${authRoutes.resetPassword()}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ password: 'new-password' }),
+      },
+    );
 
     expect(response.status).toBe(422);
   });
 
   it('rejects an invalid token with 422', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.resetPassword()}`, {
-      method: 'POST',
-      body: JSON.stringify({
-        token: 'invalid-token',
-        password: 'new-password',
-      }),
-    });
+    const response = await fetch(
+      `${TEST_API_URL}${authRoutes.resetPassword()}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          token: 'invalid-token',
+          password: 'new-password',
+        }),
+      },
+    );
 
     expect(response.status).toBe(422);
   });
 
   it('accepts a valid token', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.resetPassword()}`, {
-      method: 'POST',
-      body: JSON.stringify({ token: 'valid-token', password: 'new-password' }),
-    });
+    const response = await fetch(
+      `${TEST_API_URL}${authRoutes.resetPassword()}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          token: 'valid-token',
+          password: 'new-password',
+        }),
+      },
+    );
 
     expect(response.status).toBe(200);
   });
@@ -148,7 +163,7 @@ describe('POST /auth/reset-password', () => {
 
 describe('POST /auth/logout', () => {
   it('returns a success message', async (): Promise<void> => {
-    const response = await fetch(`${BASE_URL}${authRoutes.logout()}`, {
+    const response = await fetch(`${TEST_API_URL}${authRoutes.logout()}`, {
       method: 'POST',
     });
 

@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { userRoutes } from '../../api/routes';
-import type { User } from '../data/fixtures';
+import type { User } from '../../types/models';
+import { MOCK_PASSWORD } from '../data/fixtures';
 import { database } from '../database';
 import { randomDelay } from '../utils';
 
@@ -33,7 +34,7 @@ export const userHandler = [
       );
     }
 
-    if (body.currentPassword !== 'password123') {
+    if (body.currentPassword !== MOCK_PASSWORD) {
       return HttpResponse.json(
         { message: 'Current password is incorrect.' },
         { status: 401 },

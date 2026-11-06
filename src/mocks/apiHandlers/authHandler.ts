@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { authRoutes } from '../../api/routes';
-import { MOCK_TOKEN, mockUser } from '../data/fixtures';
+import { MOCK_PASSWORD, MOCK_TOKEN, mockUser } from '../data/fixtures';
 import { database } from '../database';
 import { createId, randomDelay } from '../utils';
 
@@ -20,7 +20,7 @@ export const authHandler = [
       );
     }
 
-    if (body.email !== mockUser.email || body.password !== 'password123') {
+    if (body.email !== mockUser.email || body.password !== MOCK_PASSWORD) {
       return HttpResponse.json(
         { message: 'Invalid credentials.' },
         { status: 401 },

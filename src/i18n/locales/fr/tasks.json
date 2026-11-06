@@ -1,0 +1,8 @@
+{
+  "quadrants": {
+    "critical": "Critique",
+    "schedule": "À planifier",
+    "delegate": "À déléguer",
+    "secondary": "Secondaire"
+  }
+}

@@ -1,5 +1,6 @@
 {
   "comingSoon": "Coming soon ({{ticket}}).",
   "showPassword": "Show password",
-  "hidePassword": "Hide password"
+  "hidePassword": "Hide password",
+  "signOut": "Sign out"
 }

@@ -1,0 +1,27 @@
+{
+  "nav": {
+    "tasks": "Tâches",
+    "folders": "Dossiers",
+    "focus": "Focus",
+    "analytics": "Analytics",
+    "analyticsShort": "Stats",
+    "profile": "Profil"
+  },
+  "titles": {
+    "tasks": "Tâches",
+    "folders": "Dossiers",
+    "focus": "Mode Focus",
+    "analytics": "Analytics",
+    "profile": "Profil"
+  },
+  "mainNavigation": "Navigation principale",
+  "newTask": "Nouvelle tâche",
+  "rightPanel": {
+    "overview": "Vue d'ensemble",
+    "progress": "Progression",
+    "completed": "Tâches terminées",
+    "overdue": "En retard",
+    "noOverdue": "Aucune tâche en retard 🎉",
+    "loadError": "Impossible de charger les tâches."
+  }
+}
