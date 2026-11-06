@@ -25,7 +25,7 @@ export const apiRequest = async <T>(
 
   const response = await fetch(`${getBaseUrl()}${path}`, { ...init, headers });
 
-  const body = (await response.json().catch(() => null)) as unknown;
+  const body = parseJson(await response.text());
 
   if (!response.ok) {
     const message =
@@ -38,5 +38,21 @@ export const apiRequest = async <T>(
     throw new ApiError(response.status, message);
   }
 
+  // A success without a readable JSON body breaks the API contract: fail
+  // loudly instead of handing `null` to callers expecting data.
+  if (body === undefined && response.status !== 204) {
+    throw new ApiError(response.status, 'Empty or invalid JSON response');
+  }
+
   return body as T;
+};
+
+/** `undefined` for an empty or non-JSON body. */
+const parseJson = (text: string): unknown => {
+  if (!text) return undefined;
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    return undefined;
+  }
 };

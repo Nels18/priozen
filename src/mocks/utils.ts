@@ -21,8 +21,8 @@ export const startMocks = async (): Promise<void> => {
       serviceWorker: { url: '/mockServiceWorker.js' },
     });
   } else {
-    // iOS / Android — msw/native + polyfills
-    const { server } = await import('./native');
-    server.listen({ onUnhandledRequest: 'bypass' });
+    // iOS / Android — see native.ts for why this isn't msw/native
+    const { installNativeMocks } = await import('./native');
+    installNativeMocks();
   }
 };
