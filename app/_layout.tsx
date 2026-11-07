@@ -10,6 +10,7 @@ import { Stack } from 'expo-router';
 import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
 import { AuthProvider } from '@/src/auth/AuthProvider';
+import { QueryProvider } from '@/src/query/QueryProvider';
 import '@/src/i18n';
 import '../global.css';
 
@@ -59,9 +60,11 @@ export default function RootLayout(): JSX.Element | null {
 
   return (
     <MocksProvider>
-      <AuthProvider>
-        <Stack screenOptions={{ headerShown: false }} />
-      </AuthProvider>
+      <QueryProvider>
+        <AuthProvider>
+          <Stack screenOptions={{ headerShown: false }} />
+        </AuthProvider>
+      </QueryProvider>
     </MocksProvider>
   );
 }
