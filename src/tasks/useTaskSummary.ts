@@ -1,38 +1,25 @@
-import { useEffect, useState } from 'react';
-import { listTasks } from '../api/tasks';
+import type { UseQueryResult } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import type { Task } from '../types/models';
+import { useStartOfToday } from '../utils/startOfToday';
 import type { TaskSummary } from './summary';
 import { summarizeTasks } from './summary';
-
-export type TaskSummaryState =
-  | { status: 'loading' }
-  | { status: 'error' }
-  | { status: 'ready'; summary: TaskSummary };
+import { taskQueries } from './taskQueries';
 
 /**
- * Loads the tasks once and summarizes them for the right panel.
- * DASH-02 will share task state so the panel refreshes after each change.
+ * Right-panel figures, derived from the shared task list: any screen that
+ * updates or invalidates the tasks refreshes the panel too. The summary is
+ * also recomputed at midnight, so "overdue" stays right even when the tasks
+ * themselves don't change.
  */
-export const useTaskSummary = (): TaskSummaryState => {
-  const [state, setState] = useState<TaskSummaryState>({ status: 'loading' });
+export const useTaskSummary = (): UseQueryResult<TaskSummary> => {
+  const startOfToday = useStartOfToday();
+  const selectSummary = useCallback(
+    (tasks: Task[]): TaskSummary =>
+      summarizeTasks(tasks, new Date(startOfToday)),
+    [startOfToday],
+  );
 
-  useEffect(() => {
-    let isCancelled = false;
-    listTasks()
-      .then((tasks) => {
-        if (!isCancelled) {
-          setState({
-            status: 'ready',
-            summary: summarizeTasks(tasks, new Date()),
-          });
-        }
-      })
-      .catch(() => {
-        if (!isCancelled) setState({ status: 'error' });
-      });
-    return (): void => {
-      isCancelled = true;
-    };
-  }, []);
-
-  return state;
+  return useQuery({ ...taskQueries.list(), select: selectSummary });
 };

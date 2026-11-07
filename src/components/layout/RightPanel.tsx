@@ -108,20 +108,20 @@ function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
 /** 280px column summarizing the user's tasks (large screens only). */
 export function RightPanel(): JSX.Element {
   const { t } = useTranslation('layout');
-  const state = useTaskSummary();
+  const summary = useTaskSummary();
 
   return (
     <ScrollView
       className="w-[280px] grow-0 border-l border-border bg-card"
       contentContainerClassName="px-5 py-6"
     >
-      {state.status === 'loading' && <ActivityIndicator />}
-      {state.status === 'error' && (
+      {summary.isPending && <ActivityIndicator />}
+      {summary.isError && (
         <Text className="font-sans text-caption text-critical">
           {t('rightPanel.loadError')}
         </Text>
       )}
-      {state.status === 'ready' && <SummaryContent summary={state.summary} />}
+      {summary.isSuccess && <SummaryContent summary={summary.data} />}
     </ScrollView>
   );
 }

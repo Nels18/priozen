@@ -1,4 +1,5 @@
 import type { EisenhowerQuadrant, Task } from '../types/models';
+import { getStartOfDay } from '../utils/startOfToday';
 import { EISENHOWER_QUADRANTS } from './quadrants';
 
 export interface TaskSummary {
@@ -10,13 +11,10 @@ export interface TaskSummary {
   overdue: Task[];
 }
 
-const startOfDay = (date: Date): number =>
-  new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-
 /** Figures shown in the right panel; ignores soft-deleted tasks. */
 export const summarizeTasks = (tasks: Task[], now: Date): TaskSummary => {
   const active = tasks.filter((task) => task.deletedAt === null);
-  const today = startOfDay(now);
+  const today = getStartOfDay(now);
 
   const openByQuadrant = Object.fromEntries(
     EISENHOWER_QUADRANTS.map((quadrant) => [quadrant, 0]),
@@ -30,7 +28,7 @@ export const summarizeTasks = (tasks: Task[], now: Date): TaskSummary => {
       (task) =>
         !task.isDone &&
         task.dueDate !== null &&
-        startOfDay(new Date(task.dueDate)) < today,
+        getStartOfDay(new Date(task.dueDate)) < today,
     )
     .sort((a, b) => (a.dueDate ?? '').localeCompare(b.dueDate ?? ''));
 
