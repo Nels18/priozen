@@ -13,22 +13,21 @@ import { AuthProvider } from '@/src/auth/AuthProvider';
 import '@/src/i18n';
 import '../global.css';
 
+// Mocks run in development unless EXPO_PUBLIC_USE_MOCKS says otherwise.
+const isMocksEnabled = process.env.EXPO_PUBLIC_USE_MOCKS
+  ? process.env.EXPO_PUBLIC_USE_MOCKS === 'true'
+  : process.env.NODE_ENV === 'development';
+
 function MocksProvider({
   children,
 }: {
   children: React.ReactNode;
 }): JSX.Element | null {
-  const [isReady, setIsReady] = useState(false);
+  // Without mocks there is nothing to wait for: ready from the first render.
+  const [isReady, setIsReady] = useState(!isMocksEnabled);
 
   useEffect(() => {
-    const isMocksEnabled = process.env.EXPO_PUBLIC_USE_MOCKS
-      ? process.env.EXPO_PUBLIC_USE_MOCKS === 'true'
-      : process.env.NODE_ENV === 'development';
-
-    if (!isMocksEnabled) {
-      setIsReady(true);
-      return;
-    }
+    if (!isMocksEnabled) return;
 
     import('@/src/mocks')
       .then(({ startMocks }) => startMocks())

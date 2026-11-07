@@ -3,6 +3,13 @@ const token = (name) => `rgb(var(--color-${name}) / <alpha-value>)`;
 const fixedColors = require('./src/theme/fixedColors');
 
 module.exports = {
+  // 'class', not the default 'media': on web, NativeWind 4.2.7 throws
+  // "Cannot manually set color scheme, as dark mode is type 'media'" when its
+  // CSS loads after its runtime (the case since Expo SDK 58). The theme still
+  // follows the OS: colors come from the @media (prefers-color-scheme) blocks
+  // of global.css, and no component uses dark: variants. 'class' is also what
+  // the manual light/dark toggle (UX-03) will need.
+  darkMode: 'class',
   presets: [require('nativewind/preset')],
   content: ['./app/**/*.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
