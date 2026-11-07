@@ -3,7 +3,7 @@ import {
   onlineManager,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { addNetworkStateListener } from 'expo-network';
+import { addNetworkStateListener, getNetworkStateAsync } from 'expo-network';
 import type { JSX, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import type { AppStateStatus } from 'react-native';
@@ -28,6 +28,11 @@ const useNativeQueryManagers = (): void => {
     );
 
     onlineManager.setEventListener((setOnline) => {
+      // The listener only reports changes: also read the current state, so an
+      // app started offline pauses its queries instead of failing and retrying.
+      void getNetworkStateAsync().then((state): void => {
+        setOnline(state.isConnected ?? true);
+      });
       const networkSubscription = addNetworkStateListener((state): void => {
         setOnline(state.isConnected ?? true);
       });
@@ -36,6 +41,8 @@ const useNativeQueryManagers = (): void => {
 
     return (): void => {
       appStateSubscription.remove();
+      // Replacing the listener runs the previous cleanup (network subscription).
+      onlineManager.setEventListener(() => undefined);
     };
   }, []);
 };
