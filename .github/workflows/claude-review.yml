@@ -1,7 +1,7 @@
 name: Relecture Claude
 
 # Mode économe : la relecture ne se lance que lorsqu'on ajoute le label
-# « relecture » à une PR, et jamais pour une PR qui ne touche pas au code.
+# « ai-review » à une PR, et jamais pour une PR qui ne touche pas au code.
 on:
   pull_request:
     branches: [develop]
@@ -26,4 +26,5 @@ jobs:
       model: sonnet
       max-turns: 15
       timeout-minutes: 10
+      review-label: ai-review
     secrets: inherit
