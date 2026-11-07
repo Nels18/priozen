@@ -1,0 +1,30 @@
+name: Relecture Claude
+
+# Mode économe : la relecture ne se lance que lorsqu'on ajoute le label
+# « ai-review » à une PR, et jamais pour une PR qui ne touche pas au code.
+on:
+  pull_request:
+    branches: [develop]
+    types: [labeled]
+    paths-ignore:
+      - '**/*.md'
+      - 'package-lock.json'
+      - 'assets/**'
+      - 'public/**'
+
+jobs:
+  relecture:
+    uses: Nels18/dev-agents/.github/workflows/review.yml@v1
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+    with:
+      agents-ref: v1
+      modules: base,react,react-native,design-system,i18n
+      model: sonnet
+      max-turns: 15
+      timeout-minutes: 10
+      review-label: ai-review
+    secrets: inherit
