@@ -5,6 +5,7 @@
   "todaySubtitle": "Voici vos tâches du jour",
   "completedPercent": "complété",
   "completedTasks": "Tâches complétées",
+  "loading": "Chargement des tâches…",
   "loadError": "Impossible de charger les tâches.",
   "retry": "Réessayer"
 }

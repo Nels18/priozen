@@ -26,3 +26,30 @@ export const getDueDateInfo = (
   if (days === 0) return { status: 'today', days };
   return { status: 'upcoming', days };
 };
+
+export interface DueDateDisplay {
+  /** Color of the chip. */
+  tone: DueDateStatus;
+  /** Translation key ("tasks" namespace), or null to show the date itself. */
+  labelKey: 'dueDate.overdue' | 'dueDate.today' | 'dueDate.tomorrow' | null;
+}
+
+/**
+ * How a task's due date is shown. A done task is never late: its chip is
+ * neutral and shows the date instead of "overdue".
+ */
+export const getDueDateDisplay = (
+  dueDate: string,
+  startOfToday: number,
+  isDone: boolean,
+): DueDateDisplay => {
+  const { status, days } = getDueDateInfo(dueDate, startOfToday);
+  const tone = isDone ? 'upcoming' : status;
+
+  if (status === 'overdue') {
+    return { tone, labelKey: isDone ? null : 'dueDate.overdue' };
+  }
+  if (status === 'today') return { tone, labelKey: 'dueDate.today' };
+  if (days === 1) return { tone, labelKey: 'dueDate.tomorrow' };
+  return { tone, labelKey: null };
+};

@@ -22,6 +22,7 @@
     "completed": "Completed tasks",
     "overdue": "Overdue",
     "noOverdue": "No overdue tasks 🎉",
+    "loading": "Loading summary…",
     "loadError": "Couldn't load tasks."
   }
 }

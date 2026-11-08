@@ -2,10 +2,10 @@ import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
 import type { DueDateStatus } from '@/src/tasks/dueDate';
-import { getDueDateInfo } from '@/src/tasks/dueDate';
+import { getDueDateDisplay } from '@/src/tasks/dueDate';
 import { formatShortDate } from '@/src/utils/format';
 
-const STATUS_CLASSES: Record<DueDateStatus, string> = {
+const TONE_CLASSES: Record<DueDateStatus, string> = {
   overdue: 'bg-critical-bg text-critical',
   today: 'bg-schedule-bg text-primary',
   upcoming: 'bg-secondary-bg text-muted',
@@ -25,18 +25,15 @@ export function DueDateChip({
   isDone,
 }: DueDateChipProps): JSX.Element {
   const { t, i18n } = useTranslation('tasks');
-  const { status, days } = getDueDateInfo(dueDate, startOfToday);
-
-  let label: string;
-  if (status === 'overdue' && !isDone) label = t('dueDate.overdue');
-  else if (status === 'today') label = t('dueDate.today');
-  else if (days === 1) label = t('dueDate.tomorrow');
-  else label = formatShortDate(new Date(dueDate), i18n.language);
+  const { tone, labelKey } = getDueDateDisplay(dueDate, startOfToday, isDone);
+  const label = labelKey
+    ? t(labelKey)
+    : formatShortDate(new Date(dueDate), i18n.language);
 
   return (
     <Text
       className={`overflow-hidden rounded-full px-2 py-0.5 font-sans-medium text-tiny ${
-        STATUS_CLASSES[isDone ? 'upcoming' : status]
+        TONE_CLASSES[tone]
       }`}
     >
       {label}

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { getStartOfDay } from '../utils/startOfToday';
-import { getDueDateInfo } from './dueDate';
+import { getDueDateDisplay, getDueDateInfo } from './dueDate';
 
 // 18 Oct 2026, local time.
 const TODAY = getStartOfDay(new Date(2026, 9, 18, 15, 0));
@@ -35,4 +35,33 @@ describe('getDueDateInfo', () => {
       days: 10,
     });
   });
+});
+
+describe('getDueDateDisplay', () => {
+  const at = (day: number): string => new Date(2026, 9, day, 10).toISOString();
+
+  it.each([
+    {
+      due: at(15),
+      isDone: false,
+      tone: 'overdue',
+      labelKey: 'dueDate.overdue',
+    },
+    { due: at(18), isDone: false, tone: 'today', labelKey: 'dueDate.today' },
+    {
+      due: at(19),
+      isDone: false,
+      tone: 'upcoming',
+      labelKey: 'dueDate.tomorrow',
+    },
+    { due: at(25), isDone: false, tone: 'upcoming', labelKey: null },
+    // A done task is never late, and always neutral.
+    { due: at(15), isDone: true, tone: 'upcoming', labelKey: null },
+    { due: at(18), isDone: true, tone: 'upcoming', labelKey: 'dueDate.today' },
+  ])(
+    'due $due, done=$isDone → $tone / $labelKey',
+    ({ due, isDone, tone, labelKey }): void => {
+      expect(getDueDateDisplay(due, TODAY, isDone)).toEqual({ tone, labelKey });
+    },
+  );
 });

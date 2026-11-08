@@ -117,7 +117,9 @@ export default function TasksScreen(): JSX.Element | null {
         isCompact={screenSize === 'small'}
       />
 
-      {tasks.isPending && <ActivityIndicator className="mt-8" />}
+      {tasks.isPending && (
+        <ActivityIndicator accessibilityLabel={t('loading')} className="mt-8" />
+      )}
 
       {tasks.isError && (
         <View className="items-center gap-4 rounded-md border border-border bg-card px-6 py-10">

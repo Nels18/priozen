@@ -115,7 +115,9 @@ export function RightPanel(): JSX.Element {
       className="w-[280px] grow-0 border-l border-border bg-card"
       contentContainerClassName="px-5 py-6"
     >
-      {summary.isPending && <ActivityIndicator />}
+      {summary.isPending && (
+        <ActivityIndicator accessibilityLabel={t('rightPanel.loading')} />
+      )}
       {summary.isError && (
         <Text className="font-sans text-caption text-critical">
           {t('rightPanel.loadError')}
