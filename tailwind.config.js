@@ -45,8 +45,10 @@ module.exports = {
         'sans-bold': ['interBold'],
       },
       // 13px: secondary text of the mockup (labels, links, captions).
+      // 11px: task metadata (folder, due date, badges, group hints).
       fontSize: {
         caption: '13px',
+        tiny: '11px',
       },
       borderRadius: {
         sm: '8px',

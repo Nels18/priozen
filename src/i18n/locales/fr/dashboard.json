@@ -1,4 +1,10 @@
 {
   "greeting": "Bonjour,",
-  "greetingName": "{{firstName}} 👋"
+  "greetingName": "{{firstName}} 👋",
+  "greetingInline": "Bonjour, {{firstName}} 👋",
+  "todaySubtitle": "Voici vos tâches du jour",
+  "completedPercent": "complété",
+  "completedTasks": "Tâches complétées",
+  "loadError": "Impossible de charger les tâches.",
+  "retry": "Réessayer"
 }

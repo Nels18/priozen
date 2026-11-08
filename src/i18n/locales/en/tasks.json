@@ -4,5 +4,19 @@
     "schedule": "Schedule",
     "delegate": "Delegate",
     "secondary": "Secondary"
+  },
+  "quadrantHints": {
+    "critical": "Important and urgent",
+    "schedule": "Important, not urgent",
+    "delegate": "Urgent, less important",
+    "secondary": "Neither urgent nor important"
+  },
+  "doneGroup": "Done",
+  "emptyGroup": "No tasks here.",
+  "emptyDoneGroup": "No completed tasks yet.",
+  "dueDate": {
+    "overdue": "Overdue",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
   }
 }
