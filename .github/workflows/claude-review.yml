@@ -1,13 +1,16 @@
 name: Relecture Claude
 
-# Mode économe : la relecture ne se lance que lorsqu'on ajoute le label
-# « ai-review » à une PR, et jamais pour une PR qui ne touche pas au code.
-# Une PR en brouillon n'est pas relue : si le label est posé pendant le
-# brouillon, la relecture part au passage en « prête » (ready_for_review).
+# Mode économe : seules les PR qui portent le label « ai-review » sont relues,
+# et jamais une PR qui ne touche pas au code. La relecture part :
+# - quand on ajoute le label ;
+# - au passage en « prête » (label posé pendant le brouillon) ;
+# - à chaque nouveau push sur la branche (synchronize), pour relire les
+#   corrections. Un push qui arrive pendant une relecture l'annule et la
+#   relance (concurrency du workflow partagé). Brouillons jamais relus.
 on:
   pull_request:
     branches: [develop]
-    types: [labeled, ready_for_review]
+    types: [labeled, ready_for_review, synchronize]
     paths-ignore:
       - '**/*.md'
       - 'package-lock.json'
@@ -16,8 +19,8 @@ on:
 
 jobs:
   relecture:
-    # Passage en « prête » : seulement si la PR porte déjà le label, pour
-    # garder le mode économe (pas de relecture sans demande explicite).
+    # Passage en « prête » ou nouveau push : seulement si la PR porte déjà le
+    # label, pour garder le mode économe (pas de relecture sans demande).
     if: >-
       github.event.action == 'labeled' ||
       contains(github.event.pull_request.labels.*.name, 'ai-review')
