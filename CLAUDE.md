@@ -29,7 +29,7 @@ GitHub Actions (`.github/workflows/`) :
 - `ci.yml` — push et PR vers `main` / `develop` : scan de secrets (gitleaks), puis lint, typecheck et tests Vitest (fichiers modifiés sur une PR, suite complète avec couverture sur un push)
 - `branch-guard.yml` — PR vers `main` : seule `develop` peut y être mergée
 - `branch-name.yml` — toute PR : le nom de branche respecte `.validate-branch-namerc.js` (même règle que le hook `pre-push`)
-- `claude-review.yml` — PR vers `develop` : relecture par Claude quand on ajoute le label `ai-review` (workflow réutilisable de `Nels18/dev-agents`, guidelines dans `.github/review-guidelines.md`) ; PR de doc ignorées
+- `claude-review.yml` — PR vers `develop` : relecture par Claude des PR qui portent le label `ai-review`, à l'ajout du label, au passage en « prête » et à chaque nouveau push (workflow réutilisable de `Nels18/dev-agents`, guidelines dans `.github/review-guidelines.md`) ; PR de doc ignorées
 - `release.yml` — lancement manuel : tests, génération de la doc, `npm version` (patch / minor / major) et push du tag `v*`
 
 Workflows EAS (`.eas/workflows/`) :
