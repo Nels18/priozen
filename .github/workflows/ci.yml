@@ -45,6 +45,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Tests (PR — changed files only)
         if: github.event_name == 'pull_request'
         run: npx vitest run --changed origin/${{ github.base_ref }} --coverage
