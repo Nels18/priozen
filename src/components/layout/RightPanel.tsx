@@ -3,9 +3,11 @@ import type { JSX, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import type { TaskSummary } from '@/src/tasks/summary';
+import { getCompletionPercent } from '@/src/tasks/summary';
 import { EISENHOWER_QUADRANTS, QUADRANT_CLASSES } from '@/src/tasks/quadrants';
 import { useTaskSummary } from '@/src/tasks/useTaskSummary';
 import { useIconColors } from '@/src/theme/useIconColors';
+import { ProgressBar } from '../ui/ProgressBar';
 
 function Section({
   title,
@@ -30,8 +32,6 @@ function Section({
 function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
   const { t } = useTranslation(['layout', 'tasks']);
   const iconColors = useIconColors();
-  const progress =
-    summary.totalCount === 0 ? 0 : summary.doneCount / summary.totalCount;
 
   return (
     <>
@@ -69,20 +69,12 @@ function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
             {summary.doneCount}/{summary.totalCount}
           </Text>
         </View>
-        <View
-          accessibilityRole="progressbar"
-          accessibilityValue={{
-            min: 0,
-            max: summary.totalCount,
-            now: summary.doneCount,
-          }}
-          className="h-1.5 overflow-hidden rounded-full bg-input"
-        >
-          <View
-            style={{ width: `${Math.round(progress * 100)}%` }}
-            className="h-full rounded-full bg-primary"
-          />
-        </View>
+        <ProgressBar
+          label={t('rightPanel.completed')}
+          value={summary.doneCount}
+          max={summary.totalCount}
+          percent={getCompletionPercent(summary)}
+        />
       </Section>
 
       <Section title={t('rightPanel.overdue')}>

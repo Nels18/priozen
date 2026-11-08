@@ -75,6 +75,7 @@ Maquette de référence (responsive mobile / tablette / bureau) : https://claude
 - Interface : Inter → `font-sans`, `font-sans-medium`, `font-sans-semibold`, `font-sans-bold` (une famille par graisse : le natif ne synthétise pas les graisses des polices custom ; chargées dans `app/_layout.tsx`)
 - Taille `text-caption` (13px) pour le texte secondaire de la maquette (libellés, liens, légendes) — pas de `text-[13px]`
 - Taille `text-tiny` (11px) pour les métadonnées d'une tâche (dossier, échéance, badges) — pas de `text-[11px]`
+- Tailles `text-greeting` (26px, salutation du tableau de bord) et `text-stat` (28px, chiffre clé) ; toute nouvelle taille de la maquette se nomme dans `tailwind.config.js` plutôt qu'en valeur arbitraire
 
 ## Architecture des vues (expo-router)
 

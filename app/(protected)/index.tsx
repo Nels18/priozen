@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { JSX } from 'react';
-import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { useAuth } from '@/src/auth/AuthProvider';
@@ -101,15 +100,12 @@ export default function TasksScreen(): JSX.Element | null {
   const folders = useQuery(folderQueries.list());
   const setDone = useMutation(taskMutations.setDone(queryClient));
 
-  const foldersById = useMemo(
-    () => new Map((folders.data ?? []).map((folder) => [folder.id, folder])),
-    [folders.data],
+  // No useMemo / useCallback: the React Compiler (app.json) memoizes.
+  const foldersById = new Map(
+    (folders.data ?? []).map((folder) => [folder.id, folder]),
   );
-  const { mutate: mutateDone } = setDone;
-  const handleToggleDone = useCallback(
-    (task: Task): void => mutateDone({ id: task.id, isDone: !task.isDone }),
-    [mutateDone],
-  );
+  const handleToggleDone = (task: Task): void =>
+    setDone.mutate({ id: task.id, isDone: !task.isDone });
 
   if (!session) return null;
 

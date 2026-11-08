@@ -66,7 +66,7 @@ export function TaskItem({
         </Text>
 
         {(hasMeta || isQuadrantShown) && (
-          <View className="mt-[5px] flex-row flex-wrap items-center gap-2">
+          <View className="mt-1 flex-row flex-wrap items-center gap-2">
             {isQuadrantShown && (
               <Text
                 className={`overflow-hidden rounded-full px-2 py-0.5 font-sans-semibold text-tiny ${

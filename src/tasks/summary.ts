@@ -39,3 +39,11 @@ export const summarizeTasks = (tasks: Task[], now: Date): TaskSummary => {
     overdue,
   };
 };
+
+/** Share of done tasks, as a whole percentage (0 when there are no tasks). */
+export const getCompletionPercent = (
+  summary: Pick<TaskSummary, 'doneCount' | 'totalCount'>,
+): number =>
+  summary.totalCount === 0
+    ? 0
+    : Math.round((summary.doneCount / summary.totalCount) * 100);

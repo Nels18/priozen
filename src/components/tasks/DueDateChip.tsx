@@ -35,7 +35,7 @@ export function DueDateChip({
 
   return (
     <Text
-      className={`overflow-hidden rounded-full px-[7px] py-0.5 font-sans-medium text-tiny ${
+      className={`overflow-hidden rounded-full px-2 py-0.5 font-sans-medium text-tiny ${
         STATUS_CLASSES[isDone ? 'upcoming' : status]
       }`}
     >
