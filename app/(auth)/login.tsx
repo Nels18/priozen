@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link, router } from 'expo-router';
 import type { JSX } from 'react';
 import { useState } from 'react';
@@ -7,6 +8,7 @@ import { useAuth } from '@/src/auth/AuthProvider';
 import type { LoginErrorKey, LoginFieldErrors } from '@/src/auth/loginForm';
 import { getLoginErrorKey, validateLoginForm } from '@/src/auth/loginForm';
 import { ROUTES } from '@/src/navigation/routes';
+import { useIconColors } from '@/src/theme/useIconColors';
 import { AuthCard } from '@/src/components/AuthCard';
 import { Button } from '@/src/components/ui/Button';
 import { Logo } from '@/src/components/ui/Logo';
@@ -15,6 +17,7 @@ import { TextField } from '@/src/components/ui/TextField';
 export default function LoginScreen(): JSX.Element {
   const { t } = useTranslation('auth');
   const { signIn } = useAuth();
+  const iconColors = useIconColors();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fieldErrors, setFieldErrors] = useState<LoginFieldErrors>({});
@@ -47,10 +50,15 @@ export default function LoginScreen(): JSX.Element {
       {submitError ? (
         <View
           accessibilityRole="alert"
-          className="mb-4 rounded-sm border border-critical/40 bg-critical-bg px-3.5 py-2.5"
+          className="mb-4 flex-row items-center gap-2 rounded-sm border border-critical/40 bg-critical-bg px-3.5 py-2.5"
         >
-          <Text className="font-sans text-caption text-critical">
-            ⚠ {t(submitError)}
+          <Ionicons
+            name="warning-outline"
+            size={16}
+            color={iconColors.critical}
+          />
+          <Text className="flex-1 font-sans text-caption text-critical">
+            {t(submitError)}
           </Text>
         </View>
       ) : null}

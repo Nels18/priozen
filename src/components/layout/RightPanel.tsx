@@ -1,9 +1,11 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import type { JSX, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import type { TaskSummary } from '@/src/tasks/summary';
 import { EISENHOWER_QUADRANTS, QUADRANT_CLASSES } from '@/src/tasks/quadrants';
 import { useTaskSummary } from '@/src/tasks/useTaskSummary';
+import { useIconColors } from '@/src/theme/useIconColors';
 
 function Section({
   title,
@@ -27,6 +29,7 @@ function Section({
 
 function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
   const { t } = useTranslation(['layout', 'tasks']);
+  const iconColors = useIconColors();
   const progress =
     summary.totalCount === 0 ? 0 : summary.doneCount / summary.totalCount;
 
@@ -93,7 +96,11 @@ function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
               key={task.id}
               className="mb-2 flex-row items-start gap-2 rounded-sm bg-critical-bg px-3 py-2.5"
             >
-              <Text className="font-sans text-xs text-critical">⚠</Text>
+              <Ionicons
+                name="warning-outline"
+                size={14}
+                color={iconColors.critical}
+              />
               <Text className="flex-1 font-sans-medium text-caption text-critical">
                 {task.title}
               </Text>
