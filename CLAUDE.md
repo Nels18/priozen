@@ -1,85 +1,13 @@
 # Priozen — Contexte projet
 
-## Statut actuel (mis à jour)
-
-- ✅ Maquettes complètes (toutes les vues, light + dark)
-- ✅ Palette définie — tokens light/dark documentés
-- ✅ Icônes et favicons exportés (iOS light/dark/tinted, Android, Splash, Favicons)
-- ✅ 33 tickets Trello (11 epics, 103 points) — CSV + DOCX générés
-- ✅ Architecture déploiement : EAS (mobile) + Vercel (web) + Scaleway (backend)
-- ✅ CLAUDE.md rédigé et intégré au projet Expo
-- ✅ Nom **Priozen** vérifié et sécurisé :
-  - Domaine `priozen.app` acheté (OVH — 10,19€ TTC/an), DNSSEC inclus
-  - `contact@priozen.app` configuré dans Apple Mail
-  - App Store — libre
-  - Play Store — libre
-  - EUIPO classe 42 — libre
-  - Instagram/TikTok @priozen — libres
-  - ⚠️ X (Twitter) @priozen — compte fantôme, squatté → enregistrer **@priozenapp** à la place
-- ✅ MSW-00 — Setup infrastructure MSW terminé (handlers auth/tasks/folders/user, native.ts + worker.ts, `startMocks()` intégré dans `app/_layout.tsx`)
-- ✅ MSW-01 — Génération de données mockées (factories Faker.js pour users/tasks/folders/subtasks) terminé
-- ✅ AUTH-01 — Page Connexion (thème NativeWind, polices, i18n fr/en, client API)
-- 🔄 DASH-01 — Layout global responsive (sidebar, en-tête, panneau droit, nav mobile) — en revue
-- ⏳ Backend : pas encore prêt
-
-## Assets produits
-
-- ✅ `ios-light.png` — 1024×1024, fond blanc
-- ✅ `ios-dark.png` — 1024×1024, fond #0A0918
-- ✅ `ios-tinted.png` — 1024×1024, fond noir + logo blanc (iOS 18)
-- ✅ `adaptive-icon.png` — 1024×1024, fond transparent (Android foreground)
-- ✅ `monochrome-icon.png` — 1024×1024, fond transparent, noir uniquement
-- ✅ `splash-icon-light.png` / `splash-icon-dark.png` — 200×200, fond transparent
-- ✅ `favicon.ico` — multi-size 16+32+48
-- ✅ `favicon-32x32.png`, `favicon-180x180.png`, `favicon-dark-32x32.png`
-
-## CI/CD — Architecture validée
-
-```
-Pull Request ouverte
-        │
-GitHub Actions (OPS-02)
-  ├── lint + typecheck
-  ├── tests Vitest
-  └── expo export --platform web
-        │
-Merge sur main
-        │
-        ├── GitHub Actions → Vercel (web)
-        ├── GitHub Actions → Scaleway (backend)
-        └── EAS Build → App Store / Play Store
-```
-
-- GitHub Actions : lint + tests + build web (OPS-02)
-- GitHub Actions → Vercel (web) + Scaleway (backend) sur merge main (OPS-03a)
-- EAS Build + EAS Submit : compilation et soumission stores (OPS-03b)
-- EAS Update : mises à jour OTA sans passer par les stores
-- Ticket manquant à créer : EAS-01 (configuration eas.json, profils dev/preview/prod)
-
-## Tickets Trello — détail par epic (33 tickets · 11 epics · 103 points)
-
-| Epic                          | Tickets | Points |
-| ----------------------------- | ------- | ------ |
-| MSW — Infrastructure mocking  | 2       | 6 pts  |
-| EPIC 1 — Authentification     | 4       | 13 pts |
-| EPIC 2 — Dashboard principal  | 4       | 21 pts |
-| EPIC 3 — Gestion des tâches   | 2       | 8 pts  |
-| EPIC 4 — Gestion des dossiers | 2       | 6 pts  |
-| EPIC 5 — Profil utilisateur   | 1       | 3 pts  |
-| EPIC 6 — Mode Concentration   | 1       | 5 pts  |
-| EPIC 7 — Analytics            | 1       | 8 pts  |
-| EPIC 8 — Mobile               | 2       | 8 pts  |
-| EPIC 9 — États vides & UX     | 3       | 7 pts  |
-| DevOps + Déploiement          | 11      | 18 pts |
-
-## Prochaine tâche
-
-Objectif POC (label Jira `POC`) : AUTH-01 → DASH-01 → DASH-02 → TASK-01, puis DEVOPS-12 (build web en CI) et DEVOPS-04 (Vercel). AUTH-01 terminé, DASH-01 (layout global) en revue ; prochaine tâche : DASH-02 — Liste de tâches groupées par quadrant.
-
 ## Présentation
 
 Application de gestion de tâches basée sur la méthode Eisenhower.
 Nom du projet : **Priozen** (anciennement ZenTask Pro, puis Priolist).
+
+L'état d'avancement vit dans Jira (projet PRIO). L'historique des débuts du projet est dans `HISTORIQUE.md`.
+
+Le backend et la base de données ne sont pas encore prêts : le frontend tourne sur des données mockées par MSW (service worker sur le web via `src/mocks/worker.ts` ; sur iOS/Android, `fetch` résolu directement par les handlers via `getResponse()`, voir `src/mocks/native.ts`).
 
 ⚠️ **Exception EAS** : le projet EAS existant (`projectId: 0cb7e9a8-7547-4f3e-be66-ed5a78ee8ed0`, avec un historique de builds iOS/Android réels) garde le **slug `Priolist`** dans `app.json` — aucune commande `eas` ne permet de renommer le slug d'un projet existant (`eas init --force` écrase le slug local pour matcher le serveur, pas l'inverse). Le `name` (Priozen) et les bundle identifiers (`com.priozen.app`) sont bien à jour ; seul le slug technique (URL `expo.dev/.../Priolist`, invisible aux utilisateurs finaux) reste sur l'ancien nom, en attendant un éventuel renommage via le support Expo.
 
@@ -94,10 +22,21 @@ Nom du projet : **Priozen** (anciennement ZenTask Pro, puis Priolist).
 - **Déploiement mobile** : EAS (Expo Application Services)
 - **CI/CD** : GitHub Actions + workflows EAS
 
-## Statut actuel
+## CI/CD
 
-⚠️ Le backend et la base de données ne sont pas encore prêts.
-Le frontend tourne seul avec des données mockées (MSW — `msw/node` pour iOS/Android via `src/mocks/native.ts`, service worker pour le web via `src/mocks/worker.ts`).
+GitHub Actions (`.github/workflows/`) :
+
+- `ci.yml` — push et PR vers `main` / `develop` : scan de secrets (gitleaks), puis lint, typecheck et tests Vitest (fichiers modifiés sur une PR, suite complète avec couverture sur un push)
+- `branch-guard.yml` — PR vers `main` : seule `develop` peut y être mergée
+- `branch-name.yml` — toute PR : le nom de branche respecte `.validate-branch-namerc.js` (même règle que le hook `pre-push`)
+- `claude-review.yml` — PR vers `develop` : relecture par Claude quand on ajoute le label `ai-review` (workflow réutilisable de `Nels18/dev-agents`, guidelines dans `.github/review-guidelines.md`) ; PR de doc ignorées
+- `release.yml` — lancement manuel : tests, génération de la doc, `npm version` (patch / minor / major) et push du tag `v*`
+
+Workflows EAS (`.eas/workflows/`) :
+
+- `preview-builds.yml` — PR vers `main` : builds preview Android et iOS
+- `release-production.yml` — tag `v*` : builds production, approbation manuelle, puis soumission aux stores
+- `deploy-web.yml` — tag `v*` : déploiement web de production (EAS Hosting)
 
 ## Palette de couleurs
 
@@ -167,6 +106,10 @@ Vues :
 - Les mocks importent les types depuis `src/types/models.ts` ; le code de l'app n'importe **jamais** depuis `src/mocks/`
 - Tests : URL d'API `TEST_API_URL` (`src/test/constants.ts`) ; les valeurs attendues des assertions restent écrites en dur
 - Composants en PascalCase, hooks en camelCase avec préfixe `use`
+- ESLint (`eslint.config.js`) fait respecter trois de ces règles :
+  - pas de couleur hexadécimale ni de variante `dark:` dans une prop `*ClassName` (sauf `src/theme/**`) ;
+  - pas de texte brut affiché dans le JSX (`i18next/no-literal-string`, sauf tests et `src/mocks/**`) : tout texte passe par `t()`, un nom de marque passe par une constante nommée (cf. `Logo`) ;
+  - pas d'URL `http(s)://` écrite en dur (sauf tests, `src/test/**` et `src/mocks/**`)
 - Styles via classes NativeWind (`className`), pas de StyleSheet sauf cas non couvert par Tailwind
 - Alias d'import `@/*` disponible (voir `tsconfig.json`)
 - **Aucun texte affiché en dur** : tout passe par i18next (`src/i18n/`). Un namespace par domaine (`common`, `auth`, `dashboard`…), un fichier JSON par langue et par namespace dans `src/i18n/locales/{fr,en}/`. Le français est la langue de référence (les types des clés en dérivent) ; chaque clé doit exister en `fr` et en `en` (test de parité). Nouveau namespace → créer les deux JSON puis l'enregistrer dans `src/i18n/resources.ts`.
@@ -233,6 +176,7 @@ npm run ios            # lance sur simulateur iOS
 npm run android        # lance sur émulateur Android
 npm run web            # lance en mode web (Metro)
 npm run lint           # ESLint (expo lint)
+npm run typecheck      # TypeScript (tsc --noEmit)
 npm run test           # Vitest
 npm run test:watch     # Vitest en mode watch
 npm run test:coverage  # Vitest avec couverture
@@ -242,8 +186,9 @@ npm run test:coverage  # Vitest avec couverture
 
 Conventions lues par le skill `/pr-message` (skill personnel, générique) :
 
-- **Langue** : description des PR en **français** ; titre en anglais au format Conventional Commits (`feat(auth): add login page (AUTH-01)`), car il devient le message du squash merge
+- **Langue** : description des PR en **français** ; titre en anglais au format Conventional Commits, avec le code ticket **et la clé Jira** (`feat(dashboard): add global layout (DASH-01, PRIO-18)`) : il devient le message du squash merge, et la clé permet à Jira de relier la PR au ticket
 - **Branche de base** : `develop` (seul `develop` est mergé dans `main`, garde CI)
+- **Nom de branche** : `<type>/PRIO-<numéro>[-description]`, clé Jira en majuscules, description en minuscules et tirets (`feat/PRIO-19-dash-02-liste-quadrants`) ; `PRIO-XX` pour un travail sans ticket. Règle unique dans `.validate-branch-namerc.js`, vérifiée au push (hook Husky) et sur chaque PR (workflow `branch-name.yml`)
 - **Ticket** : Jira `https://priozen.atlassian.net/browse/PRIO-XX`, clé dans le footer `Refs: PRIO-XX` des commits ; le code ticket (`AUTH-01`, `DASH-02`…) figure dans le nom de branche et le résumé du ticket
 - **Sections** (titres en français, avec emoji) : 💡 Contexte · 🏗️ Ce qui a été fait · 🛠️ Détails techniques · 🧪 Comment tester · 📸 Rendu Visuel (tableau Desktop / Mobile) · 💬 Notes pour le relecteur
 - **Comment tester** : données mockées MSW, utilisateur `martin@priozen.app` / `password123` ; préciser light/dark et mobile/desktop pour toute PR qui touche l'UI

@@ -4,6 +4,8 @@
 // can require() it.
 module.exports = {
   white: '#FFFFFF',
+  // Error / overdue red: the critical quadrant token is the same in both themes.
+  critical: '#EF4444',
   // The sidebar stays dark in both themes, so its foreground colors are fixed.
   sidebar: {
     accent: '#818CF8',

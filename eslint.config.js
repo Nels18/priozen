@@ -4,6 +4,57 @@ const expoConfig = require('eslint-config-expo/flat');
 const tseslint = require('typescript-eslint');
 const prettierPlugin = require('eslint-plugin-prettier');
 const prettierConfig = require('eslint-config-prettier');
+const i18next = require('eslint-plugin-i18next');
+
+// Project conventions enforced through no-restricted-syntax. ESLint doesn't
+// merge this rule across config objects (the last one wins), so each group is
+// a list, and every files block below combines the groups it needs.
+const CLASS_NAME_ATTRIBUTE = 'JSXAttribute[name.name=/(^c|C)lassName$/]';
+
+/** Colors come from the theme tokens (global.css), never from className. */
+const THEME_COLOR_RESTRICTIONS = [
+  {
+    selector: `${CLASS_NAME_ATTRIBUTE} Literal[value=/#[0-9a-fA-F]{3,8}/]`,
+    message:
+      'No hex color in className: use a theme class (bg-card, text-muted…). Raw colors live in src/theme/.',
+  },
+  {
+    selector: `${CLASS_NAME_ATTRIBUTE} TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}/]`,
+    message:
+      'No hex color in className: use a theme class (bg-card, text-muted…). Raw colors live in src/theme/.',
+  },
+  {
+    selector: `${CLASS_NAME_ATTRIBUTE} Literal[value=/(^|\\s)dark:/]`,
+    message:
+      'No dark: variant: theme tokens already switch with the color scheme (global.css).',
+  },
+  {
+    selector: `${CLASS_NAME_ATTRIBUTE} TemplateElement[value.raw=/(^|\\s)dark:/]`,
+    message:
+      'No dark: variant: theme tokens already switch with the color scheme (global.css).',
+  },
+];
+
+/** URLs come from env variables (EXPO_PUBLIC_API_URL) or route constants. */
+const HARDCODED_URL_RESTRICTIONS = [
+  {
+    selector: 'Literal[value=/https?:\\/\\//]',
+    message:
+      'No hardcoded URL: use EXPO_PUBLIC_API_URL / apiRequest for the API, ROUTES for app paths.',
+  },
+  {
+    selector: 'TemplateElement[value.raw=/https?:\\/\\//]',
+    message:
+      'No hardcoded URL: use EXPO_PUBLIC_API_URL / apiRequest for the API, ROUTES for app paths.',
+  },
+];
+
+const TEST_AND_MOCK_FILES = [
+  '**/*.test.ts',
+  '**/*.test.tsx',
+  'src/test/**',
+  'src/mocks/**',
+];
 
 module.exports = defineConfig([
   expoConfig,
@@ -93,6 +144,39 @@ module.exports = defineConfig([
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'warn',
     },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        ...THEME_COLOR_RESTRICTIONS,
+        ...HARDCODED_URL_RESTRICTIONS,
+      ],
+    },
+  },
+  {
+    // Raw colors are allowed where the theme is defined.
+    files: ['src/theme/**'],
+    rules: {
+      'no-restricted-syntax': ['error', ...HARDCODED_URL_RESTRICTIONS],
+    },
+  },
+  {
+    // Tests and mocks need fake URLs (test host, mocked API).
+    files: TEST_AND_MOCK_FILES,
+    rules: {
+      'no-restricted-syntax': ['error', ...THEME_COLOR_RESTRICTIONS],
+    },
+  },
+  {
+    // Displayed text goes through i18next (mode jsx-text-only: JSX text only).
+    files: ['**/*.tsx'],
+    ...i18next.configs['flat/recommended'],
+  },
+  {
+    files: TEST_AND_MOCK_FILES,
+    rules: { 'i18next/no-literal-string': 'off' },
   },
   {
     // Type-aware rules need a TS program, which only .ts/.tsx files get
