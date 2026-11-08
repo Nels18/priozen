@@ -98,6 +98,7 @@ function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
             >
               <Ionicons
                 name="warning-outline"
+                aria-hidden
                 size={14}
                 color={iconColors.critical}
               />

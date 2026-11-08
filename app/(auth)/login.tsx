@@ -54,6 +54,7 @@ export default function LoginScreen(): JSX.Element {
         >
           <Ionicons
             name="warning-outline"
+            aria-hidden
             size={16}
             color={iconColors.critical}
           />
