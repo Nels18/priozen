@@ -1,0 +1,36 @@
+name: Branch Name
+
+# Same rule as the local pre-push hook, enforced on every pull request
+# whatever created the branch (local push, web UI, cloud agent).
+# The rule itself lives in .validate-branch-namerc.js.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  branch-name:
+    name: branch-name
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout the rule
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: .validate-branch-namerc.js
+          sparse-checkout-cone-mode: false
+
+      - name: Check the branch name
+        env:
+          # Passed through env, never interpolated in the script (injection).
+          BRANCH: ${{ github.head_ref }}
+        run: |
+          node -e '
+            const { pattern, errorMsg } = require("./.validate-branch-namerc.js");
+            const branch = process.env.BRANCH;
+            if (!new RegExp(pattern).test(branch)) {
+              console.log(`::error::Branch "${branch}" — ${errorMsg}`);
+              process.exit(1);
+            }
+            console.log(`Branch "${branch}" follows the naming rule.`);
+          '

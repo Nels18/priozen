@@ -28,6 +28,7 @@ GitHub Actions (`.github/workflows/`) :
 
 - `ci.yml` — push et PR vers `main` / `develop` : scan de secrets (gitleaks), puis lint, typecheck et tests Vitest (fichiers modifiés sur une PR, suite complète avec couverture sur un push)
 - `branch-guard.yml` — PR vers `main` : seule `develop` peut y être mergée
+- `branch-name.yml` — toute PR : le nom de branche respecte `.validate-branch-namerc.js` (même règle que le hook `pre-push`)
 - `claude-review.yml` — PR vers `develop` : relecture par Claude quand on ajoute le label `ai-review` (workflow réutilisable de `Nels18/dev-agents`, guidelines dans `.github/review-guidelines.md`) ; PR de doc ignorées
 - `release.yml` — lancement manuel : tests, génération de la doc, `npm version` (patch / minor / major) et push du tag `v*`
 
@@ -187,6 +188,7 @@ Conventions lues par le skill `/pr-message` (skill personnel, générique) :
 
 - **Langue** : description des PR en **français** ; titre en anglais au format Conventional Commits, avec le code ticket **et la clé Jira** (`feat(dashboard): add global layout (DASH-01, PRIO-18)`) : il devient le message du squash merge, et la clé permet à Jira de relier la PR au ticket
 - **Branche de base** : `develop` (seul `develop` est mergé dans `main`, garde CI)
+- **Nom de branche** : `<type>/PRIO-<numéro>[-description]`, clé Jira en majuscules, description en minuscules et tirets (`feat/PRIO-19-dash-02-liste-quadrants`) ; `PRIO-XX` pour un travail sans ticket. Règle unique dans `.validate-branch-namerc.js`, vérifiée au push (hook Husky) et sur chaque PR (workflow `branch-name.yml`)
 - **Ticket** : Jira `https://priozen.atlassian.net/browse/PRIO-XX`, clé dans le footer `Refs: PRIO-XX` des commits ; le code ticket (`AUTH-01`, `DASH-02`…) figure dans le nom de branche et le résumé du ticket
 - **Sections** (titres en français, avec emoji) : 💡 Contexte · 🏗️ Ce qui a été fait · 🛠️ Détails techniques · 🧪 Comment tester · 📸 Rendu Visuel (tableau Desktop / Mobile) · 💬 Notes pour le relecteur
 - **Comment tester** : données mockées MSW, utilisateur `martin@priozen.app` / `password123` ; préciser light/dark et mobile/desktop pour toute PR qui touche l'UI
