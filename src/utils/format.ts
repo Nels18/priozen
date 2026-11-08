@@ -11,6 +11,12 @@ export const formatLongDate = (date: Date, language: string): string => {
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
 
+/** "28 oct." / "Oct 28" (task due dates). */
+export const formatShortDate = (date: Date, language: string): string =>
+  new Intl.DateTimeFormat(language, { day: 'numeric', month: 'short' }).format(
+    date,
+  );
+
 /** "Martin Dupont" → "MD" (avatar). */
 export const getInitials = (
   user: Pick<User, 'firstName' | 'lastName'>,

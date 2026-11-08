@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { Task } from '../types/models';
-import { summarizeTasks } from './summary';
+import { getCompletionPercent, summarizeTasks } from './summary';
 
 const NOW = new Date(2026, 9, 18, 15, 0); // 18 Oct 2026, 15:00 local time
 
@@ -77,5 +77,17 @@ describe('summarizeTasks', () => {
 
     expect(summary.totalCount).toBe(0);
     expect(summary.openByQuadrant.critical).toBe(0);
+  });
+});
+
+describe('getCompletionPercent', () => {
+  it('is 0 when there are no tasks', (): void => {
+    expect(getCompletionPercent({ doneCount: 0, totalCount: 0 })).toBe(0);
+  });
+
+  it('rounds to a whole percentage', (): void => {
+    expect(getCompletionPercent({ doneCount: 1, totalCount: 3 })).toBe(33);
+    expect(getCompletionPercent({ doneCount: 2, totalCount: 3 })).toBe(67);
+    expect(getCompletionPercent({ doneCount: 9, totalCount: 9 })).toBe(100);
   });
 });

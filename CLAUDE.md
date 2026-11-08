@@ -74,6 +74,8 @@ Maquette de référence (responsive mobile / tablette / bureau) : https://claude
 - Titres : DM Serif Display → classe `font-serif`
 - Interface : Inter → `font-sans`, `font-sans-medium`, `font-sans-semibold`, `font-sans-bold` (une famille par graisse : le natif ne synthétise pas les graisses des polices custom ; chargées dans `app/_layout.tsx`)
 - Taille `text-caption` (13px) pour le texte secondaire de la maquette (libellés, liens, légendes) — pas de `text-[13px]`
+- Taille `text-tiny` (11px) pour les métadonnées d'une tâche (dossier, échéance, badges) — pas de `text-[11px]`
+- Tailles `text-greeting` (26px, salutation du tableau de bord) et `text-stat` (28px, chiffre clé) ; toute nouvelle taille de la maquette se nomme dans `tailwind.config.js` plutôt qu'en valeur arbitraire
 
 ## Architecture des vues (expo-router)
 
@@ -115,7 +117,7 @@ Vues :
 - **Aucun texte affiché en dur** : tout passe par i18next (`src/i18n/`). Un namespace par domaine (`common`, `auth`, `dashboard`…), un fichier JSON par langue et par namespace dans `src/i18n/locales/{fr,en}/`. Le français est la langue de référence (les types des clés en dérivent) ; chaque clé doit exister en `fr` et en `en` (test de parité). Nouveau namespace → créer les deux JSON puis l'enregistrer dans `src/i18n/resources.ts`.
 - Les fonctions pures (validation, mapping d'erreurs) retournent des **clés** de traduction, jamais du texte ; l'écran traduit au rendu
 - Appels API via `apiRequest` (`src/api/client.ts`), base URL = `EXPO_PUBLIC_API_URL` (définie dans `.env.development` pour le dev mocké)
-- **Données serveur : TanStack Query**, jamais d'appel API dans un `useEffect`. Un composant lit via `useQuery` / modifie via `useMutation`, avec les fabriques `queryOptions` du domaine (ex. `taskQueries.list()` dans `src/tasks/taskQueries.ts`) ; les clés viennent du même fichier (`taskKeys`) et une mutation invalide `taskKeys.all`. Les fonctions d'API (`src/api/*.ts`, basées sur `apiRequest`) servent de `queryFn`.
+- **Données serveur : TanStack Query**, jamais d'appel API dans un `useEffect`. Un composant lit via `useQuery` / modifie via `useMutation`, avec les fabriques `queryOptions` du domaine (ex. `taskQueries.list()` dans `src/tasks/taskQueries.ts`) ; les clés viennent du même fichier (`taskKeys`) et une mutation invalide `taskKeys.all`. Les mutations suivent le même modèle : fabriques `mutationOptions` du domaine (ex. `taskMutations.setDone()` dans `src/tasks/taskMutations.ts`, mise à jour optimiste du cache puis annulation en cas d'échec). Les fonctions d'API (`src/api/*.ts`, basées sur `apiRequest`) servent de `queryFn`.
 - `QueryClient` unique créé par `createQueryClient()` (`src/query/queryClient.ts`) : `QUERY_STALE_TIME_MS` (30 s), `QUERY_RETRY_COUNT` (2 nouvelles tentatives), erreurs remontées une seule fois par le `QueryCache`. `QueryProvider` (dans `app/_layout.tsx`, à l'intérieur de `MocksProvider` pour qu'aucune requête ne parte avant MSW) branche `focusManager` sur `AppState` et `onlineManager` sur `expo-network` (iOS/Android ; le web est géré nativement par TanStack Query)
 - Tests de requêtes : `createTestQueryClient()` (sans retries) et `createQueryWrapper()` (`src/test/queryClient.tsx`) ; utiliser `queryClient.query(options)` (`fetchQuery` est déprécié)
 - Données de test : utilisateur fictif **Martin Dupont / martin@priozen.app** (mot de passe mock `password123`, constante `MOCK_PASSWORD`) — ne jamais utiliser de vrai nom

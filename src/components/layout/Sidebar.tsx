@@ -71,7 +71,7 @@ export function Sidebar({ user, width }: SidebarProps): JSX.Element {
             </Text>
             <Text
               numberOfLines={1}
-              className="font-sans text-[11px] text-sidebar-text"
+              className="font-sans text-tiny text-sidebar-text"
             >
               {user.email}
             </Text>

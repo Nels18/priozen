@@ -22,6 +22,7 @@
     "completed": "Tâches terminées",
     "overdue": "En retard",
     "noOverdue": "Aucune tâche en retard 🎉",
+    "loading": "Chargement du résumé…",
     "loadError": "Impossible de charger les tâches."
   }
 }

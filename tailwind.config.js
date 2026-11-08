@@ -45,8 +45,13 @@ module.exports = {
         'sans-bold': ['interBold'],
       },
       // 13px: secondary text of the mockup (labels, links, captions).
+      // 11px: task metadata (folder, due date, badges, group hints).
+      // 26px: dashboard greeting (serif). 28px: key figure (completion rate).
       fontSize: {
         caption: '13px',
+        tiny: '11px',
+        greeting: '26px',
+        stat: '28px',
       },
       borderRadius: {
         sm: '8px',
