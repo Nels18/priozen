@@ -36,7 +36,7 @@ export function Sidebar({ user, width }: SidebarProps): JSX.Element {
             <Pressable
               key={item.key}
               accessibilityRole="menuitem"
-              accessibilityState={{ selected: isActive }}
+              aria-selected={isActive}
               onPress={(): void => router.navigate(item.href)}
               className={`mb-0.5 flex-row items-center gap-3 rounded-sm px-3.5 py-2.5 hover:bg-sidebar-active ${
                 isActive ? 'bg-sidebar-active' : ''
