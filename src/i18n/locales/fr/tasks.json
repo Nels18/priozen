@@ -18,5 +18,31 @@
     "overdue": "En retard",
     "today": "Aujourd'hui",
     "tomorrow": "Demain"
+  },
+  "editHint": "Modifier la tâche",
+  "form": {
+    "newTitle": "Nouvelle tâche",
+    "editTitle": "Modifier la tâche",
+    "close": "Fermer",
+    "title": "Titre",
+    "titlePlaceholder": "Ex. : Préparer la réunion client",
+    "quadrant": "Quadrant",
+    "description": "Description",
+    "optional": "(facultatif)",
+    "descriptionPlaceholder": "Ajoutez un détail utile",
+    "dueDate": "Échéance",
+    "dueDatePlaceholder": "jj/mm/aaaa",
+    "folder": "Dossier",
+    "noFolder": "Aucun",
+    "cancel": "Annuler",
+    "create": "Créer la tâche",
+    "save": "Enregistrer",
+    "loading": "Chargement de la tâche…",
+    "notFound": "Cette tâche n'existe plus.",
+    "errors": {
+      "titleRequired": "Le titre est obligatoire.",
+      "dueDateInvalid": "Date invalide : utilisez le format jj/mm/aaaa.",
+      "saveFailed": "Impossible d'enregistrer la tâche. Réessayez."
+    }
   }
 }

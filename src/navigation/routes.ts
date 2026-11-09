@@ -1,19 +1,24 @@
 // Single source of truth for in-app URLs (the app/ screens), like
 // src/api/routes.ts for the API. `as const` keeps the literal types so
 // expo-router's typed routes still reject a path that doesn't exist.
-// Route groups — app/(auth)/, app/(protected)/ — never appear in URLs.
+// Route groups — app/(auth)/, app/(protected)/, (main)/ — never appear in URLs.
 
 export const ROUTES = {
   // app/(auth)/ — public, no app shell
   login: '/login',
   register: '/register',
   forgotPassword: '/forgot-password',
-  // app/(protected)/ — signed-in, inside the app shell
+  // app/(protected)/(main)/ — signed-in, inside the app shell
   tasks: '/',
   folders: '/folders',
   focus: '/focus',
   analytics: '/analytics',
   profile: '/profile',
+  // app/(protected)/tasks/ — modals above the app shell
+  newTask: '/tasks/new',
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];
+
+/** Edit modal of one task (app/(protected)/tasks/[id].tsx). */
+export const editTaskRoute = (id: string): `/tasks/${string}` => `/tasks/${id}`;

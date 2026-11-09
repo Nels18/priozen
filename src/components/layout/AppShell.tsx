@@ -1,10 +1,11 @@
-import { usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import type { JSX, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useScreenSize } from '@/src/layout/screenSize';
 import { getActiveNavItem } from '@/src/navigation/navItems';
+import { ROUTES } from '@/src/navigation/routes';
 import type { User } from '@/src/types/models';
 import { BottomNav } from './BottomNav';
 import { Fab } from './Fab';
@@ -32,6 +33,7 @@ export function AppShell({ user, children }: AppShellProps): JSX.Element {
   const { t } = useTranslation('layout');
   const screenSize = useScreenSize();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const isTasksView = getActiveNavItem(usePathname()).key === 'tasks';
 
   if (screenSize === 'small') {
@@ -43,8 +45,7 @@ export function AppShell({ user, children }: AppShellProps): JSX.Element {
         {isTasksView && (
           <Fab
             label={t('newTask')}
-            // TODO(TASK-01): open the "new task" modal.
-            onPress={(): void => undefined}
+            onPress={(): void => router.push(ROUTES.newTask)}
             bottom={BOTTOM_NAV_HEIGHT + insets.bottom + 16}
           />
         )}

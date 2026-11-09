@@ -33,6 +33,11 @@ module.exports = {
         schedule: { DEFAULT: token('schedule'), bg: token('schedule-bg') },
         delegate: { DEFAULT: token('delegate'), bg: token('delegate-bg') },
         secondary: { DEFAULT: token('secondary'), bg: token('secondary-bg') },
+        scrim: fixedColors.scrim,
+      },
+      // Centered modal dialog on medium and large screens (mockup).
+      maxWidth: {
+        dialog: '520px',
       },
       // Native platforms can't synthesize weights for custom fonts, so each
       // weight is its own family (names match the useFonts keys in
@@ -57,6 +62,8 @@ module.exports = {
         sm: '8px',
         md: '12px',
         lg: '16px',
+        // Top corners of the mobile bottom sheet (task modal).
+        sheet: '20px',
       },
     },
   },

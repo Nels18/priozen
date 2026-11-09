@@ -7,5 +7,6 @@
   "completedTasks": "Tâches complétées",
   "loading": "Chargement des tâches…",
   "loadError": "Impossible de charger les tâches.",
-  "retry": "Réessayer"
+  "retry": "Réessayer",
+  "newTaskButton": "+ Nouvelle tâche"
 }
