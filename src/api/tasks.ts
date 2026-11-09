@@ -10,9 +10,22 @@ export type TaskUpdate = Partial<
   >
 >;
 
+/** Fields sent to create a task (`POST /tasks`); the server sets the rest. */
+export type TaskInput = Pick<
+  Task,
+  'title' | 'description' | 'quadrant' | 'folderId' | 'dueDate'
+>;
+
 /** Active (non-deleted) tasks, sorted by Eisenhower priority. */
 export const listTasks = (): Promise<Task[]> =>
   apiRequest<Task[]>(tasksRoutes.list());
+
+/** Resolves with the created task, as saved by the server. */
+export const createTask = (input: TaskInput): Promise<Task> =>
+  apiRequest<Task>(tasksRoutes.list(), {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
 
 /** Partial update; resolves with the task as saved by the server. */
 export const updateTask = (id: string, changes: TaskUpdate): Promise<Task> =>

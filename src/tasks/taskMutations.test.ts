@@ -65,11 +65,11 @@ describe('taskMutations.setDone', () => {
     if (!target) throw new Error('fixtures need an open task');
 
     serverModule.server.use(
-      http.patch('*/tasks/:id', () =>
+      http.patch(`${TEST_API_URL}/tasks/:id`, () =>
         HttpResponse.json({ message: 'Server error.' }, { status: 500 }),
       ),
       // The resync after the failure must not hide a missing rollback.
-      http.get('*/tasks', () => HttpResponse.json(tasks)),
+      http.get(`${TEST_API_URL}/tasks`, () => HttpResponse.json(tasks)),
     );
 
     const observer = new MutationObserver(
@@ -83,5 +83,57 @@ describe('taskMutations.setDone', () => {
     expect(
       findTask(queryClient.getQueryData(taskKeys.list()), target.id)?.isDone,
     ).toBe(false);
+  });
+});
+
+describe('taskMutations.create', () => {
+  it('creates the task and resolves once the list shows it', async (): Promise<void> => {
+    const queryClient = createTestQueryClient();
+    const { taskQueries, taskKeys } = taskQueriesModule;
+    await queryClient.query(taskQueries.list());
+
+    const observer = new MutationObserver(
+      queryClient,
+      taskMutationsModule.taskMutations.create(queryClient),
+    );
+    const created = await observer.mutate({
+      title: 'Appeler le fournisseur',
+      description: null,
+      quadrant: 'delegate',
+      folderId: null,
+      dueDate: null,
+    });
+
+    expect(created.quadrant).toBe('delegate');
+    const listed = findTask(
+      queryClient.getQueryData(taskKeys.list()),
+      created.id,
+    );
+    expect(listed?.title).toBe('Appeler le fournisseur');
+    expect(listed?.quadrant).toBe('delegate');
+  });
+});
+
+describe('taskMutations.update', () => {
+  it('saves the changes and resolves once the list shows them', async (): Promise<void> => {
+    const queryClient = createTestQueryClient();
+    const { taskQueries, taskKeys } = taskQueriesModule;
+    const [target] = await queryClient.query(taskQueries.list());
+
+    const observer = new MutationObserver(
+      queryClient,
+      taskMutationsModule.taskMutations.update(queryClient),
+    );
+    await observer.mutate({
+      id: target.id,
+      changes: { title: 'Titre modifié', quadrant: 'secondary' },
+    });
+
+    const listed = findTask(
+      queryClient.getQueryData(taskKeys.list()),
+      target.id,
+    );
+    expect(listed?.title).toBe('Titre modifié');
+    expect(listed?.quadrant).toBe('secondary');
   });
 });
