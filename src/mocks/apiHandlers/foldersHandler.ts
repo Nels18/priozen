@@ -3,17 +3,17 @@ import { foldersRoutes } from '../../api/routes';
 import type { Folder } from '../../types/models';
 import { MOCK_USER_ID } from '../data/fixtures';
 import { database } from '../database';
-import { createId, randomDelay } from '../utils';
+import { apiPattern, createId, randomDelay } from '../utils';
 
 export const foldersHandler = [
   // GET /folders
-  http.get(`*${foldersRoutes.list()}`, async () => {
+  http.get(apiPattern(foldersRoutes.list()), async () => {
     await randomDelay(200, 500);
     return HttpResponse.json(database.getFolders());
   }),
 
   // GET /folders/:id
-  http.get(`*${foldersRoutes.detail(':id')}`, async ({ params }) => {
+  http.get(apiPattern(foldersRoutes.detail(':id')), async ({ params }) => {
     await randomDelay(150, 400);
     const folder = database.getFolder(params.id as string);
 
@@ -28,7 +28,7 @@ export const foldersHandler = [
   }),
 
   // POST /folders
-  http.post(`*${foldersRoutes.list()}`, async ({ request }) => {
+  http.post(apiPattern(foldersRoutes.list()), async ({ request }) => {
     await randomDelay(300, 600);
     const body = (await request.json()) as Partial<Folder>;
 
@@ -52,23 +52,26 @@ export const foldersHandler = [
   }),
 
   // PATCH /folders/:id
-  http.patch(`*${foldersRoutes.detail(':id')}`, async ({ params, request }) => {
-    await randomDelay(200, 500);
-    const body = (await request.json()) as Partial<Folder>;
-    const updated = database.updateFolder(params.id as string, body);
+  http.patch(
+    apiPattern(foldersRoutes.detail(':id')),
+    async ({ params, request }) => {
+      await randomDelay(200, 500);
+      const body = (await request.json()) as Partial<Folder>;
+      const updated = database.updateFolder(params.id as string, body);
 
-    if (!updated) {
-      return HttpResponse.json(
-        { message: 'Folder not found.' },
-        { status: 404 },
-      );
-    }
+      if (!updated) {
+        return HttpResponse.json(
+          { message: 'Folder not found.' },
+          { status: 404 },
+        );
+      }
 
-    return HttpResponse.json(updated);
-  }),
+      return HttpResponse.json(updated);
+    },
+  ),
 
   // DELETE /folders/:id
-  http.delete(`*${foldersRoutes.detail(':id')}`, async ({ params }) => {
+  http.delete(apiPattern(foldersRoutes.detail(':id')), async ({ params }) => {
     await randomDelay(200, 500);
     const isRemoved = database.deleteFolder(params.id as string);
 

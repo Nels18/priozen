@@ -2,11 +2,11 @@ import { http, HttpResponse } from 'msw';
 import { authRoutes } from '../../api/routes';
 import { MOCK_PASSWORD, MOCK_TOKEN, mockUser } from '../data/fixtures';
 import { database } from '../database';
-import { createId, randomDelay } from '../utils';
+import { apiPattern, createId, randomDelay } from '../utils';
 
 export const authHandler = [
   // POST /auth/login
-  http.post(`*${authRoutes.login()}`, async ({ request }) => {
+  http.post(apiPattern(authRoutes.login()), async ({ request }) => {
     await randomDelay(300, 700);
     const body = (await request.json()) as {
       email?: string;
@@ -31,7 +31,7 @@ export const authHandler = [
   }),
 
   // POST /auth/register
-  http.post(`*${authRoutes.register()}`, async ({ request }) => {
+  http.post(apiPattern(authRoutes.register()), async ({ request }) => {
     await randomDelay(400, 800);
     const body = (await request.json()) as {
       firstName?: string;
@@ -69,7 +69,7 @@ export const authHandler = [
   }),
 
   // POST /auth/forgot-password
-  http.post(`*${authRoutes.forgotPassword()}`, async () => {
+  http.post(apiPattern(authRoutes.forgotPassword()), async () => {
     await randomDelay(400, 800);
     // Always 200 to avoid email enumeration
     return HttpResponse.json({
@@ -78,7 +78,7 @@ export const authHandler = [
   }),
 
   // POST /auth/reset-password
-  http.post(`*${authRoutes.resetPassword()}`, async ({ request }) => {
+  http.post(apiPattern(authRoutes.resetPassword()), async ({ request }) => {
     await randomDelay(300, 600);
     const body = (await request.json()) as {
       token?: string;
@@ -103,7 +103,7 @@ export const authHandler = [
   }),
 
   // POST /auth/logout
-  http.post(`*${authRoutes.logout()}`, async () => {
+  http.post(apiPattern(authRoutes.logout()), async () => {
     await randomDelay(100, 300);
     return HttpResponse.json({ message: 'Logged out.' });
   }),

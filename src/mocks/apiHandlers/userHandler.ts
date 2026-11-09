@@ -3,24 +3,24 @@ import { userRoutes } from '../../api/routes';
 import type { User } from '../../types/models';
 import { MOCK_PASSWORD } from '../data/fixtures';
 import { database } from '../database';
-import { randomDelay } from '../utils';
+import { apiPattern, randomDelay } from '../utils';
 
 export const userHandler = [
   // GET /user/me
-  http.get(`*${userRoutes.me()}`, async () => {
+  http.get(apiPattern(userRoutes.me()), async () => {
     await randomDelay(150, 400);
     return HttpResponse.json(database.getUser());
   }),
 
   // PATCH /user/me
-  http.patch(`*${userRoutes.me()}`, async ({ request }) => {
+  http.patch(apiPattern(userRoutes.me()), async ({ request }) => {
     await randomDelay(300, 600);
     const body = (await request.json()) as Partial<User>;
     return HttpResponse.json(database.updateUser(body));
   }),
 
   // PATCH /user/me/password
-  http.patch(`*${userRoutes.password()}`, async ({ request }) => {
+  http.patch(apiPattern(userRoutes.password()), async ({ request }) => {
     await randomDelay(300, 600);
     const body = (await request.json()) as {
       currentPassword?: string;
@@ -45,7 +45,7 @@ export const userHandler = [
   }),
 
   // DELETE /user/me
-  http.delete(`*${userRoutes.me()}`, async () => {
+  http.delete(apiPattern(userRoutes.me()), async () => {
     await randomDelay(400, 800);
     return HttpResponse.json({ message: 'Account deleted.' });
   }),

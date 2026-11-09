@@ -3,6 +3,14 @@ import { Platform } from 'react-native';
 
 export const DAY_MS = 24 * 60 * 60 * 1000;
 
+// MSW URL pattern for an API path, limited to the API host
+// (EXPO_PUBLIC_API_URL). A pattern starting with a "*" wildcard would also
+// catch the app's own files: the lazy-loaded bundle of
+// app/(protected)/tasks/new.tsx ends in /tasks/new.bundle, which the
+// "any host + /tasks/:id" handler answered with a 404.
+export const apiPattern = (path: string): string =>
+  `${process.env.EXPO_PUBLIC_API_URL ?? ''}${path}`;
+
 export const randomDelay = (min = 200, max = 800): Promise<void> => {
   if (process.env.NODE_ENV === 'test') return Promise.resolve();
   return delay(Math.floor(Math.random() * (max - min) + min));
