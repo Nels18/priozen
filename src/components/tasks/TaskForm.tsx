@@ -38,6 +38,7 @@ export function TaskForm({
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<TaskFormErrors>({});
   const [isSaving, setIsSaving] = useState(false);
+  const isSavingRef = useRef(false);
   const [hasSaveFailed, setHasSaveFailed] = useState(false);
   const titleRef = useRef<ComponentRef<typeof TextInput>>(null);
   const dueDateRef = useRef<ComponentRef<typeof TextInput>>(null);
@@ -54,6 +55,11 @@ export function TaskForm({
   };
 
   const handleSubmit = async (): Promise<void> => {
+    // One save at a time: Enter in the title can fire again while the
+    // button already shows its spinner (a second POST would duplicate the
+    // task). A ref, unlike the state, is up to date between two key presses.
+    if (isSavingRef.current) return;
+
     const result = validateTaskForm(values, i18n.language);
     if (!result.isValid) {
       setErrors(result.errors);
@@ -64,12 +70,15 @@ export function TaskForm({
 
     setErrors({});
     setHasSaveFailed(false);
+    isSavingRef.current = true;
     setIsSaving(true);
     try {
       await onSubmit(result.input);
       // Success: the modal closes, nothing left to reset.
     } catch {
+      // Already reported by the QueryClient's MutationCache.
       setHasSaveFailed(true);
+      isSavingRef.current = false;
       setIsSaving(false);
     }
   };

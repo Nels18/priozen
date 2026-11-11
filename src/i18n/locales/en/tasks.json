@@ -39,6 +39,10 @@
     "save": "Save",
     "loading": "Loading the task…",
     "notFound": "This task no longer exists.",
+    "loadFailed": "Couldn't load the task.",
+    "retry": "Try again",
+    "quadrantOption": "{{name}}, {{hint}}",
+    "folderButton": "{{label}}: {{name}}",
     "errors": {
       "titleRequired": "The title is required.",
       "dueDateInvalid": "Invalid date: use the mm/dd/yyyy format.",

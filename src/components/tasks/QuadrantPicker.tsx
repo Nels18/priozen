@@ -46,9 +46,10 @@ export function QuadrantPicker({
                   accessibilityRole="radio"
                   // aria-*, not accessibilityState: see .github/review-guidelines.md.
                   aria-checked={isSelected}
-                  accessibilityLabel={`${t(`quadrants.${quadrant}`)}, ${t(
-                    `quadrantHints.${quadrant}`,
-                  )}`}
+                  accessibilityLabel={t('form.quadrantOption', {
+                    name: t(`quadrants.${quadrant}`),
+                    hint: t(`quadrantHints.${quadrant}`),
+                  })}
                   onPress={() => onChange(quadrant)}
                   className={`min-h-16 flex-1 gap-0.5 rounded-md border-2 px-3 py-2.5 ${
                     isSelected ? classes.selected : 'border-border bg-input'

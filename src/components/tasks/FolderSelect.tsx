@@ -49,7 +49,10 @@ export function FolderSelect({
       </Text>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={`${t('form.folder')}, ${current.name}`}
+        accessibilityLabel={t('form.folderButton', {
+          label: t('form.folder'),
+          name: current.name,
+        })}
         aria-expanded={isOpen}
         onPress={() => setIsOpen((open) => !open)}
         className={`min-h-11 flex-row items-center gap-2 rounded-sm border-[1.5px] bg-input px-3 ${

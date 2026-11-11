@@ -39,6 +39,10 @@
     "save": "Enregistrer",
     "loading": "Chargement de la tâche…",
     "notFound": "Cette tâche n'existe plus.",
+    "loadFailed": "Impossible de charger la tâche.",
+    "retry": "Réessayer",
+    "quadrantOption": "{{name}}, {{hint}}",
+    "folderButton": "{{label}} : {{name}}",
     "errors": {
       "titleRequired": "Le titre est obligatoire.",
       "dueDateInvalid": "Date invalide : utilisez le format jj/mm/aaaa.",

@@ -88,6 +88,7 @@ export const taskMutations = {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   create: (queryClient: QueryClient) =>
     mutationOptions<Task, Error, TaskInput>({
+      mutationKey: [...taskKeys.all, 'create'],
       mutationFn: createTask,
       onSuccess: (saved) => refreshAfterSave(queryClient, saved),
     }),
@@ -96,6 +97,7 @@ export const taskMutations = {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
   update: (queryClient: QueryClient) =>
     mutationOptions<Task, Error, UpdateTaskVariables>({
+      mutationKey: [...taskKeys.all, 'update'],
       mutationFn: ({ id, changes }) => updateTask(id, changes),
       onSuccess: (saved) => refreshAfterSave(queryClient, saved),
     }),
