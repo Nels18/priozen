@@ -3,11 +3,15 @@ import type { JSX } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
+import type { FoldersStatus } from '@/src/folders/folderField';
+import { getFolderFieldState } from '@/src/folders/folderField';
 import { useIconColors } from '@/src/theme/useIconColors';
 import type { Folder } from '@/src/types/models';
 
 interface FolderSelectProps {
   folders: Folder[];
+  /** Loading state of `folders`: the field is locked until they load. */
+  foldersStatus: FoldersStatus;
   value: string | null;
   onChange: (folderId: string | null) => void;
 }
@@ -25,12 +29,24 @@ interface Option {
  */
 export function FolderSelect({
   folders,
+  foldersStatus,
   value,
   onChange,
 }: FolderSelectProps): JSX.Element {
   const { t } = useTranslation('tasks');
   const iconColors = useIconColors();
   const [isOpen, setIsOpen] = useState(false);
+
+  const state = getFolderFieldState(value, folders, foldersStatus);
+  const isLocked = state.kind !== 'ready';
+
+  let currentLabel: string;
+  if (state.kind === 'loading') currentLabel = t('form.foldersLoading');
+  else if (state.kind === 'unavailable') {
+    currentLabel = state.hasFolder
+      ? t('form.folderUnavailable')
+      : t('form.noFolder');
+  } else currentLabel = state.folder?.name ?? t('form.noFolder');
 
   const options: Option[] = [
     { id: null, name: t('form.noFolder'), color: null },
@@ -40,7 +56,7 @@ export function FolderSelect({
       color: folder.color,
     })),
   ];
-  const current = options.find((option) => option.id === value) ?? options[0];
+  const selectedId = state.kind === 'ready' ? (state.folder?.id ?? null) : null;
 
   return (
     <View>
@@ -51,13 +67,16 @@ export function FolderSelect({
         accessibilityRole="button"
         accessibilityLabel={t('form.folderButton', {
           label: t('form.folder'),
-          name: current.name,
+          name: currentLabel,
         })}
-        aria-expanded={isOpen}
+        aria-expanded={isOpen && !isLocked}
+        aria-disabled={isLocked}
+        aria-busy={state.kind === 'loading'}
+        disabled={isLocked}
         onPress={() => setIsOpen((open) => !open)}
         className={`min-h-11 flex-row items-center gap-2 rounded-sm border-[1.5px] bg-input px-3 ${
-          isOpen ? 'border-primary' : 'border-border'
-        }`}
+          isOpen && !isLocked ? 'border-primary' : 'border-border'
+        } ${isLocked ? 'opacity-60' : ''}`}
       >
         <Ionicons
           name="folder-outline"
@@ -66,24 +85,43 @@ export function FolderSelect({
           color={iconColors.muted}
         />
         <Text numberOfLines={1} className="flex-1 font-sans text-sm text-text">
-          {current.name}
+          {currentLabel}
         </Text>
-        <Ionicons
-          name={isOpen ? 'chevron-up' : 'chevron-down'}
-          aria-hidden
-          size={16}
-          color={iconColors.muted}
-        />
+        {!isLocked && (
+          <Ionicons
+            name={isOpen ? 'chevron-up' : 'chevron-down'}
+            aria-hidden
+            size={16}
+            color={iconColors.muted}
+          />
+        )}
       </Pressable>
 
-      {isOpen && (
+      {state.kind === 'unavailable' && (
+        <View
+          accessibilityRole="alert"
+          className="mt-1.5 flex-row items-center gap-1.5"
+        >
+          <Ionicons
+            name="alert-circle-outline"
+            aria-hidden
+            size={14}
+            color={iconColors.critical}
+          />
+          <Text className="flex-1 font-sans text-xs text-critical">
+            {t('form.foldersLoadFailed')}
+          </Text>
+        </View>
+      )}
+
+      {isOpen && !isLocked && (
         <View
           accessibilityRole="radiogroup"
           accessibilityLabel={t('form.folder')}
           className="mt-1 overflow-hidden rounded-sm border border-border bg-card"
         >
           {options.map((option) => {
-            const isSelected = option.id === current.id;
+            const isSelected = option.id === selectedId;
             return (
               <Pressable
                 key={option.id ?? 'none'}

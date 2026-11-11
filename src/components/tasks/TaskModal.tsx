@@ -20,11 +20,40 @@ interface TaskModalProps {
   children: ReactNode;
 }
 
+// id of the modal's root element on web (nativeID): one modal at a time.
+const MODAL_ROOT_ID = 'task-modal-root';
+
 /**
- * Web only: Escape closes the modal, and the focus goes back to whatever
- * opened it (the "+" button, a task…) once it closes.
+ * Makes everything outside `root` inert (no focus, no clicks, hidden from
+ * screen readers): each sibling of `root` and of its ancestors. Returns the
+ * function that undoes it.
  */
-const useWebDialogKeyboard = (onClose: () => void): void => {
+const makeOutsideInert = (root: Element): (() => void) => {
+  const changed: Element[] = [];
+  for (
+    let node: Element = root;
+    node.parentElement && node !== document.body;
+    node = node.parentElement
+  ) {
+    for (const sibling of Array.from(node.parentElement.children)) {
+      if (sibling !== node && !sibling.hasAttribute('inert')) {
+        sibling.setAttribute('inert', '');
+        changed.push(sibling);
+      }
+    }
+  }
+  return (): void => {
+    for (const element of changed) element.removeAttribute('inert');
+  };
+};
+
+/**
+ * Web only, while the modal is open:
+ * - Tab stays inside it: the app underneath is inert (WCAG 2.4.3);
+ * - Escape closes it;
+ * - the focus then goes back to whatever opened it (the "+" button, a task…).
+ */
+const useWebDialogBehavior = (onClose: () => void): void => {
   const onCloseRef = useRef(onClose);
   useEffect(() => {
     onCloseRef.current = onClose;
@@ -43,8 +72,12 @@ const useWebDialogKeyboard = (onClose: () => void): void => {
     // Capture phase: React Native Web's TextInput stops key events from
     // bubbling, and the focus is usually in a field.
     document.addEventListener('keydown', handleKeyDown, true);
+    const root = document.getElementById(MODAL_ROOT_ID);
+    const restoreOutside = root ? makeOutsideInert(root) : (): void => {};
     return (): void => {
       document.removeEventListener('keydown', handleKeyDown, true);
+      // Interactive again first: an inert element can't take the focus.
+      restoreOutside();
       if (trigger instanceof HTMLElement) trigger.focus();
     };
   }, [trigger]);
@@ -63,10 +96,11 @@ export function TaskModal({
   const iconColors = useIconColors();
   const insets = useSafeAreaInsets();
   const isSheet = useScreenSize() === 'small';
-  useWebDialogKeyboard(onClose);
+  useWebDialogBehavior(onClose);
 
   return (
     <KeyboardAvoidingView
+      nativeID={MODAL_ROOT_ID}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className={`flex-1 ${
         isSheet ? 'justify-end pt-11' : 'items-center justify-center p-4'

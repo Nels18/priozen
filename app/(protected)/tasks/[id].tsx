@@ -70,6 +70,7 @@ export default function EditTaskScreen(): JSX.Element {
           key={editedTask.id}
           initialValues={taskToFormValues(editedTask, i18n.language)}
           folders={folders.data ?? []}
+          foldersStatus={folders.status}
           submitLabel={t('form.save')}
           onCancel={close}
           onSubmit={async (input) => {

@@ -21,6 +21,7 @@ export default function NewTaskScreen(): JSX.Element {
       <TaskForm
         initialValues={EMPTY_TASK_FORM}
         folders={folders.data ?? []}
+        foldersStatus={folders.status}
         submitLabel={t('form.create')}
         onCancel={close}
         onSubmit={async (input) => {

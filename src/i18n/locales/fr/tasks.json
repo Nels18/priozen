@@ -43,6 +43,9 @@
     "retry": "Réessayer",
     "quadrantOption": "{{name}}, {{hint}}",
     "folderButton": "{{label}} : {{name}}",
+    "foldersLoading": "Chargement…",
+    "folderUnavailable": "Dossier indisponible",
+    "foldersLoadFailed": "Impossible de charger les dossiers : le dossier de la tâche ne change pas.",
     "errors": {
       "titleRequired": "Le titre est obligatoire.",
       "dueDateInvalid": "Date invalide : utilisez le format jj/mm/aaaa.",

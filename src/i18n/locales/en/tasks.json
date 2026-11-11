@@ -43,6 +43,9 @@
     "retry": "Try again",
     "quadrantOption": "{{name}}, {{hint}}",
     "folderButton": "{{label}}: {{name}}",
+    "foldersLoading": "Loading…",
+    "folderUnavailable": "Folder unavailable",
+    "foldersLoadFailed": "Couldn't load the folders: the task's folder stays as it is.",
     "errors": {
       "titleRequired": "The title is required.",
       "dueDateInvalid": "Invalid date: use the mm/dd/yyyy format.",

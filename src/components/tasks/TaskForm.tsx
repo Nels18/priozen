@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { TextInput } from 'react-native';
 import { Text, View } from 'react-native';
 import type { TaskInput } from '@/src/api/tasks';
+import type { FoldersStatus } from '@/src/folders/folderField';
 import { useScreenSize } from '@/src/layout/screenSize';
 import type { TaskFormErrors, TaskFormValues } from '@/src/tasks/taskForm';
 import { validateTaskForm } from '@/src/tasks/taskForm';
@@ -18,6 +19,7 @@ import { QuadrantPicker } from './QuadrantPicker';
 interface TaskFormProps {
   initialValues: TaskFormValues;
   folders: Folder[];
+  foldersStatus: FoldersStatus;
   submitLabel: string;
   /** Saves the task; a rejection shows a "couldn't save" message. */
   onSubmit: (input: TaskInput) => Promise<void>;
@@ -28,6 +30,7 @@ interface TaskFormProps {
 export function TaskForm({
   initialValues,
   folders,
+  foldersStatus,
   submitLabel,
   onSubmit,
   onCancel,
@@ -130,6 +133,7 @@ export function TaskForm({
         <View className="flex-1">
           <FolderSelect
             folders={folders}
+            foldersStatus={foldersStatus}
             value={values.folderId}
             onChange={(folderId) => update('folderId', folderId)}
           />
