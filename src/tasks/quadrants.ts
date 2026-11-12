@@ -9,6 +9,8 @@ interface QuadrantClasses {
   badge: string;
   /** Colored text alone. */
   text: string;
+  /** Selected choice in the quadrant picker: colored border, tinted fill. */
+  selected: string;
 }
 
 // Single place mapping each quadrant to its theme colors (global.css tokens).
@@ -19,20 +21,24 @@ export const QUADRANT_CLASSES: Record<EisenhowerQuadrant, QuadrantClasses> = {
     dot: 'bg-critical',
     badge: 'bg-critical-bg text-critical',
     text: 'text-critical',
+    selected: 'border-critical bg-critical-bg',
   },
   schedule: {
     dot: 'bg-schedule',
     badge: 'bg-schedule-bg text-schedule',
     text: 'text-schedule',
+    selected: 'border-schedule bg-schedule-bg',
   },
   delegate: {
     dot: 'bg-delegate',
     badge: 'bg-delegate-bg text-delegate',
     text: 'text-delegate',
+    selected: 'border-delegate bg-delegate-bg',
   },
   secondary: {
     dot: 'bg-secondary',
     badge: 'bg-secondary-bg text-secondary',
     text: 'text-secondary',
+    selected: 'border-secondary bg-secondary-bg',
   },
 };

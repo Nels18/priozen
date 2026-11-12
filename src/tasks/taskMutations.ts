@@ -1,6 +1,8 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { mutationOptions } from '@tanstack/react-query';
-import { updateTask } from '../api/tasks';
+import type { TaskInput, TaskUpdate } from '../api/tasks';
+import { createTask, updateTask } from '../api/tasks';
+import { folderKeys } from '../folders/folderQueries';
 import type { Task } from '../types/models';
 import { taskKeys } from './taskQueries';
 
@@ -14,7 +16,34 @@ interface SetTaskDoneContext {
   previousTasks: Task[] | undefined;
 }
 
+export interface UpdateTaskVariables {
+  id: string;
+  changes: TaskUpdate;
+}
+
 const SET_DONE_KEY = [...taskKeys.all, 'setDone'] as const;
+
+/**
+ * After a save: the saved task goes straight into the cached list (added or
+ * replaced), so every screen shows it at once, displayed or not. Then the
+ * tasks are resynced, and the folders too (their task count changes).
+ */
+const refreshAfterSave = (
+  queryClient: QueryClient,
+  saved: Task,
+): Promise<unknown> => {
+  queryClient.setQueryData<Task[]>(taskKeys.list(), (tasks) => {
+    if (!tasks) return tasks;
+    const isKnown = tasks.some((task) => task.id === saved.id);
+    return isKnown
+      ? tasks.map((task) => (task.id === saved.id ? saved : task))
+      : [...tasks, saved];
+  });
+  return Promise.all([
+    queryClient.invalidateQueries({ queryKey: taskKeys.all }),
+    queryClient.invalidateQueries({ queryKey: folderKeys.all }),
+  ]);
+};
 
 export const taskMutations = {
   /**
@@ -50,5 +79,26 @@ export const taskMutations = {
         }
         return undefined;
       },
+    }),
+
+  /**
+   * Creates a task (task modal). Resolves once the task is in the cached list,
+   * so the modal closes on a list that already shows the new task.
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  create: (queryClient: QueryClient) =>
+    mutationOptions<Task, Error, TaskInput>({
+      mutationKey: [...taskKeys.all, 'create'],
+      mutationFn: createTask,
+      onSuccess: (saved) => refreshAfterSave(queryClient, saved),
+    }),
+
+  /** Saves the task modal in edit mode; same refresh as `create`. */
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  update: (queryClient: QueryClient) =>
+    mutationOptions<Task, Error, UpdateTaskVariables>({
+      mutationKey: [...taskKeys.all, 'update'],
+      mutationFn: ({ id, changes }) => updateTask(id, changes),
+      onSuccess: (saved) => refreshAfterSave(queryClient, saved),
     }),
 };

@@ -36,7 +36,7 @@ export function BottomNav(): JSX.Element {
           <Pressable
             key={item.key}
             accessibilityRole="tab"
-            accessibilityState={{ selected: isActive }}
+            aria-selected={isActive}
             onPress={(): void => router.navigate(item.href)}
             className="flex-1 items-center gap-0.5 px-1 py-1.5"
           >

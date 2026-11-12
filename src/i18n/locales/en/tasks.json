@@ -18,5 +18,38 @@
     "overdue": "Overdue",
     "today": "Today",
     "tomorrow": "Tomorrow"
+  },
+  "editHint": "Edit the task",
+  "form": {
+    "newTitle": "New task",
+    "editTitle": "Edit task",
+    "close": "Close",
+    "title": "Title",
+    "titlePlaceholder": "E.g. Prepare the client meeting",
+    "quadrant": "Quadrant",
+    "description": "Description",
+    "optional": "(optional)",
+    "descriptionPlaceholder": "Add a useful detail",
+    "dueDate": "Due date",
+    "dueDatePlaceholder": "mm/dd/yyyy",
+    "folder": "Folder",
+    "noFolder": "None",
+    "cancel": "Cancel",
+    "create": "Create task",
+    "save": "Save",
+    "loading": "Loading the task…",
+    "notFound": "This task no longer exists.",
+    "loadFailed": "Couldn't load the task.",
+    "retry": "Try again",
+    "quadrantOption": "{{name}}, {{hint}}",
+    "folderButton": "{{label}}: {{name}}",
+    "foldersLoading": "Loading…",
+    "folderUnavailable": "Folder unavailable",
+    "foldersLoadFailed": "Couldn't load the folders: the task's folder stays as it is.",
+    "errors": {
+      "titleRequired": "The title is required.",
+      "dueDateInvalid": "Invalid date: use the mm/dd/yyyy format.",
+      "saveFailed": "Couldn't save the task. Try again."
+    }
   }
 }

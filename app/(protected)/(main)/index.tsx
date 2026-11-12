@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Text, View } from 'react-native';
@@ -9,6 +10,7 @@ import { TaskGroup } from '@/src/components/tasks/TaskGroup';
 import { Button } from '@/src/components/ui/Button';
 import { folderQueries } from '@/src/folders/folderQueries';
 import { useScreenSize } from '@/src/layout/screenSize';
+import { ROUTES } from '@/src/navigation/routes';
 import type { GroupedTasks } from '@/src/tasks/grouping';
 import { groupTasks } from '@/src/tasks/grouping';
 import type { EisenhowerQuadrant, Folder, Task } from '@/src/types/models';
@@ -92,6 +94,7 @@ export default function TasksScreen(): JSX.Element | null {
   const screenSize = useScreenSize();
   const startOfToday = useStartOfToday();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   // Same cache entry as the right panel: ticking a task updates both.
   const tasks = useQuery({ ...taskQueries.list(), select: groupTasks });
@@ -116,6 +119,16 @@ export default function TasksScreen(): JSX.Element | null {
         summary={summary.data}
         isCompact={screenSize === 'small'}
       />
+
+      {/* Small screens use the floating "+" button instead (AppShell). */}
+      {screenSize !== 'small' && (
+        <View className="mb-5 flex-row justify-end">
+          <Button
+            label={t('newTaskButton')}
+            onPress={() => router.push(ROUTES.newTask)}
+          />
+        </View>
+      )}
 
       {tasks.isPending && (
         <ActivityIndicator accessibilityLabel={t('loading')} className="mt-8" />

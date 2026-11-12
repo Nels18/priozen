@@ -7,5 +7,6 @@
   "completedTasks": "Completed tasks",
   "loading": "Loading your tasks…",
   "loadError": "Couldn't load your tasks.",
-  "retry": "Try again"
+  "retry": "Try again",
+  "newTaskButton": "+ New task"
 }

@@ -82,8 +82,10 @@ Maquette de référence (responsive mobile / tablette / bureau) : https://claude
 Deux groupes de routes (les parenthèses n'apparaissent pas dans l'URL), chacun avec un `_layout.tsx` qui sert de garde :
 
 - `app/(auth)/` — écrans publics sans sidebar (`login`, `register`, `forgot-password`, `cgu`) ; un utilisateur connecté est renvoyé vers `/`
-- `app/(protected)/` — écrans connectés, rendus dans l'`AppShell` (`src/components/layout/`) ; sans session → `/login`
-- URL centralisées dans `ROUTES` (`src/navigation/routes.ts`) — jamais de chemin en dur ; les 5 entrées de navigation (sidebar + onglets mobiles) dans `NAV_ITEMS` (`src/navigation/navItems.ts`)
+- `app/(protected)/` — écrans connectés ; sans session → `/login`. Son `_layout.tsx` est une Stack :
+  - `(main)/` — les écrans, rendus dans l'`AppShell` (`src/components/layout/`) ;
+  - `tasks/new`, `tasks/[id]` — modales (`presentation: 'transparentModal'`) empilées au-dessus, qui dessinent elles-mêmes leur bottom sheet ou dialogue (`TaskModal`) ; fermeture via `useCloseModal()`
+- URL centralisées dans `ROUTES` (`src/navigation/routes.ts`, URL paramétrées comme `editTaskRoute(id)`) — jamais de chemin en dur ; les 5 entrées de navigation (sidebar + onglets mobiles) dans `NAV_ITEMS` (`src/navigation/navItems.ts`)
 - Mise en page responsive selon `useScreenSize()` (`src/layout/screenSize.ts`) : `small` < 768px (en-tête + onglets en bas + bouton « + »), `medium` 768–1279px (sidebar 240px + en-tête), `large` ≥ 1280px (sidebar 260px + en-tête + panneau droit 280px) — c'est la largeur disponible, pas le type d'appareil
 - Contenu d'un écran connecté dans `<Screen>` (défilement + marges par taille) ; écran pas encore livré → `<ScreenPlaceholder ticket="…">`
 
@@ -94,6 +96,7 @@ Vues :
 - `/forgot-password` — Mot de passe oublié
 - `/cgu` — CGU avec barre de progression lecture
 - `/` (dashboard) — Liste tâches groupées par quadrant
+- `/tasks/new`, `/tasks/:id` — Modale création / édition de tâche (raccourci N sur le web)
 - `/folders/:id` — Vue dossier avec stats
 - `/trash` — Corbeille (soft delete, purge 30j)
 - `/profile` — Profil utilisateur + zone danger RGPD
@@ -104,7 +107,7 @@ Vues :
 
 - Toujours utiliser les variables d'environnement Expo (`EXPO_PUBLIC_API_URL`) pour l'URL API
 - Ne jamais hardcoder d'URL
-- Données mockées via MSW (`src/mocks/`) : handlers par domaine (`apiHandlers/tasksHandler.ts`, `authHandler.ts`, `userHandler.ts`, `foldersHandler.ts`), fixtures dans `src/mocks/data/fixtures.ts` (avec `MOCK_USER_ID`, `MOCK_PASSWORD`, `MOCK_TOKEN`) ; en dev, données aléatoires générées par les factories Faker
+- Données mockées via MSW (`src/mocks/`) : handlers par domaine (`apiHandlers/tasksHandler.ts`, `authHandler.ts`, `userHandler.ts`, `foldersHandler.ts`), fixtures dans `src/mocks/data/fixtures.ts` (avec `MOCK_USER_ID`, `MOCK_PASSWORD`, `MOCK_TOKEN`) ; en dev, données aléatoires générées par les factories Faker. Un handler matche toujours `apiPattern(route)` (hôte de l'API seulement), jamais `*${route}` : le joker attrape aussi les fichiers de l'app (bundle d'une route chargée à la demande)
 - Les mocks importent les types depuis `src/types/models.ts` ; le code de l'app n'importe **jamais** depuis `src/mocks/`
 - Tests : URL d'API `TEST_API_URL` (`src/test/constants.ts`) ; les valeurs attendues des assertions restent écrites en dur
 - Composants en PascalCase, hooks en camelCase avec préfixe `use`

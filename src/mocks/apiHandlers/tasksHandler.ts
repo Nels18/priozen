@@ -4,11 +4,11 @@ import type { Task } from '../../types/models';
 import { EISENHOWER_QUADRANTS } from '../../types/models';
 import { MOCK_USER_ID } from '../data/fixtures';
 import { database } from '../database';
-import { createId, randomDelay } from '../utils';
+import { apiPattern, createId, randomDelay } from '../utils';
 
 export const tasksHandler = [
   // GET /tasks
-  http.get(`*${tasksRoutes.list()}`, async ({ request }) => {
+  http.get(apiPattern(tasksRoutes.list()), async ({ request }) => {
     await randomDelay(200, 600);
     const url = new URL(request.url);
     const search = url.searchParams.get('search')?.toLowerCase();
@@ -44,7 +44,7 @@ export const tasksHandler = [
   }),
 
   // GET /tasks/:id
-  http.get(`*${tasksRoutes.detail(':id')}`, async ({ params }) => {
+  http.get(apiPattern(tasksRoutes.detail(':id')), async ({ params }) => {
     await randomDelay(150, 400);
     const task = database.getTask(params.id as string);
 
@@ -56,7 +56,7 @@ export const tasksHandler = [
   }),
 
   // POST /tasks
-  http.post(`*${tasksRoutes.list()}`, async ({ request }) => {
+  http.post(apiPattern(tasksRoutes.list()), async ({ request }) => {
     await randomDelay(300, 600);
     const body = (await request.json()) as Partial<Task>;
 
@@ -85,20 +85,26 @@ export const tasksHandler = [
   }),
 
   // PATCH /tasks/:id
-  http.patch(`*${tasksRoutes.detail(':id')}`, async ({ params, request }) => {
-    await randomDelay(200, 500);
-    const body = (await request.json()) as Partial<Task>;
-    const updated = database.updateTask(params.id as string, body);
+  http.patch(
+    apiPattern(tasksRoutes.detail(':id')),
+    async ({ params, request }) => {
+      await randomDelay(200, 500);
+      const body = (await request.json()) as Partial<Task>;
+      const updated = database.updateTask(params.id as string, body);
 
-    if (!updated) {
-      return HttpResponse.json({ message: 'Task not found.' }, { status: 404 });
-    }
+      if (!updated) {
+        return HttpResponse.json(
+          { message: 'Task not found.' },
+          { status: 404 },
+        );
+      }
 
-    return HttpResponse.json(updated);
-  }),
+      return HttpResponse.json(updated);
+    },
+  ),
 
   // DELETE /tasks/:id — soft delete (move to trash)
-  http.delete(`*${tasksRoutes.detail(':id')}`, async ({ params }) => {
+  http.delete(apiPattern(tasksRoutes.detail(':id')), async ({ params }) => {
     await randomDelay(200, 500);
     const updated = database.updateTask(params.id as string, {
       deletedAt: new Date().toISOString(),
@@ -112,7 +118,7 @@ export const tasksHandler = [
   }),
 
   // POST /tasks/:id/restore
-  http.post(`*${tasksRoutes.restore(':id')}`, async ({ params }) => {
+  http.post(apiPattern(tasksRoutes.restore(':id')), async ({ params }) => {
     await randomDelay(200, 500);
     const updated = database.updateTask(params.id as string, {
       deletedAt: null,
@@ -126,7 +132,7 @@ export const tasksHandler = [
   }),
 
   // DELETE /tasks/:id/permanent
-  http.delete(`*${tasksRoutes.permanent(':id')}`, async ({ params }) => {
+  http.delete(apiPattern(tasksRoutes.permanent(':id')), async ({ params }) => {
     await randomDelay(200, 500);
     const isRemoved = database.removeTask(params.id as string);
 
@@ -138,7 +144,7 @@ export const tasksHandler = [
   }),
 
   // DELETE /tasks/trash/empty
-  http.delete(`*${tasksRoutes.trashEmpty()}`, async () => {
+  http.delete(apiPattern(tasksRoutes.trashEmpty()), async () => {
     await randomDelay(300, 600);
     database.emptyTrash();
     return HttpResponse.json({ message: 'Trash emptied.' });

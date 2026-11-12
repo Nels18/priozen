@@ -1,7 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Link } from 'expo-router';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
+import { editTaskRoute } from '@/src/navigation/routes';
 import { QUADRANT_CLASSES } from '@/src/tasks/quadrants';
 import fixedColors from '@/src/theme/fixedColors';
 import type { Folder, Task } from '@/src/types/models';
@@ -17,7 +19,10 @@ interface TaskItemProps {
   onToggleDone: (task: Task) => void;
 }
 
-/** One task row: checkbox, title, folder, due date (and quadrant badge). */
+/**
+ * One task row: checkbox, title, folder, due date (and quadrant badge).
+ * The checkbox ticks the task; the rest of the row opens it for editing.
+ */
 export function TaskItem({
   task,
   folder,
@@ -37,7 +42,7 @@ export function TaskItem({
     >
       <Pressable
         accessibilityRole="checkbox"
-        // Not accessibilityState: React Native Web drops its `checked`.
+        // aria-*, not accessibilityState: see .github/review-guidelines.md.
         aria-checked={task.isDone}
         accessibilityLabel={task.title}
         hitSlop={12}
@@ -56,48 +61,53 @@ export function TaskItem({
         )}
       </Pressable>
 
-      <View className="min-w-0 flex-1">
-        <Text
-          className={`font-sans-medium text-sm leading-5 ${
-            task.isDone ? 'text-muted line-through' : 'text-text'
-          }`}
+      <Link href={editTaskRoute(task.id)} asChild>
+        <Pressable
+          accessibilityHint={t('editHint')}
+          className="min-w-0 flex-1 rounded-sm active:opacity-70"
         >
-          {task.title}
-        </Text>
+          <Text
+            className={`font-sans-medium text-sm leading-5 ${
+              task.isDone ? 'text-muted line-through' : 'text-text'
+            }`}
+          >
+            {task.title}
+          </Text>
 
-        {(hasMeta || isQuadrantShown) && (
-          <View className="mt-1 flex-row flex-wrap items-center gap-2">
-            {isQuadrantShown && (
-              <Text
-                className={`overflow-hidden rounded-full px-2 py-0.5 font-sans-semibold text-tiny ${
-                  QUADRANT_CLASSES[task.quadrant].badge
-                }`}
-              >
-                {t(`quadrants.${task.quadrant}`)}
-              </Text>
-            )}
-            {folder && (
-              <View className="flex-row items-center gap-1">
-                <View
-                  className="h-2 w-2 rounded-full"
-                  // Folder colors are user data, not theme tokens.
-                  style={{ backgroundColor: folder.color }}
-                />
-                <Text className="font-sans text-tiny text-muted">
-                  {folder.name}
+          {(hasMeta || isQuadrantShown) && (
+            <View className="mt-1 flex-row flex-wrap items-center gap-2">
+              {isQuadrantShown && (
+                <Text
+                  className={`overflow-hidden rounded-full px-2 py-0.5 font-sans-semibold text-tiny ${
+                    QUADRANT_CLASSES[task.quadrant].badge
+                  }`}
+                >
+                  {t(`quadrants.${task.quadrant}`)}
                 </Text>
-              </View>
-            )}
-            {task.dueDate && (
-              <DueDateChip
-                dueDate={task.dueDate}
-                startOfToday={startOfToday}
-                isDone={task.isDone}
-              />
-            )}
-          </View>
-        )}
-      </View>
+              )}
+              {folder && (
+                <View className="flex-row items-center gap-1">
+                  <View
+                    className="h-2 w-2 rounded-full"
+                    // Folder colors are user data, not theme tokens.
+                    style={{ backgroundColor: folder.color }}
+                  />
+                  <Text className="font-sans text-tiny text-muted">
+                    {folder.name}
+                  </Text>
+                </View>
+              )}
+              {task.dueDate && (
+                <DueDateChip
+                  dueDate={task.dueDate}
+                  startOfToday={startOfToday}
+                  isDone={task.isDone}
+                />
+              )}
+            </View>
+          )}
+        </Pressable>
+      </Link>
     </View>
   );
 }

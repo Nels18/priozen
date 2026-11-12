@@ -7,9 +7,11 @@
 
 - **Nommage des fichiers** : les fichiers non-composants sont en `camelCase.ts` (`loginForm.ts`, `screenSize.ts`), les composants en `PascalCase.tsx`. Ne pas proposer de `kebab-case`.
 - **Organisation** : par domaine directement sous `src/` (`src/auth`, `src/tasks`, `src/navigation`…), sans dossier `features/`. Les composants partagés vivent dans `src/components/ui` et `src/components/layout`.
-- **Props d'accessibilité** : le projet utilise la famille `accessibilityRole` / `accessibilityLabel` / `accessibilityState`, pas `role` / `aria-*`. Signaler un mélange des deux familles. Exceptions, quand l'équivalent `accessibility*` est ignoré par React Native Web alors que la prop `aria-*` fonctionne sur iOS, Android **et** web :
-  - `aria-hidden` pour masquer un élément décoratif aux lecteurs d'écran (ex. une icône à côté d'un texte) — React Native Web ignore `accessibilityElementsHidden` et `importantForAccessibility` ;
-  - `aria-checked` pour l'état d'une case à cocher — React Native Web ignore `accessibilityState.checked`.
+- **Props d'accessibilité** : `accessibilityRole` et `accessibilityLabel` pour le rôle et le nom. Pour le reste, les props `aria-*` quand l'équivalent `accessibility*` est ignoré par React Native Web : elles fonctionnent sur iOS, Android **et** web.
+  - **États** : `aria-checked`, `aria-selected`, `aria-expanded`, `aria-disabled`, `aria-busy`, jamais `accessibilityState` (React Native Web 0.21 l'ignore en entier).
+  - **Élément décoratif** : `aria-hidden` (ex. une icône à côté d'un texte) ; React Native Web ignore `accessibilityElementsHidden` et `importantForAccessibility`.
+  - **Dialogue** : `role="dialog"` et `aria-modal`, car `accessibilityRole` n'a pas de valeur « dialog » (plus `accessibilityViewIsModal` pour iOS).
+  - Signaler un `accessibilityState`, ou un `role` / `aria-*` hors de ces cas.
 - **Tests** : Vitest, avec `react-native` aliasé vers `react-native-web` (voir `vitest.config.ts`). Les tests portent sur la logique (fonctions pures, hooks, handlers MSW). Les tests de composants ne sont pas encore outillés : ne pas les exiger, mais exiger le test de toute logique extraite.
 - **Couleurs brutes** : autorisées uniquement dans `src/theme/fixedColors.js` et `src/theme/useIconColors.ts`, pour les props qui n'acceptent pas de classe NativeWind (couleur d'icône). Une nouvelle couleur brute ailleurs est 🔴.
 - **Session** : la session vit en mémoire pour le POC (pas de persistance du token). Ne pas le signaler tant que le backend réel n'existe pas.

@@ -1,7 +1,11 @@
-import type { Query, QueryKey } from '@tanstack/react-query';
-import { QueryCache, QueryClient } from '@tanstack/react-query';
+import type { Mutation, Query, QueryKey } from '@tanstack/react-query';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 
-export type QueryErrorHandler = (error: Error, queryKey: QueryKey) => void;
+/** Receives every failed query or mutation once, with its key. */
+export type QueryErrorHandler = (error: Error, key: QueryKey) => void;
+
+/** Key reported for a mutation declared without `mutationKey`. */
+export const UNKEYED_MUTATION = ['mutation'] as const;
 
 /**
  * How long fetched data counts as fresh. Fresh data is reused as-is; stale
@@ -14,15 +18,15 @@ export const QUERY_STALE_TIME_MS = 30 * 1000;
 export const QUERY_RETRY_COUNT = 2;
 
 /** Default handler: no toast system yet (UX-02), so failures are logged. */
-const logQueryError: QueryErrorHandler = (error, queryKey) => {
+const logQueryError: QueryErrorHandler = (error, key) => {
   // eslint-disable-next-line no-console
-  console.error('[query] request failed', queryKey, error);
+  console.error('[query] request failed', key, error);
 };
 
 /**
- * The app's single QueryClient. Query errors are reported once, here,
- * instead of in every screen; screens still read `isError` to render
- * their own error state.
+ * The app's single QueryClient. Query and mutation errors are reported
+ * once, here, instead of in every screen; screens still render their own
+ * error state (`isError`, a rejected `mutateAsync`).
  */
 export const createQueryClient = (
   onError: QueryErrorHandler = logQueryError,
@@ -31,6 +35,15 @@ export const createQueryClient = (
     queryCache: new QueryCache({
       onError: (error: Error, query: Query<unknown, unknown, unknown>): void =>
         onError(error, query.queryKey),
+    }),
+    mutationCache: new MutationCache({
+      onError: (
+        error: Error,
+        _variables: unknown,
+        _context: unknown,
+        mutation: Mutation<unknown, unknown, unknown, unknown>,
+      ): void =>
+        onError(error, mutation.options.mutationKey ?? UNKEYED_MUTATION),
     }),
     defaultOptions: {
       queries: {
