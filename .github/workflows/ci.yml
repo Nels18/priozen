@@ -56,7 +56,17 @@ jobs:
         if: github.event_name == 'push'
         run: npm run test:coverage
 
+      # Production web build, static rendering included: catches what lint,
+      # types and tests can't see (broken import, bundler error, a screen
+      # that crashes when rendered). ~1 min; the output (dist/) is not kept.
+      # No EXPO_PUBLIC_API_URL here, like in production for now (DEVOPS-04):
+      # static rendering doesn't call the API.
+      - name: Build web
+        run: npx expo export --platform web
+
+      # Also after a failed test or build step: that's when coverage helps most.
       - name: Upload coverage
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: coverage
