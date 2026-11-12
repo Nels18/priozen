@@ -1,6 +1,6 @@
 // Thin fetch wrapper shared by every API module. The base URL always comes
-// from EXPO_PUBLIC_API_URL (never hardcoded); MSW handlers match any host, so
-// the same calls hit the mocks today and the real backend later.
+// from EXPO_PUBLIC_API_URL (never hardcoded); MSW handlers match that same
+// host, so the same calls hit the mocks today and the real backend later.
 
 export class ApiError extends Error {
   readonly status: number;

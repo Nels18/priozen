@@ -36,7 +36,8 @@ Workflows EAS (`.eas/workflows/`) :
 
 - `preview-builds.yml` — PR vers `main` : builds preview Android et iOS
 - `release-production.yml` — tag `v*` : builds production, approbation manuelle, puis soumission aux stores
-- `deploy-web.yml` — tag `v*` : déploiement web de production (EAS Hosting)
+- `deploy-web-demo.yml` — push sur `develop` : démo web du POC sur l'alias EAS Hosting `demo`, données mockées (variables de l'environnement EAS `preview` : `EXPO_PUBLIC_USE_MOCKS=true` et une `EXPO_PUBLIC_API_URL` factice, obligatoire car les handlers ne matchent que l'hôte de l'API)
+- `deploy-web.yml` — tag `v*` : déploiement web de production (EAS Hosting, environnement EAS `production`)
 
 ## Palette de couleurs
 

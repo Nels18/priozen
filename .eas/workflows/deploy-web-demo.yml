@@ -1,0 +1,20 @@
+name: Deploy Web (demo)
+
+# POC demo: every push on develop updates the "demo" alias, on mocked data.
+# Variables of the EAS "preview" environment (set on expo.dev, not in Git):
+#   EXPO_PUBLIC_USE_MOCKS=true  → MSW answers every API call
+#   EXPO_PUBLIC_API_URL         → placeholder host MSW intercepts (required:
+#                                 handlers only match the API host)
+# Production stays on deploy-web.yml (tags v*).
+on:
+  push:
+    branches: ['develop']
+  workflow_dispatch: {}
+
+jobs:
+  deploy_web_demo:
+    name: Deploy Web (demo)
+    type: deploy
+    environment: preview
+    params:
+      alias: demo

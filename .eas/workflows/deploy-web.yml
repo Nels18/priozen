@@ -10,5 +10,6 @@ jobs:
   deploy_web:
     name: Deploy Web (production)
     type: deploy
+    environment: production
     params:
       prod: true
