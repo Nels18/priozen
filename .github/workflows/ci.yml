@@ -56,6 +56,12 @@ jobs:
         if: github.event_name == 'push'
         run: npm run test:coverage
 
+      # Production web build, static rendering included: catches what lint,
+      # types and tests can't see (broken import, bundler error, a screen
+      # that crashes when rendered). ~1 min; the output (dist/) is not kept.
+      - name: Build web
+        run: npx expo export --platform web
+
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
