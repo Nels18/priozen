@@ -58,7 +58,17 @@ Déclarées comme variables CSS dans `global.css` (bascule light/dark automatiqu
 - Props de couleur brute qui suivent le thème (icônes, `placeholderTextColor`) : `useIconColors()` (`src/theme/useIconColors.ts`), à garder synchronisé avec `global.css`
 - Couleurs par quadrant : `QUADRANT_CLASSES` (`src/tasks/quadrants.ts`) — pastille, badge, texte ; ne jamais réécrire les classes `bg-critical`… à la main
 
-Maquette de référence (responsive mobile / tablette / bureau) : https://claude.ai/artifact/UWBMeXCP5cPEhwteH7VoCV
+## Maquette
+
+Maquette de référence (responsive mobile / tablette / bureau) : **`design/maquettes/index.html`**, à lire avant de coder un écran (onglets Mobile / Tablette / Bureau, clair et sombre). C'est une copie de l'artefact https://claude.ai/artifact/UWBMeXCP5cPEhwteH7VoCV, où se fait la conception : à recopier après chaque mise à jour de la maquette, en remplaçant le vrai nom par l'utilisateur fictif. Fichier exclu de Prettier et d'ESLint, pour que le diff d'une nouvelle copie reste lisible.
+
+Décisions de design (maquette ; livrées par MOB-01 et DASH-06) :
+
+- **Vue d'ensemble** en haut de la liste : 4 pastilles, une par quadrant, qui comptent les tâches de l'onglet actif et servent de filtre (2e tap sur la même pastille = tout afficher, rappel « Filtre : X · N — Tout afficher ») ; sur bureau, elle remplace le panneau de droite de l'écran Tâches
+- **Onglets de statut** sous la bande : À faire / En retard / Terminées, avec compteur (« En retard » en rouge s'il est non nul)
+- Une tâche en retard figure **dans deux onglets** : « À faire » (elle n'est pas terminée) et « En retard » (vue filtrée, pas un statut exclusif)
+- Toute cible tactile fait **au moins 44 px** (pastilles, onglets, liens « Tout afficher »)
+- **Pas d'émoji dans l'UI** : tout pictogramme est une icône Ionicons (`@expo/vector-icons`), décorative = masquée aux lecteurs d'écran ; via le composant `Icon` dès qu'il existe (UX-04)
 
 ## Badges Eisenhower
 

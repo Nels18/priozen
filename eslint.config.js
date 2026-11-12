@@ -65,6 +65,8 @@ module.exports = defineConfig([
       'eslint.config.js',
       '.validate-branch-namerc.js',
       'public/mockServiceWorker.js',
+      // Copy of the claude.ai mockup, kept as is (see CLAUDE.md).
+      'design/maquettes/*',
     ],
   },
   {
