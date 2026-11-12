@@ -114,7 +114,9 @@ EXPO_PUBLIC_USE_MOCKS=true npm run web  # force mocks even outside development
 ## CI/CD Pipeline
 
 ```
-PR → CI (lint + tests on changed files)
+PR → CI (lint + types + tests on changed files + web build)
+       ↓
+merge develop → EAS deploy-web-demo → Web demo on mocked data (EAS Hosting)
        ↓
 merge main
        ↓
@@ -126,11 +128,33 @@ GitHub Actions Release (versioning + tag)
 
 | Workflow                 | Trigger                        | Action                                         |
 | ------------------------ | ------------------------------ | ---------------------------------------------- |
-| `ci.yml`                 | Push / PR on `main`, `develop` | Lint + tests + coverage                        |
+| `ci.yml`                 | Push / PR on `main`, `develop` | Lint + types + tests + coverage + web build    |
 | `release.yml`            | Manual                         | Version bump + docs + Git tag                  |
 | `preview-builds.yml`     | PR to `main`                   | Build iOS + Android preview (internal)         |
 | `release-production.yml` | Tag `v*`                       | Build iOS + Android → approval → submit stores |
+| `deploy-web-demo.yml`    | Push on `develop`              | Web demo (mocked data) via EAS Hosting         |
 | `deploy-web.yml`         | Tag `v*`                       | Web deployment via EAS Hosting                 |
+
+## Web demo
+
+**https://priozen--demo.expo.app**
+
+Until the backend is ready, every push on `develop` deploys the web app to the
+`demo` alias of EAS Hosting, with the API mocked by MSW (sign in with
+`martin@priozen.app` / `password123`). The data is fictitious and resets when
+the page reloads, which also signs you out.
+
+The build reads the variables of the EAS **preview** environment
+(expo.dev → project → Environment variables), not a file in the repository:
+
+| Variable                | Value                              |
+| ----------------------- | ---------------------------------- |
+| `EXPO_PUBLIC_USE_MOCKS` | `true`                             |
+| `EXPO_PUBLIC_API_URL`   | `https://api.demo.priozen.invalid` |
+
+The API URL is a placeholder that is never reached: MSW only intercepts requests
+to the API host, so it must be set. To deploy by hand: **expo.dev → Workflows →
+Deploy Web (demo) → Run**, or `npx eas-cli workflow:run deploy-web-demo.yml`.
 
 ## Changelog
 
