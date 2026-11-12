@@ -34,7 +34,10 @@ jobs:
       agents-ref: v1
       modules: base,react,react-native,design-system,i18n
       model: sonnet
-      max-turns: 15
+      # Cost guard. 15 was too tight for a large PR: on #17 the review
+      # finished its work in 17 turns, so the job failed although every
+      # comment was posted.
+      max-turns: 25
       timeout-minutes: 10
       review-label: ai-review
     secrets: inherit
