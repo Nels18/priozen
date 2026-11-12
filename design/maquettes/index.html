@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Priozen — Maquettes Responsive</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* ============================================================
+   TOKENS — Light (default)
+   ============================================================ */
+:root {
+  color-scheme: light;
+  --primary: #4F46E5;
+  --primary-light: #EEF2FF;
+  --bg-page: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --bg-sidebar: #1E1B4B;
+  --bg-sidebar-hover: #2D2A6E;
+  --bg-input: #F1F5F9;
+  --success: #10B981;
+  --critique: #EF4444;
+  --critique-bg: #FEF2F2;
+  --schedule: #4F46E5;
+  --schedule-bg: #EEF2FF;
+  --delegate: #F59E0B;
+  --delegate-bg: #FFFBEB;
+  --secondary-c: #94A3B8;
+  --secondary-bg: #F8FAFC;
+  --text-primary: #1E293B;
+  --text-muted: #64748B;
+  --border: #E2E8F0;
+  --sidebar-text: rgba(255,255,255,0.65);
+  --sidebar-text-active: #FFFFFF;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ============================================================
+   TOKENS — Dark
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --primary: #818CF8;
+    --primary-light: #1E1B4B;
+    --bg-page: #0A0918;
+    --bg-card: #13111F;
+    --bg-sidebar: #0A0918;
+    --bg-sidebar-hover: #1E1B4B;
+    --bg-input: #1E1C2E;
+    --text-primary: #E0E7FF;
+    --text-muted: #94A3B8;
+    --border: #312E81;
+    --critique-bg: #2D1515;
+    --schedule-bg: #1E1B4B;
+    --delegate-bg: #2D1F00;
+    --secondary-bg: #0F0E1A;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --primary: #818CF8;
+  --primary-light: #1E1B4B;
+  --bg-page: #0A0918;
+  --bg-card: #13111F;
+  --bg-sidebar: #0A0918;
+  --bg-sidebar-hover: #1E1B4B;
+  --bg-input: #1E1C2E;
+  --text-primary: #E0E7FF;
+  --text-muted: #94A3B8;
+  --border: #312E81;
+  --critique-bg: #2D1515;
+  --schedule-bg: #1E1B4B;
+  --delegate-bg: #2D1F00;
+  --secondary-bg: #0F0E1A;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #1a1730;
+  color: var(--text-primary);
+  min-height: 100%;
+  padding: 0;
+}
+
+/* ============================================================
+   DEVICE SELECTOR BAR (hors cadre)
+   ============================================================ */
+.device-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #0d0b1a;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.device-bar-title {
+  font-family: 'DM Serif Display', serif;
+  color: #818CF8;
+  font-size: 18px;
+  margin-right: 8px;
+}
+.device-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.device-btn:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.8); }
+.device-btn.active { background: #4F46E5; border-color: #4F46E5; color: #fff; }
+
+.theme-toggle {
+  margin-left: auto;
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: rgba(255,255,255,0.65);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.theme-toggle:hover { background: rgba(255,255,255,0.07); color: #fff; }
+
+/* ============================================================
+   STAGE (conteneur centré pour la simulation)
+   ============================================================ */
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 16px 48px;
+  min-height: calc(100vh - 56px);
+}
+
+/* ============================================================
+   PHONE FRAME (Mobile)
+   ============================================================ */
+.phone-frame {
+  width: 390px;
+  min-height: 780px;
+  background: var(--bg-page);
+  border-radius: 48px;
+  border: 10px solid #1a1630;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 30px 80px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.05);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.phone-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 32px;
+  background: #1a1630;
+  border-radius: 0 0 20px 20px;
+  z-index: 10;
+}
+.phone-screen {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 36px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--bg-page);
+  scrollbar-width: none;
+}
+.phone-screen::-webkit-scrollbar { display: none; }
+
+/* ============================================================
+   TABLET FRAME
+   ============================================================ */
+.tablet-frame {
+  width: 100%;
+  max-width: 900px;
+  min-height: 700px;
+  background: var(--bg-page);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+/* ============================================================
+   DESKTOP FRAME
+   ============================================================ */
+.desktop-frame {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 700px;
+  background: var(--bg-page);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+/* ============================================================
+   SIDEBAR (Tablet + Desktop)
+   ============================================================ */
+.sidebar {
+  background: var(--bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 24px 0 20px;
+  overflow: hidden;
+}
+.sim-tablet .sidebar { width: 240px; }
+.sim-desktop .sidebar { width: 260px; }
+
+.sidebar-logo {
+  font-family: 'DM Serif Display', serif;
+  color: #fff;
+  font-size: 24px;
+  padding: 0 24px 28px;
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 8px;
+}
+.sidebar-logo span { color: #818CF8; }
+
+.sidebar-nav { flex: 1; padding: 8px 12px; }
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--sidebar-text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 2px;
+}
+.sidebar-nav-item:hover { background: var(--bg-sidebar-hover); color: var(--sidebar-text-active); }
+.sidebar-nav-item.active { background: rgba(129,140,248,0.2); color: var(--sidebar-text-active); }
+.sidebar-nav-item .nav-icon { display:inline-flex; justify-content:center; flex-shrink: 0; width: 22px; }
+.sidebar-nav-item .nav-icon .ic { width:20px; height:20px; }
+.ic { flex-shrink:0; vertical-align:-3px; }
+.task-folder .ic { vertical-align:-2px; }
+.bottom-nav-item .bn-icon { display:flex; justify-content:center; }
+
+.sidebar-footer {
+  padding: 16px 12px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.sidebar-user:hover { background: var(--bg-sidebar-hover); }
+.sidebar-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4F46E5, #818CF8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.sidebar-user-info { overflow: hidden; }
+.sidebar-user-name { color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar-user-email { color: var(--sidebar-text); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ============================================================
+   MAIN CONTENT AREA (Tablet + Desktop)
+   ============================================================ */
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+.main-header {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+.main-header-left h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.main-header-left p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4F46E5, #818CF8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+.main-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 28px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.sim-desktop .main-scroll { padding: 32px; }
+
+/* Right panel (Desktop only) */
+.right-panel {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border);
+  background: var(--bg-card);
+  padding: 24px 20px;
+  overflow-y: auto;
+  display: none;
+}
+.sim-desktop .right-panel { display: block; }
+
+/* ============================================================
+   SCREEN MANAGEMENT
+   ============================================================ */
+.screen { display: none; width: 100%; }
+.screen.active { display: block; }
+
+/* Auth screens: jamais de sidebar */
+.auth-screen-wrapper {
+  width: 100%;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  background: var(--bg-page);
+}
+
+/* ============================================================
+   BOTTOM NAV (Mobile uniquement)
+   ============================================================ */
+.bottom-nav {
+  display: flex;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom, 0px));
+  flex-shrink: 0;
+}
+.bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 4px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.bottom-nav-item:hover, .bottom-nav-item.active { color: var(--primary); }
+.bottom-nav-item .bn-icon { font-size: 20px; line-height: 1; }
+
+/* ============================================================
+   MOBILE HEADER
+   ============================================================ */
+.mobile-header {
+  padding: 14px 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.mobile-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.mobile-logo span { color: var(--primary); }
+.mobile-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4F46E5, #818CF8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ============================================================
+   AUTH CARD
+   ============================================================ */
+.auth-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+.auth-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+.auth-logo span { color: var(--primary); }
+.auth-tagline {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 28px;
+}
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus { border-color: var(--primary); }
+.form-input::placeholder { color: var(--text-muted); }
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.9; }
+.auth-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.auth-link a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.auth-divider span { color: var(--text-muted); font-size: 12px; }
+.btn-google {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   TASK ITEM
+   ============================================================ */
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.task-item:last-child { border-bottom: none; }
+.task-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+.task-check.done { background: var(--success); border-color: var(--success); color: #fff; font-size: 12px; }
+.task-body { flex: 1; min-width: 0; }
+.task-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+.task-title.done { text-decoration: line-through; color: var(--text-muted); }
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+  flex-wrap: wrap;
+}
+.task-folder {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.task-date {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+.task-date.today { background: var(--schedule-bg); color: var(--primary); }
+.task-date.late { background: var(--critique-bg); color: var(--critique); }
+.task-date.future { background: var(--secondary-bg); color: var(--text-muted); }
+.task-subtasks { font-size: 11px; color: var(--text-muted); }
+
+/* ============================================================
+   QUADRANT CARD
+   ============================================================ */
+.quadrant-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.quadrant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.quadrant-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.quadrant-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.quadrant-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.quadrant-count {
+  font-size: 12px;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.quadrant-card.critique .quadrant-dot { background: var(--critique); }
+.quadrant-card.critique .quadrant-name { color: var(--critique); }
+.quadrant-card.schedule .quadrant-dot { background: var(--primary); }
+.quadrant-card.schedule .quadrant-name { color: var(--primary); }
+.quadrant-card.delegate .quadrant-dot { background: var(--delegate); }
+.quadrant-card.delegate .quadrant-name { color: var(--delegate); }
+.quadrant-card.secondary .quadrant-dot { background: var(--secondary-c); }
+.quadrant-card.secondary .quadrant-name { color: var(--secondary-c); }
+
+/* ============================================================
+   BADGE
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge.critique { background: var(--critique-bg); color: var(--critique); }
+.badge.schedule { background: var(--schedule-bg); color: var(--schedule); }
+.badge.delegate { background: var(--delegate-bg); color: var(--delegate); }
+.badge.secondary { background: var(--secondary-bg); color: var(--secondary-c); }
+
+/* ============================================================
+   SECTION TITLE (shared)
+   ============================================================ */
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.section-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* ============================================================
+   GREETING BLOCK (Dashboard mobile)
+   ============================================================ */
+.greeting {
+  padding: 20px 20px 0;
+}
+.greeting-sub { font-size: 13px; color: var(--text-muted); }
+.greeting-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+  text-wrap: balance;
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar-wrap {
+  background: var(--bg-input);
+  border-radius: 8px;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--primary), #818CF8);
+  transition: width 0.4s;
+}
+
+/* ============================================================
+   STATS TILES
+   ============================================================ */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat-tile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+/* ============================================================
+   FOLDER CARD
+   ============================================================ */
+.folder-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s;
+}
+.folder-card:hover { box-shadow: var(--shadow-md); }
+.folder-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.folder-info { flex: 1; min-width: 0; }
+.folder-name { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.folder-count { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.folder-arrow { color: var(--text-muted); font-size: 18px; }
+
+/* ============================================================
+   PROFILE
+   ============================================================ */
+.profile-avatar-big {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4F46E5, #818CF8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0 auto 16px;
+}
+.profile-name-big {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  text-align: center;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.profile-email {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 4px;
+}
+.profile-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.profile-row:last-child { border-bottom: none; }
+.profile-row-label { font-size: 14px; color: var(--text-primary); font-weight: 500; display: flex; align-items: center; gap: 10px; }
+.profile-row-value { font-size: 13px; color: var(--text-muted); }
+
+/* ============================================================
+   FOCUS MODE
+   ============================================================ */
+.focus-screen {
+  background: var(--bg-sidebar) !important;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+}
+.focus-timer {
+  font-family: 'DM Serif Display', serif;
+  font-size: 72px;
+  color: #fff;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.focus-task-name {
+  font-size: 18px;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.focus-badge { margin-bottom: 32px; }
+.focus-ring {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+.focus-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #818CF8;
+  border-right-color: #818CF8;
+  animation: rotate 10s linear infinite;
+}
+@keyframes rotate { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .focus-ring::before { animation: none; } }
+.focus-controls { display: flex; gap: 16px; }
+.focus-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s;
+}
+.focus-btn.play { background: #818CF8; color: #fff; }
+.focus-btn.stop { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.65); }
+.focus-btn:hover { opacity: 0.85; }
+.focus-subtask { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 32px; }
+
+/* ============================================================
+   ANALYTICS
+   ============================================================ */
+.analytics-chart-placeholder {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.analytics-chart-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
+.radar-svg, .bar-svg { width: 100%; max-width: 280px; }
+
+/* ============================================================
+   TRASH SCREEN
+   ============================================================ */
+.trash-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0.6;
+}
+.trash-icon { font-size: 18px; color: var(--text-muted); }
+.trash-title { font-size: 14px; color: var(--text-muted); text-decoration: line-through; flex: 1; }
+.trash-restore { font-size: 12px; color: var(--primary); font-weight: 500; cursor: pointer; }
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+.empty-illustration { font-size: 56px; margin-bottom: 20px; opacity: 0.4; }
+.empty-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text-primary); margin-bottom: 8px; letter-spacing: -0.02em; }
+.empty-desc { font-size: 14px; color: var(--text-muted); max-width: 260px; line-height: 1.6; margin-bottom: 24px; }
+.btn-primary-sm {
+  padding: 10px 24px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================================================
+   CGU
+   ============================================================ */
+.cgu-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: var(--shadow-md);
+}
+.cgu-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text-primary); margin-bottom: 16px; letter-spacing: -0.02em; }
+.cgu-body { font-size: 13px; line-height: 1.7; color: var(--text-muted); max-height: 220px; overflow-y: auto; margin-bottom: 20px; }
+.cgu-actions { display: flex; gap: 10px; }
+.btn-outline {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ============================================================
+   DESKTOP QUADRANT 2x2 GRID
+   ============================================================ */
+.quadrant-grid-2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.quadrant-grid-2x2 .quadrant-card { margin-bottom: 0; }
+
+/* ============================================================
+   RIGHT PANEL STATS
+   ============================================================ */
+.rp-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+.rp-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.rp-stat-row:last-child { border-bottom: none; }
+.rp-stat-name { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+.rp-stat-dot { width: 8px; height: 8px; border-radius: 50%; }
+.rp-stat-val { font-size: 14px; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+.rp-section { margin-bottom: 24px; }
+.rp-progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+/* ============================================================
+   ANALYTICS DESKTOP: 2 colonnes
+   ============================================================ */
+.analytics-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.sim-mobile .analytics-cols,
+.sim-tablet .analytics-cols { grid-template-columns: 1fr; }
+
+/* ============================================================
+   MOBILE SCROLL PADDING (bottom nav)
+   ============================================================ */
+.phone-screen > .screen-content-mobile {
+  padding-bottom: 16px;
+}
+
+/* ============================================================
+   SIM CLASSES — override layout
+   ============================================================ */
+
+/* --- Mobile --- */
+body.sim-mobile .stage { padding: 24px 12px 40px; }
+body.sim-mobile .phone-frame { display: flex; }
+body.sim-mobile .tablet-frame { display: none; }
+body.sim-mobile .desktop-frame { display: none; }
+
+/* --- Tablet --- */
+body.sim-tablet .stage { padding: 24px 16px 40px; align-items: flex-start; }
+body.sim-tablet .phone-frame { display: none; }
+body.sim-tablet .tablet-frame { display: flex; }
+body.sim-tablet .desktop-frame { display: none; }
+body.sim-tablet .analytics-cols { grid-template-columns: 1fr; }
+
+/* --- Desktop (default) --- */
+body.sim-desktop .stage { padding: 24px 20px 40px; align-items: flex-start; }
+body.sim-desktop .phone-frame { display: none; }
+body.sim-desktop .tablet-frame { display: none; }
+body.sim-desktop .desktop-frame { display: flex; }
+body.sim-desktop .right-panel { display: block; }
+body.sim-desktop .quadrant-grid-2x2 { grid-template-columns: 1fr 1fr; }
+body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
+
+/* Auth screens: toujours centré, pas de sidebar */
+.auth-no-sidebar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  min-height: 600px;
+  background: var(--bg-page);
+}
+
+/* ============================================================
+   MISC
+   ============================================================ */
+.add-btn {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(79,70,229,0.4);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s;
+}
+.add-btn:hover { transform: scale(1.07); }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chip.active { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* Mobile overview strip */
+.ov-strip { display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+.ov-pills { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+.ov-pill { box-sizing:border-box; min-height:56px; padding:8px; border:1.5px solid var(--border); border-radius:12px; background:var(--bg-card); color:var(--text-primary); display:flex; flex-direction:column; align-items:flex-start; gap:3px; font-family:inherit; text-align:left; cursor:pointer; transition:all .15s; }
+.ov-pill-top { display:flex; align-items:center; gap:6px; }
+.ov-dot { width:8px; height:8px; border-radius:50%; }
+.ov-count { font-size:20px; font-weight:700; line-height:1; }
+.ov-label { font-size:12px; color:var(--text-muted); }
+.ov-pill.active { border-color:var(--primary); background:var(--primary-light); }
+.ov-pill.dim { opacity:.55; }
+.ov-pill:disabled { opacity:.4; cursor:default; }
+.ov-progress { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-muted); }
+.ov-progress strong { color:var(--text-primary); }
+.ov-filter-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; font-size:13px; font-weight:600; color:var(--text-primary); }
+.ov-filter-bar button { min-height:44px; padding:0 4px; border:0; background:none; color:var(--primary); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; }
+
+/* Tablette / bureau : pastilles compactes (point + chiffre, libellé dessous) à 40 px, comme le bouton */
+.ov-wide-head { display:grid; grid-template-columns:1fr auto; gap:10px 16px; align-items:center; margin-bottom:20px; }
+.ov-wide-strip, .ov-wide-strip .ov-strip { display:contents; }
+.ov-wide-strip .ov-pills { grid-column:1; grid-row:1; }
+.ov-wide-strip .ov-pills { grid-template-columns:repeat(auto-fit,minmax(0,1fr)); grid-auto-flow:column; }
+.ov-wide-strip .ov-progress { display:none; } /* déjà dans la carte « Bonjour » */
+.ov-wide-head .ov-add { grid-column:2; grid-row:1; height:40px; padding:0 24px; }
+.ov-wide-strip .ov-pill { min-height:40px; height:40px; padding:0 10px; justify-content:center; gap:1px; min-width:0; }
+.ov-wide-strip .ov-pill-top { gap:6px; }
+.ov-wide-strip .ov-count { font-size:15px; line-height:1.1; }
+.ov-wide-strip .ov-label { font-size:11.5px; line-height:1.1; white-space:nowrap; }
+.task-quad { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:var(--text-muted); }
+.task-quad-dot { width:7px; height:7px; border-radius:50%; }
+/* Mobile : pastilles compactes (44 px = cible tactile minimale) */
+.ov-mobile .ov-pill { min-height:44px; height:44px; padding:0 8px; justify-content:center; gap:1px; }
+.ov-mobile .ov-count { font-size:15px; line-height:1.1; }
+.ov-mobile .ov-label { font-size:11.5px; line-height:1.1; }
+.ov-tabs { display:flex; border-bottom:1px solid var(--border); margin-bottom:14px; }
+.ov-tab { flex:0 0 auto; min-height:44px; padding:0 18px; border:0; border-bottom:2px solid transparent; margin-bottom:-1px; background:none; color:var(--text-muted); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+.ov-tabs-fill .ov-tab { flex:1; padding:0 8px; }
+.ov-tab[aria-selected="true"] { color:var(--primary); border-bottom-color:var(--primary); }
+.ov-tab-count { min-width:20px; padding:1px 6px; border-radius:10px; background:var(--border); color:var(--text-primary); font-size:12px; font-weight:700; text-align:center; }
+.ov-tab[aria-selected="true"] .ov-tab-count { background:var(--primary-light); color:var(--primary); }
+.ov-tab.has-late .ov-tab-count { background:var(--critique-bg); color:var(--critique); }
+.ov-empty { padding:20px 16px; font-size:13px; color:var(--text-muted); text-align:center; }
+.screen-inner { padding: 20px; }
+.screen-inner-lg { padding: 0; }
+
+/* CGU checkbox row */
+.cgu-check-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.cgu-check-row input { width: 18px; height: 18px; accent-color: var(--primary); }
+.cgu-check-row label { font-size: 13px; color: var(--text-muted); }
+</style>
+<link rel="stylesheet" href="modal.css">
+</head>
+<body class="sim-desktop">
+
+<!-- ============================================================
+     DEVICE SELECTOR BAR
+     ============================================================ -->
+<div class="device-bar">
+  <span class="device-bar-title">Priozen</span>
+  <button class="device-btn" id="btn-mobile" onclick="setDevice('mobile')">📱 Mobile</button>
+  <button class="device-btn" id="btn-tablet" onclick="setDevice('tablet')">📟 Tablette</button>
+  <button class="device-btn active" id="btn-desktop" onclick="setDevice('desktop')">🖥 Bureau</button>
+
+  <span style="width:1px;height:20px;background:rgba(255,255,255,0.1);margin:0 4px;"></span>
+
+  <!-- Screen nav buttons -->
+  <select id="screen-select" onchange="switchScreen(this.value)" style="padding:7px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.7);font-family:'Inter',sans-serif;font-size:13px;outline:none;cursor:pointer;">
+    <option value="dashboard">Dashboard</option>
+    <option value="login">Login</option>
+    <option value="register">Inscription</option>
+    <option value="forgot">Mot de passe</option>
+    <option value="cgu">CGU</option>
+    <option value="folder">Dossiers</option>
+    <option value="focus">Focus</option>
+    <option value="analytics">Analytics</option>
+    <option value="profile">Profil</option>
+    <option value="trash">Corbeille</option>
+    <option value="empty">État vide</option>
+    <option value="task-modal">Nouvelle tâche (modale)</option>
+    <option value="task-modal-filled">Nouvelle tâche (remplie)</option>
+    <option value="task-modal-error">Nouvelle tâche (erreur)</option>
+  </select>
+
+  <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙 Sombre</button>
+</div>
+
+<!-- ============================================================
+     STAGE
+     ============================================================ -->
+<div class="stage">
+
+  <!-- ===== MOBILE: Phone frame ===== -->
+  <div class="phone-frame" id="frame-mobile">
+    <div class="phone-notch"></div>
+    <div class="phone-screen" id="phone-screen-content">
+      <!-- Content injected here by JS -->
+    </div>
+  </div>
+
+  <!-- ===== TABLET: Tablet frame ===== -->
+  <div class="tablet-frame" id="frame-tablet">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar-tablet">
+      <div class="sidebar-logo">Prio<span>zen</span></div>
+      <nav class="sidebar-nav" id="sidebar-nav-tablet"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">MD</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">Martin Dupont</div>
+            <div class="sidebar-user-email">martin@priozen.app</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Main -->
+    <div class="main-area">
+      <div class="main-header" id="main-header-tablet">
+        <div class="main-header-left">
+          <h2 id="tablet-header-title">Tâches</h2>
+          <p id="tablet-header-sub">Samedi, 26 septembre 2026</p>
+        </div>
+        <div class="header-avatar">MD</div>
+      </div>
+      <div class="main-scroll" id="tablet-scroll-content"></div>
+    </div>
+  </div>
+
+  <!-- ===== DESKTOP: Desktop frame ===== -->
+  <div class="desktop-frame" id="frame-desktop">
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar-desktop">
+      <div class="sidebar-logo">Prio<span>zen</span></div>
+      <nav class="sidebar-nav" id="sidebar-nav-desktop"></nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">MD</div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">Martin Dupont</div>
+            <div class="sidebar-user-email">martin@priozen.app</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Main -->
+    <div class="main-area">
+      <div class="main-header">
+        <div class="main-header-left">
+          <h2 id="desktop-header-title">Tâches</h2>
+          <p id="desktop-header-sub">Samedi, 26 septembre 2026</p>
+        </div>
+        <div class="header-avatar">MD</div>
+      </div>
+      <div class="main-scroll" id="desktop-scroll-content"></div>
+    </div>
+    <!-- Right panel -->
+    <div class="right-panel" id="right-panel"></div>
+  </div>
+
+</div><!-- /stage -->
+
+<script src="modal.js"></script>
+
+<script>
+/* ============================================================
+   ICONES (SVG inline, trait 1.8, héritent de currentColor — équivalent Ionicons de l'appli)
+   ============================================================ */
+const ICONS = {
+  task:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  folder:'<path d="M3.5 7.5A2 2 0 015.5 5.5h4l2 2.5h7a2 2 0 012 2v7.5a2 2 0 01-2 2h-13a2 2 0 01-2-2z"/>',
+  timer:'<circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.5 1.5M9.5 3h5"/>',
+  chart:'<path d="M5 20V11M12 20V5M19 20v-7"/>',
+  user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.5-5.5 7-5.5s6.2 1.9 7 5.5"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  alert:'<path d="M12 3.5l9.5 16h-19z"/><path d="M12 10v4M12 17v.01"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M16 7l3 3"/>',
+  book:'<path d="M5 4.5h11a3 3 0 013 3V20H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h11"/>',
+  pen:'<path d="M4 20l1-4L16.5 4.5a2 2 0 013 3L8 19z"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
+  bell:'<path d="M6 16v-5a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 004 0"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  moon:'<path d="M20 14.5A8 8 0 019.5 4a8 8 0 1010.5 10.5z"/>',
+  file:'<path d="M7 3.5h7l4 4V20.5H7z"/><path d="M14 3.5v4h4"/>',
+  shield:'<path d="M12 3l7 3v5.5c0 4.5-3 7.5-7 9.5-4-2-7-5-7-9.5V6z"/>',
+  logout:'<path d="M10 4H6a2 2 0 00-2 2v12a2 2 0 002 2h4M15 8l4 4-4 4M19 12H9"/>',
+  trash:'<path d="M4.5 7h15M9 7V4.5h6V7M6.5 7l1 13h9l1-13"/>',
+  laptop:'<rect x="5" y="5" width="14" height="10" rx="1.5"/><path d="M3 19h18"/>',
+  briefcase:'<rect x="4" y="8" width="16" height="11" rx="2"/><path d="M9 8V6a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0115 6v2"/>',
+  home:'<path d="M4 11l8-7 8 7v8.5a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/>',
+  clipboard:'<rect x="6" y="5" width="12" height="15" rx="2"/><path d="M9 5V4h6v1M9 11h6M9 15h4"/>'
+};
+function ic(name, size) {
+  size = size || 18;
+  return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+}
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const TASKS = [
+  {
+    id: 1,
+    title: "Finaliser la page de connexion",
+    quadrant: "critique",
+    folder: "Priozen App",
+    folderIcon: ic('laptop', 13),
+    subtasks: { done: 1, total: 3 },
+    date: "Aujourd'hui",
+    dateType: "today",
+    done: false
+  },
+  {
+    id: 2,
+    title: "Préparer la réunion client",
+    quadrant: "critique",
+    folder: "Travail",
+    folderIcon: ic('briefcase', 13),
+    subtasks: null,
+    date: "En retard",
+    dateType: "late",
+    done: false
+  },
+  {
+    id: 3,
+    title: "Mettre en place les tests unitaires",
+    quadrant: "schedule",
+    folder: "Priozen App",
+    folderIcon: ic('laptop', 13),
+    subtasks: null,
+    date: "Dans 7 jours",
+    dateType: "future",
+    done: false
+  },
+  {
+    id: 4,
+    title: "Configurer ESLint et Prettier",
+    quadrant: "schedule",
+    folder: "Priozen App",
+    folderIcon: ic('laptop', 13),
+    subtasks: null,
+    date: null,
+    dateType: null,
+    done: true
+  },
+  {
+    id: 5,
+    title: "Répondre aux emails en attente",
+    quadrant: "delegate",
+    folder: null,
+    folderIcon: null,
+    subtasks: null,
+    date: "Aujourd'hui",
+    dateType: "today",
+    done: false
+  },
+  {
+    id: 6,
+    title: "Trier les favoris du navigateur",
+    quadrant: "secondary",
+    folder: "Perso",
+    folderIcon: ic('home', 13),
+    subtasks: null,
+    date: null,
+    dateType: null,
+    done: false
+  }
+];
+
+const QUADRANTS = [
+  { key: "critique", label: "Critique", description: "Important & urgent" },
+  { key: "schedule", label: "À planifier", description: "Important, non urgent" },
+  { key: "delegate", label: "Déléguer", description: "Urgent, moins important" },
+  { key: "secondary", label: "Secondaire", description: "Ni urgent ni important" }
+];
+
+const NAV_ITEMS = [
+  { key: "dashboard", label: "Tâches", icon: ic('task', 22), screen: "dashboard" },
+  { key: "folder", label: "Dossiers", icon: ic('folder', 22), screen: "folder" },
+  { key: "focus", label: "Focus", icon: ic('timer', 22), screen: "focus" },
+  { key: "analytics", label: "Analytics", icon: ic('chart', 22), screen: "analytics" },
+  { key: "profile", label: "Profil", icon: ic('user', 22), screen: "profile" }
+];
+
+const BOTTOM_NAV = [
+  { key: "dashboard", label: "Tâches", icon: ic('task', 22) },
+  { key: "folder", label: "Dossiers", icon: ic('folder', 22) },
+  { key: "focus", label: "Focus", icon: ic('timer', 22) },
+  { key: "analytics", label: "Stats", icon: ic('chart', 22) },
+  { key: "profile", label: "Profil", icon: ic('user', 22) }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let currentScreen = "dashboard";
+let currentDevice = "desktop";
+let isDark = false;
+let activeNavKey = "dashboard";
+
+/* ============================================================
+   DEVICE & THEME
+   ============================================================ */
+function setDevice(d) {
+  currentDevice = d;
+  document.body.className = 'sim-' + d;
+  ['mobile','tablet','desktop'].forEach(k => {
+    document.getElementById('btn-' + k).classList.toggle('active', k === d);
+  });
+  renderAll();
+}
+
+function toggleTheme() {
+  isDark = !isDark;
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('theme-btn').textContent = isDark ? '☀️ Clair' : '🌙 Sombre';
+}
+
+function switchScreen(name) {
+  if (name.indexOf('task-modal') === 0) {
+    currentScreen = 'dashboard';
+    activeNavKey = 'dashboard';
+    modalState = name === 'task-modal-filled' ? 'filled' : name === 'task-modal-error' ? 'error' : 'empty';
+    modalOpen = true;
+    renderAll();
+    return;
+  }
+  modalOpen = false;
+  currentScreen = name;
+  // Update nav active key
+  const match = NAV_ITEMS.find(n => n.screen === name);
+  if (match) activeNavKey = match.key;
+  renderAll();
+}
+
+/* ============================================================
+   RENDER DISPATCHER
+   ============================================================ */
+function renderAll() {
+  buildSidebars();
+  renderMobile();
+  renderTablet();
+  renderDesktop();
+  renderModal();
+}
+
+/* ============================================================
+   SIDEBAR BUILDER
+   ============================================================ */
+function buildSidebar(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = NAV_ITEMS.map(item => `
+    <div class="sidebar-nav-item ${activeNavKey === item.key ? 'active' : ''}" onclick="switchScreen('${item.screen}')">
+      <span class="nav-icon">${item.icon}</span>
+      <span>${item.label}</span>
+    </div>
+  `).join('');
+}
+
+function buildSidebars() {
+  buildSidebar('sidebar-nav-tablet');
+  buildSidebar('sidebar-nav-desktop');
+}
+
+/* ============================================================
+   SCREEN CONTENT GENERATORS
+   ============================================================ */
+
+// ---- Task item HTML ----
+function taskItemHTML(task, showQuadrant) {
+  const q = showQuadrant ? QUADRANTS.find(x => x.key === task.quadrant) : null;
+  const qDot = { critique: 'var(--critique)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
+  return `
+    <div class="task-item">
+      <div class="task-check ${task.done ? 'done' : ''}">
+        ${task.done ? ic('check', 14) : ''}
+      </div>
+      <div class="task-body">
+        <div class="task-title ${task.done ? 'done' : ''}">${task.title}</div>
+        <div class="task-meta">
+          ${q ? `<span class="task-quad"><span class="task-quad-dot" style="background:${qDot[q.key]}"></span>${q.label}</span>` : ''}
+          ${task.folder ? `<span class="task-folder">${task.folderIcon} ${task.folder}</span>` : ''}
+          ${task.subtasks ? `<span class="task-subtasks">${task.subtasks.done}/${task.subtasks.total} sous-tâches</span>` : ''}
+          ${task.date ? `<span class="task-date ${task.dateType}">${task.date}</span>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ---- Quadrant card HTML ----
+function quadrantCardHTML(q, tasks, isDesktop) {
+  const qTasks = tasks.filter(t => t.quadrant === q.key);
+  const count = qTasks.filter(t => !t.done).length;
+  return `
+    <div class="quadrant-card ${q.key}">
+      <div class="quadrant-header">
+        <div class="quadrant-label">
+          <div class="quadrant-dot"></div>
+          <span class="quadrant-name">${q.label}</span>
+          <span style="font-size:11px;color:var(--text-muted)">${q.description}</span>
+        </div>
+        <span class="quadrant-count">${count}</span>
+      </div>
+      ${qTasks.map(t => taskItemHTML(t)).join('')}
+    </div>`;
+}
+
+// ---- Vue d'ensemble : onglets (statut) + pastilles (quadrant) ----
+let taskTab = 'todo';      // 'todo' | 'late' | 'done'
+let mobileFilter = null;   // null | clé de quadrant
+const TAB_LABELS = { todo: 'À faire', late: 'En retard', done: 'Terminées' };
+const Q_DOT = { critique: 'var(--critique)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
+function tabTasks(tab) {
+  if (tab === 'done') return TASKS.filter(t => t.done);
+  if (tab === 'late') return TASKS.filter(t => !t.done && t.dateType === 'late');
+  return TASKS.filter(t => !t.done);
+}
+function setMobileFilter(key) { mobileFilter = (mobileFilter === key) ? null : key; renderAll(); }
+function setTaskTab(tab) { taskTab = tab; renderAll(); }
+
+function taskTabsHTML(device) {
+  return `<div class="ov-tabs ${device === 'mobile' ? 'ov-tabs-fill' : ''}" role="tablist" aria-label="Statut des tâches">${['todo', 'late', 'done'].map(k => {
+    const n = tabTasks(k).length;
+    return `<button type="button" role="tab" class="ov-tab ${k === 'late' && n ? 'has-late' : ''}" aria-selected="${taskTab === k}" onclick="setTaskTab('${k}')">${TAB_LABELS[k]}<span class="ov-tab-count">${n}</span></button>`;
+  }).join('')}</div>`;
+}
+
+function mobileOverviewStrip(completedCount, totalCount, pct, device) {
+  const base = tabTasks(taskTab);
+  const pills = QUADRANTS.map(q => {
+    const n = base.filter(t => t.quadrant === q.key).length;
+    const active = mobileFilter === q.key;
+    const dim = mobileFilter && !active;
+    return `<button type="button" class="ov-pill ${active ? 'active' : ''} ${dim ? 'dim' : ''}" aria-pressed="${active}" ${(n === 0 && !active) ? 'disabled' : ''} onclick="setMobileFilter('${q.key}')">
+      <span class="ov-pill-top"><span class="ov-dot" style="background:${Q_DOT[q.key]}"></span><span class="ov-count">${n}</span></span>
+      <span class="ov-label">${q.label}</span>
+    </button>`;
+  }).join('');
+  return `<div class="ov-strip ov-${device}" aria-label="Vue d'ensemble">
+    <div class="ov-pills">${pills}</div>
+    <div class="ov-progress"><span>Aujourd'hui</span><div class="progress-bar-wrap" style="flex:1"><div class="progress-bar-fill" style="width:${pct}%"></div></div><strong>${completedCount}/${totalCount}</strong></div>
+  </div>`;
+}
+
+function taskListHTML(device) {
+  const list = mobileFilter ? tabTasks(taskTab).filter(t => t.quadrant === mobileFilter) : tabTasks(taskTab);
+  const fq = mobileFilter ? QUADRANTS.find(x => x.key === mobileFilter) : null;
+  const filterBar = fq ? `<div class="ov-filter-bar"><span>Filtre : ${fq.label} · ${list.length}</span><button type="button" onclick="setMobileFilter(null)">Tout afficher</button></div>` : '';
+  if (taskTab === 'todo') {
+    const qs = fq ? [fq] : QUADRANTS;
+    const grid = device === 'desktop' && !fq;
+    const cards = qs.map(q => quadrantCardHTML(q, list, grid)).join('');
+    return filterBar + (grid ? `<div class="quadrant-grid-2x2">${cards}</div>` : cards);
+  }
+  const empty = taskTab === 'late' ? 'Aucune tâche en retard' : 'Aucune tâche terminée pour le moment';
+  const title = TAB_LABELS[taskTab];
+  return filterBar + `<div class="quadrant-card"><div class="quadrant-header"><div class="quadrant-label"><span class="quadrant-name" style="color:${taskTab === 'late' ? 'var(--critique)' : 'var(--text-primary)'}">${title}</span></div><span class="quadrant-count">${list.length}</span></div>${list.length ? list.map(t => taskItemHTML(t, true)).join('') : `<div class="ov-empty">${empty}</div>`}</div>`;
+}
+
+// ---- SCREEN: Dashboard ----
+function screenDashboard(device) {
+  const completedCount = TASKS.filter(t => t.done).length;
+  const totalCount = TASKS.length;
+  const pct = Math.round(completedCount / totalCount * 100);
+
+  if (device === 'mobile') {
+    return `
+      <div class="mobile-header">
+        <span class="mobile-logo">Prio<span>zen</span></span>
+        <div class="mobile-avatar">MD</div>
+      </div>
+      <div class="screen-content-mobile" style="padding:12px 16px 80px">
+        ${mobileOverviewStrip(completedCount, totalCount, pct, 'mobile')}
+        ${taskTabsHTML('mobile')}
+        ${taskListHTML('mobile')}
+      </div>
+      <div class="bottom-nav">
+        ${BOTTOM_NAV.map(item => `
+          <div class="bottom-nav-item ${item.key === activeNavKey ? 'active' : ''}" onclick="switchScreenMobile('${item.key}')">
+            <span class="bn-icon">${item.icon}</span>
+            <span>${item.label}</span>
+          </div>`).join('')}
+      </div>
+      <button class="add-btn" aria-label="Nouvelle tâche" onclick="openModal()" style="position:fixed;bottom:calc(72px + env(safe-area-inset-bottom,0px));right:calc(50% - 175px + 20px)">${ic('plus', 24)}</button>`;
+  }
+
+  // Tablet / Desktop content
+  const grid = device === 'desktop';
+  return `
+    <div style="margin-bottom:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--shadow-sm)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div>
+          <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--text-primary);letter-spacing:-0.02em">Bonjour, Martin</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-top:2px">Voici vos tâches du jour</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:28px;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums;letter-spacing:-0.04em">${completedCount}/${totalCount}</div>
+          <div style="font-size:12px;color:var(--text-muted)">terminées</div>
+        </div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+    </div>
+    <div class="ov-wide-head">
+      <div class="ov-wide-strip">${mobileOverviewStrip(completedCount, totalCount, pct, device)}</div>
+      <button class="btn-primary-sm ov-add" onclick="openModal()">+ Nouvelle tâche</button>
+    </div>
+    ${taskTabsHTML(device)}
+    ${taskListHTML(device)}`;
+}
+
+// ---- Right panel (Desktop) ----
+function rightPanelContent(screen) {
+  if (screen === 'dashboard') {
+    const counts = {};
+    QUADRANTS.forEach(q => {
+      counts[q.key] = TASKS.filter(t => t.quadrant === q.key && !t.done).length;
+    });
+    const colors = { critique: '#EF4444', schedule: '#4F46E5', delegate: '#F59E0B', secondary: '#94A3B8' };
+    return `
+      <div class="rp-section">
+        <div class="rp-title">Vue d'ensemble</div>
+        ${QUADRANTS.map(q => `
+          <div class="rp-stat-row">
+            <div class="rp-stat-name">
+              <div class="rp-stat-dot" style="background:${colors[q.key]}"></div>
+              ${q.label}
+            </div>
+            <div class="rp-stat-val">${counts[q.key]}</div>
+          </div>`).join('')}
+      </div>
+      <div class="rp-section">
+        <div class="rp-title">Progression</div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+          <span style="color:var(--text-muted)">Aujourd'hui</span>
+          <span style="font-weight:600;color:var(--text-primary)">${TASKS.filter(t=>t.done).length}/${TASKS.length}</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${Math.round(TASKS.filter(t=>t.done).length/TASKS.length*100)}%"></div></div>
+        <div class="rp-progress-label"><span>0</span><span>${TASKS.length}</span></div>
+      </div>
+      <div class="rp-section">
+        <div class="rp-title">En retard</div>
+        ${TASKS.filter(t => t.dateType === 'late').map(t => `
+          <div style="background:var(--critique-bg);border-radius:8px;padding:10px 12px;margin-bottom:8px;display:flex;gap:8px;align-items:flex-start">
+            <span style="color:var(--critique);margin-top:1px;display:inline-flex">${ic('alert', 14)}</span>
+            <span style="font-size:13px;color:var(--critique);font-weight:500">${t.title}</span>
+          </div>`).join('')}
+      </div>`;
+  }
+  if (screen === 'analytics') {
+    return `
+      <div class="rp-section">
+        <div class="rp-title">Cette semaine</div>
+        <div class="rp-stat-row"><div class="rp-stat-name"><div class="rp-stat-dot" style="background:#10B981"></div>Complétées</div><div class="rp-stat-val">12</div></div>
+        <div class="rp-stat-row"><div class="rp-stat-name"><div class="rp-stat-dot" style="background:#EF4444"></div>En retard</div><div class="rp-stat-val">2</div></div>
+        <div class="rp-stat-row"><div class="rp-stat-name"><div class="rp-stat-dot" style="background:#4F46E5"></div>Créées</div><div class="rp-stat-val">15</div></div>
+      </div>`;
+  }
+  return `<div style="color:var(--text-muted);font-size:13px;text-align:center;padding-top:40px">Sélectionnez une tâche</div>`;
+}
+
+// ---- SCREEN: Login ----
+function screenLogin() {
+  return `
+    <div class="auth-card">
+      <div class="auth-logo">Prio<span>zen</span></div>
+      <div class="auth-tagline">Gérez vos priorités avec méthode</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" value="martin@priozen.app" placeholder="vous@exemple.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" value="••••••••" placeholder="••••••••">
+      </div>
+      <div style="text-align:right;margin-bottom:4px">
+        <a style="font-size:13px;color:var(--primary);cursor:pointer;text-decoration:none" onclick="switchScreen('forgot')">Mot de passe oublié ?</a>
+      </div>
+      <button class="btn-primary">Se connecter</button>
+      <div class="auth-divider"><span>ou</span></div>
+      <button class="btn-google"><b style="font-size:15px">G</b>&nbsp; Continuer avec Google</button>
+      <div class="auth-link">Pas encore de compte ? <a onclick="switchScreen('register')">S'inscrire</a></div>
+    </div>`;
+}
+
+// ---- SCREEN: Register ----
+function screenRegister() {
+  return `
+    <div class="auth-card">
+      <div class="auth-logo">Prio<span>zen</span></div>
+      <div class="auth-tagline">Créez votre compte gratuitement</div>
+      <div class="form-group">
+        <label class="form-label">Prénom et nom</label>
+        <input class="form-input" type="text" value="Martin Dupont" placeholder="Jean Dupont">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" value="martin@priozen.app" placeholder="vous@exemple.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Mot de passe</label>
+        <input class="form-input" type="password" value="••••••••" placeholder="8 caractères minimum">
+      </div>
+      <div class="cgu-check-row">
+        <input type="checkbox" id="cgu-check" checked>
+        <label for="cgu-check">J'accepte les <a style="color:var(--primary);cursor:pointer" onclick="switchScreen('cgu')">conditions d'utilisation</a></label>
+      </div>
+      <button class="btn-primary">Créer mon compte</button>
+      <div class="auth-link">Déjà un compte ? <a onclick="switchScreen('login')">Se connecter</a></div>
+    </div>`;
+}
+
+// ---- SCREEN: Forgot password ----
+function screenForgot() {
+  return `
+    <div class="auth-card">
+      <div style="text-align:center;margin-bottom:12px;color:var(--primary)">${ic('key', 36)}</div>
+      <div class="auth-logo" style="font-size:22px">Réinitialiser le mot de passe</div>
+      <div class="auth-tagline">Entrez votre email pour recevoir un lien de réinitialisation</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" value="martin@priozen.app" placeholder="vous@exemple.com">
+      </div>
+      <button class="btn-primary">Envoyer le lien</button>
+      <div class="auth-link"><a onclick="switchScreen('login')">← Retour à la connexion</a></div>
+    </div>`;
+}
+
+// ---- SCREEN: CGU ----
+function screenCGU() {
+  return `
+    <div class="cgu-card">
+      <div class="cgu-title">Conditions d'utilisation</div>
+      <div class="cgu-body">
+        <p style="margin-bottom:12px"><strong>1. Objet</strong><br>Les présentes conditions régissent l'utilisation de l'application Priozen, gestionnaire de tâches basé sur la méthode Eisenhower.</p>
+        <p style="margin-bottom:12px"><strong>2. Données personnelles</strong><br>Vos données sont stockées de façon sécurisée. Priozen ne revend aucune donnée à des tiers. Vous pouvez supprimer votre compte à tout moment depuis les paramètres.</p>
+        <p style="margin-bottom:12px"><strong>3. Usage autorisé</strong><br>Priozen est destiné à un usage personnel et professionnel. Toute tentative de reverse engineering, de scraping ou d'usage automatisé non autorisé est prohibée.</p>
+        <p style="margin-bottom:12px"><strong>4. Disponibilité</strong><br>Priozen vise une disponibilité de 99,5 % mais ne peut garantir l'absence d'interruptions de service.</p>
+        <p style="margin-bottom:12px"><strong>5. Modifications</strong><br>Ces conditions peuvent être mises à jour. Les utilisateurs seront informés par email en cas de changements substantiels.</p>
+        <p><strong>6. Contact</strong><br>Pour toute question : legal@priozen.app</p>
+      </div>
+      <div class="cgu-check-row">
+        <input type="checkbox" id="cgu2" checked>
+        <label for="cgu2">J'ai lu et j'accepte les conditions</label>
+      </div>
+      <div class="cgu-actions">
+        <button class="btn-outline" onclick="switchScreen('register')">Refuser</button>
+        <button class="btn-primary" style="flex:1;margin-top:0;width:auto" onclick="switchScreen('register')">Accepter</button>
+      </div>
+    </div>`;
+}
+
+// ---- SCREEN: Folders ----
+function screenFolder() {
+  const folders = [
+    { name: "Priozen App", icon: ic('laptop', 20), color: "#EEF2FF", count: 3 },
+    { name: "Travail", icon: ic('briefcase', 20), color: "#FFFBEB", count: 2 },
+    { name: "Perso", icon: ic('home', 20), color: "#F0FDF4", count: 1 },
+    { name: "Études", icon: ic('book', 20), color: "#FFF7ED", count: 0 }
+  ];
+  return `
+    <div class="section-title">Mes dossiers</div>
+    <div style="margin-bottom:20px"><button class="btn-primary-sm">+ Nouveau dossier</button></div>
+    ${folders.map(f => `
+      <div class="folder-card">
+        <div class="folder-icon" style="background:${f.color}">${f.icon}</div>
+        <div class="folder-info">
+          <div class="folder-name">${f.name}</div>
+          <div class="folder-count">${f.count} tâche${f.count !== 1 ? 's' : ''}</div>
+        </div>
+        <span class="folder-arrow">›</span>
+      </div>`).join('')}`;
+}
+
+// ---- SCREEN: Profile ----
+function screenProfile() {
+  return `
+    <div style="padding-bottom:24px">
+      <div class="profile-avatar-big">MD</div>
+      <div class="profile-name-big">Martin Dupont</div>
+      <div class="profile-email">martin@priozen.app</div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-row"><span class="profile-row-label">${ic('pen', 18)}<span>Modifier le profil</span></span><span class="profile-row-value">›</span></div>
+      <div class="profile-row"><span class="profile-row-label">${ic('lock', 18)}<span>Sécurité</span></span><span class="profile-row-value">›</span></div>
+      <div class="profile-row"><span class="profile-row-label">${ic('bell', 18)}<span>Notifications</span></span><span class="profile-row-value">Activées ›</span></div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-row"><span class="profile-row-label">${ic('moon', 18)}<span>Thème</span></span><span class="profile-row-value">${isDark ? 'Sombre' : 'Clair'} ›</span></div>
+      <div class="profile-row"><span class="profile-row-label">${ic('globe', 18)}<span>Langue</span></span><span class="profile-row-value">Français ›</span></div>
+      <div class="profile-row"><span class="profile-row-label">${ic('timer', 18)}<span>Focus par défaut</span></span><span class="profile-row-value">25 min ›</span></div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-row"><span class="profile-row-label">${ic('file', 18)}<span>Conditions d'utilisation</span></span><span class="profile-row-value">›</span></div>
+      <div class="profile-row"><span class="profile-row-label">${ic('shield', 18)}<span>Politique de confidentialité</span></span><span class="profile-row-value">›</span></div>
+    </div>
+    <div class="profile-section">
+      <div class="profile-row" style="color:var(--critique)"><span class="profile-row-label" style="color:var(--critique)">${ic('logout', 18)}<span>Se déconnecter</span></span></div>
+    </div>`;
+}
+
+// ---- SCREEN: Focus ----
+function screenFocus(device) {
+  const task = TASKS[0];
+  const innerContent = `
+    <div style="margin-bottom:12px">
+      <span class="badge critique">Critique</span>
+    </div>
+    <div class="focus-ring">
+      <div class="focus-timer">24:13</div>
+    </div>
+    <div class="focus-task-name">${task.title}</div>
+    <div class="focus-subtask">Sous-tâche 2/3 • Priozen App</div>
+    <div class="focus-controls">
+      <button class="focus-btn stop">⏮</button>
+      <button class="focus-btn play">⏸</button>
+      <button class="focus-btn stop">⏭</button>
+    </div>
+    <div style="margin-top:28px;display:flex;gap:12px">
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums">2</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Sessions</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums">48</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Min focus</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.1)"></div>
+      <div style="text-align:center">
+        <div style="font-size:22px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums">5</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Min restants</div>
+      </div>
+    </div>`;
+
+  if (device === 'mobile') {
+    return `
+      <div class="focus-screen" style="min-height:calc(780px - 36px);padding-bottom:80px">
+        ${innerContent}
+      </div>
+      <div class="bottom-nav" style="position:absolute;bottom:0;left:0;right:0;background:rgba(30,27,75,0.9);border-top:1px solid rgba(255,255,255,0.08)">
+        ${BOTTOM_NAV.map(item => `
+          <div class="bottom-nav-item ${item.key === activeNavKey ? 'active' : ''}" onclick="switchScreenMobile('${item.key}')" style="${item.key !== activeNavKey ? 'color:rgba(255,255,255,0.35)' : ''}">
+            <span class="bn-icon">${item.icon}</span>
+            <span>${item.label}</span>
+          </div>`).join('')}
+      </div>`;
+  }
+  return `<div class="focus-screen">${innerContent}</div>`;
+}
+
+// ---- SCREEN: Analytics ----
+function screenAnalytics(device) {
+  const radarSVG = `
+    <svg viewBox="0 0 200 200" class="radar-svg">
+      <defs>
+        <style>.ra{fill:none;stroke:var(--border)}.rf{fill:rgba(79,70,229,0.15);stroke:#4F46E5;stroke-width:1.5}</style>
+      </defs>
+      <!-- grille -->
+      <polygon class="ra" points="100,20 163,60 163,140 100,180 37,140 37,60"/>
+      <polygon class="ra" points="100,47 140,70 140,130 100,153 60,130 60,70"/>
+      <polygon class="ra" points="100,73 117,83 117,117 100,127 83,117 83,83"/>
+      <!-- axes -->
+      <line class="ra" x1="100" y1="20" x2="100" y2="180"/>
+      <line class="ra" x1="37" y1="60" x2="163" y2="140"/>
+      <line class="ra" x1="163" y1="60" x2="37" y2="140"/>
+      <!-- données -->
+      <polygon class="rf" points="100,30 150,68 148,130 100,162 55,132 52,62"/>
+      <!-- labels -->
+      <text x="100" y="12" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Inter">Critique</text>
+      <text x="172" y="55" font-size="10" fill="var(--text-muted)" font-family="Inter">Planif.</text>
+      <text x="168" y="148" font-size="10" fill="var(--text-muted)" font-family="Inter">Délég.</text>
+      <text x="78" y="193" font-size="10" fill="var(--text-muted)" font-family="Inter">Second.</text>
+      <text x="10" y="148" font-size="10" fill="var(--text-muted)" font-family="Inter">Focus</text>
+      <text x="18" y="55" font-size="10" fill="var(--text-muted)" font-family="Inter">Vitesse</text>
+    </svg>`;
+
+  const barSVG = `
+    <svg viewBox="0 0 240 140" class="bar-svg">
+      <defs><style>.bl{fill:var(--border)}.bv{fill:#4F46E5}.bt{fill:var(--text-muted);font-size:9px;font-family:Inter}</style></defs>
+      <!-- axes -->
+      <line x1="30" y1="10" x2="30" y2="110" stroke="var(--border)"/>
+      <line x1="30" y1="110" x2="230" y2="110" stroke="var(--border)"/>
+      <!-- barres: Lun Mar Mer Jeu Ven Sam Dim -->
+      ${[['L',3,40],['M',5,68],['M',4,54],['J',7,95],['V',6,82],['S',2,27],['D',1,14]].map(([d,n,h],i) => `
+        <rect x="${38+i*27}" y="${110-h}" width="18" height="${h}" rx="4" class="bv" opacity="${i===5||i===6?0.4:0.85}"/>
+        <text x="${47+i*27}" y="123" text-anchor="middle" class="bt">${d}</text>
+        <text x="${47+i*27}" y="${106-h}" text-anchor="middle" class="bt" fill="var(--text-primary)">${n}</text>`).join('')}
+      <!-- y labels -->
+      <text x="24" y="14" text-anchor="end" class="bt">7</text>
+      <text x="24" y="62" text-anchor="end" class="bt">4</text>
+      <text x="24" y="112" text-anchor="end" class="bt">0</text>
+    </svg>`;
+
+  const statsBlock = `
+    <div class="stats-row" style="margin-bottom:16px">
+      <div class="stat-tile"><div class="stat-value">28</div><div class="stat-label">Tâches ce mois</div></div>
+      <div class="stat-tile"><div class="stat-value">74%</div><div class="stat-label">Taux de complétion</div></div>
+      <div class="stat-tile"><div class="stat-value">4.2h</div><div class="stat-label">Focus moyen/jour</div></div>
+      <div class="stat-tile"><div class="stat-value">3</div><div class="stat-label">En retard</div></div>
+    </div>`;
+
+  const charts = (device === 'desktop')
+    ? `<div class="analytics-cols">
+        <div class="analytics-chart-placeholder">
+          <div class="analytics-chart-title">Répartition par quadrant</div>
+          ${radarSVG}
+        </div>
+        <div class="analytics-chart-placeholder">
+          <div class="analytics-chart-title">Tâches complétées / jour</div>
+          ${barSVG}
+        </div>
+      </div>`
+    : `<div class="analytics-chart-placeholder" style="margin-bottom:16px">
+        <div class="analytics-chart-title">Répartition par quadrant</div>
+        ${radarSVG}
+      </div>
+      <div class="analytics-chart-placeholder">
+        <div class="analytics-chart-title">Tâches complétées / jour</div>
+        ${barSVG}
+      </div>`;
+
+  if (device === 'mobile') {
+    return `
+      <div class="mobile-header">
+        <span class="mobile-logo">Prio<span>zen</span></span>
+        <div class="mobile-avatar">MD</div>
+      </div>
+      <div style="padding:16px 16px 80px">
+        <div class="section-title">Analytics</div>
+        ${statsBlock}
+        ${charts}
+      </div>
+      <div class="bottom-nav">
+        ${BOTTOM_NAV.map(item => `
+          <div class="bottom-nav-item ${item.key === activeNavKey ? 'active' : ''}" onclick="switchScreenMobile('${item.key}')">
+            <span class="bn-icon">${item.icon}</span>
+            <span>${item.label}</span>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  return `
+    <div class="section-title">Analytics</div>
+    ${statsBlock}
+    ${charts}`;
+}
+
+// ---- SCREEN: Trash ----
+function screenTrash(device) {
+  const trashItems = [
+    "Réviser les maquettes v1",
+    "Appel avec l'équipe design",
+    "Mettre à jour les dépendances npm"
+  ];
+  const content = `
+    <div class="section-title">Corbeille</div>
+    <div class="section-subtitle">Ces tâches seront supprimées définitivement dans 7 jours.</div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:4px 16px;box-shadow:var(--shadow-sm)">
+      ${trashItems.map(t => `
+        <div class="trash-item">
+          <span class="trash-icon">${ic('trash', 20)}</span>
+          <span class="trash-title">${t}</span>
+          <span class="trash-restore">Restaurer</span>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:16px;text-align:center">
+      <button style="font-size:13px;color:var(--critique);background:none;border:none;cursor:pointer;font-weight:500">Vider la corbeille</button>
+    </div>`;
+
+  if (device === 'mobile') {
+    return `
+      <div class="mobile-header">
+        <span class="mobile-logo">Prio<span>zen</span></span>
+        <div class="mobile-avatar">MD</div>
+      </div>
+      <div style="padding:16px 16px 80px">${content}</div>
+      <div class="bottom-nav">
+        ${BOTTOM_NAV.map(item => `
+          <div class="bottom-nav-item ${item.key === activeNavKey ? 'active' : ''}" onclick="switchScreenMobile('${item.key}')">
+            <span class="bn-icon">${item.icon}</span>
+            <span>${item.label}</span>
+          </div>`).join('')}
+      </div>`;
+  }
+  return content;
+}
+
+// ---- SCREEN: Empty ----
+function screenEmpty(device) {
+  const content = `
+    <div class="empty-state">
+      <div class="empty-illustration">${ic('clipboard', 56)}</div>
+      <div class="empty-title">Aucune tâche ici</div>
+      <div class="empty-desc">Ce dossier est vide pour l'instant. Ajoutez votre première tâche pour commencer à organiser votre travail.</div>
+      <button class="btn-primary-sm" onclick="openModal()">+ Ajouter une tâche</button>
+    </div>`;
+
+  if (device === 'mobile') {
+    return `
+      <div class="mobile-header">
+        <span class="mobile-logo">Prio<span>zen</span></span>
+        <div class="mobile-avatar">MD</div>
+      </div>
+      ${content}
+      <div class="bottom-nav" style="position:absolute;bottom:0;left:0;right:0">
+        ${BOTTOM_NAV.map(item => `
+          <div class="bottom-nav-item ${item.key === activeNavKey ? 'active' : ''}" onclick="switchScreenMobile('${item.key}')">
+            <span class="bn-icon">${item.icon}</span>
+            <span>${item.label}</span>
+          </div>`).join('')}
+      </div>`;
+  }
+  return content;
+}
+
+/* ============================================================
+   AUTH SCREENS (no sidebar, always centered)
+   ============================================================ */
+function authWrapHTML(innerHTML) {
+  return `<div class="auth-no-sidebar">${innerHTML}</div>`;
+}
+
+/* ============================================================
+   MOBILE RENDER
+   ============================================================ */
+function renderMobile() {
+  const el = document.getElementById('phone-screen-content');
+  if (!el) return;
+
+  const isAuth = ['login','register','forgot','cgu'].includes(currentScreen);
+
+  let html = '';
+  if (isAuth) {
+    // Auth: centered, no notch area issues
+    html = `<div style="display:flex;align-items:center;justify-content:center;min-height:100%;padding:24px 16px;">${getAuthContent()}</div>`;
+  } else if (currentScreen === 'dashboard') {
+    html = screenDashboard('mobile');
+  } else if (currentScreen === 'folder') {
+    html = `
+      <div class="mobile-header"><span class="mobile-logo">Prio<span>zen</span></span><div class="mobile-avatar">MD</div></div>
+      <div style="padding:16px 16px 80px">${screenFolder()}</div>
+      <div class="bottom-nav">${BOTTOM_NAV.map(item=>`<div class="bottom-nav-item ${item.key===activeNavKey?'active':''}" onclick="switchScreenMobile('${item.key}')"><span class="bn-icon">${item.icon}</span><span>${item.label}</span></div>`).join('')}</div>`;
+  } else if (currentScreen === 'profile') {
+    html = `
+      <div class="mobile-header"><span class="mobile-logo">Prio<span>zen</span></span><div class="mobile-avatar">MD</div></div>
+      <div style="padding:16px 16px 80px">${screenProfile()}</div>
+      <div class="bottom-nav">${BOTTOM_NAV.map(item=>`<div class="bottom-nav-item ${item.key===activeNavKey?'active':''}" onclick="switchScreenMobile('${item.key}')"><span class="bn-icon">${item.icon}</span><span>${item.label}</span></div>`).join('')}</div>`;
+  } else if (currentScreen === 'focus') {
+    html = screenFocus('mobile');
+  } else if (currentScreen === 'analytics') {
+    html = screenAnalytics('mobile');
+  } else if (currentScreen === 'trash') {
+    html = screenTrash('mobile');
+  } else if (currentScreen === 'empty') {
+    html = screenEmpty('mobile');
+  }
+  el.innerHTML = html;
+}
+
+/* ============================================================
+   TABLET RENDER
+   ============================================================ */
+function renderTablet() {
+  const scrollEl = document.getElementById('tablet-scroll-content');
+  const headerTitle = document.getElementById('tablet-header-title');
+  const headerSub = document.getElementById('tablet-header-sub');
+  const frameEl = document.getElementById('frame-tablet');
+  if (!scrollEl) return;
+
+  const isAuth = ['login','register','forgot','cgu'].includes(currentScreen);
+
+  if (isAuth) {
+    // Auth: hide sidebar, show full width auth
+    if (frameEl) {
+      frameEl.innerHTML = `<div class="auth-no-sidebar">${getAuthContent()}</div>`;
+    }
+    return;
+  }
+
+  // Ensure sidebar is restored if was replaced by auth
+  if (frameEl && !frameEl.querySelector('.sidebar')) {
+    // Re-inject the full structure
+    frameEl.innerHTML = `
+      <div class="sidebar" id="sidebar-tablet">
+        <div class="sidebar-logo">Prio<span>zen</span></div>
+        <nav class="sidebar-nav" id="sidebar-nav-tablet"></nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="sidebar-avatar">MD</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Martin Dupont</div>
+              <div class="sidebar-user-email">martin@priozen.app</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main-area">
+        <div class="main-header" id="main-header-tablet">
+          <div class="main-header-left">
+            <h2 id="tablet-header-title">Tâches</h2>
+            <p id="tablet-header-sub">Samedi, 26 septembre 2026</p>
+          </div>
+          <div class="header-avatar">MD</div>
+        </div>
+        <div class="main-scroll" id="tablet-scroll-content"></div>
+      </div>`;
+    buildSidebar('sidebar-nav-tablet');
+  }
+
+  const titleEl = document.getElementById('tablet-header-title');
+  const subEl = document.getElementById('tablet-header-sub');
+  const sEl = document.getElementById('tablet-scroll-content');
+  if (!sEl) return;
+
+  const titles = {
+    dashboard:'Tâches', folder:'Dossiers', focus:'Mode Focus',
+    analytics:'Analytics', profile:'Profil', trash:'Corbeille', empty:'Dossier vide'
+  };
+  if (titleEl) titleEl.textContent = titles[currentScreen] || '';
+  if (subEl) subEl.textContent = 'Samedi, 26 septembre 2026';
+
+  if (currentScreen === 'dashboard') sEl.innerHTML = screenDashboard('tablet');
+  else if (currentScreen === 'folder') sEl.innerHTML = screenFolder();
+  else if (currentScreen === 'profile') sEl.innerHTML = screenProfile();
+  else if (currentScreen === 'focus') sEl.innerHTML = screenFocus('tablet');
+  else if (currentScreen === 'analytics') sEl.innerHTML = screenAnalytics('tablet');
+  else if (currentScreen === 'trash') sEl.innerHTML = screenTrash('tablet');
+  else if (currentScreen === 'empty') sEl.innerHTML = screenEmpty('tablet');
+}
+
+/* ============================================================
+   DESKTOP RENDER
+   ============================================================ */
+function renderDesktop() {
+  const scrollEl = document.getElementById('desktop-scroll-content');
+  const titleEl = document.getElementById('desktop-header-title');
+  const rpEl = document.getElementById('right-panel');
+  const frameEl = document.getElementById('frame-desktop');
+  if (!scrollEl) return;
+
+  const isAuth = ['login','register','forgot','cgu'].includes(currentScreen);
+
+  if (isAuth) {
+    if (frameEl) {
+      frameEl.innerHTML = `<div class="auth-no-sidebar">${getAuthContent()}</div>`;
+    }
+    return;
+  }
+
+  // Restore full desktop structure if needed
+  if (frameEl && !frameEl.querySelector('.sidebar')) {
+    frameEl.innerHTML = `
+      <div class="sidebar" id="sidebar-desktop">
+        <div class="sidebar-logo">Prio<span>zen</span></div>
+        <nav class="sidebar-nav" id="sidebar-nav-desktop"></nav>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="sidebar-avatar">MD</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Martin Dupont</div>
+              <div class="sidebar-user-email">martin@priozen.app</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main-area">
+        <div class="main-header">
+          <div class="main-header-left">
+            <h2 id="desktop-header-title">Tâches</h2>
+            <p id="desktop-header-sub">Samedi, 26 septembre 2026</p>
+          </div>
+          <div class="header-avatar">MD</div>
+        </div>
+        <div class="main-scroll" id="desktop-scroll-content"></div>
+      </div>
+      <div class="right-panel" id="right-panel"></div>`;
+    buildSidebar('sidebar-nav-desktop');
+  }
+
+  const dTitleEl = document.getElementById('desktop-header-title');
+  const dScrollEl = document.getElementById('desktop-scroll-content');
+  const dRpEl = document.getElementById('right-panel');
+  if (!dScrollEl) return;
+
+  const titles = {
+    dashboard:'Tâches', folder:'Dossiers', focus:'Mode Focus',
+    analytics:'Analytics', profile:'Profil', trash:'Corbeille', empty:'Dossier vide'
+  };
+  if (dTitleEl) dTitleEl.textContent = titles[currentScreen] || '';
+
+  if (currentScreen === 'dashboard') dScrollEl.innerHTML = screenDashboard('desktop');
+  else if (currentScreen === 'folder') dScrollEl.innerHTML = screenFolder();
+  else if (currentScreen === 'profile') dScrollEl.innerHTML = screenProfile();
+  else if (currentScreen === 'focus') dScrollEl.innerHTML = screenFocus('desktop');
+  else if (currentScreen === 'analytics') dScrollEl.innerHTML = screenAnalytics('desktop');
+  else if (currentScreen === 'trash') dScrollEl.innerHTML = screenTrash('desktop');
+  else if (currentScreen === 'empty') dScrollEl.innerHTML = screenEmpty('desktop');
+
+  if (dRpEl) {
+    dRpEl.innerHTML = rightPanelContent(currentScreen);
+    dRpEl.style.display = currentScreen === 'dashboard' ? 'none' : '';
+  }
+}
+
+/* ============================================================
+   AUTH CONTENT HELPER
+   ============================================================ */
+function getAuthContent() {
+  if (currentScreen === 'login') return screenLogin();
+  if (currentScreen === 'register') return screenRegister();
+  if (currentScreen === 'forgot') return screenForgot();
+  if (currentScreen === 'cgu') return screenCGU();
+  return '';
+}
+
+/* ============================================================
+   MOBILE NAV
+   ============================================================ */
+function switchScreenMobile(key) {
+  const map = { dashboard:'dashboard', folder:'folder', focus:'focus', analytics:'analytics', profile:'profile' };
+  if (map[key]) {
+    modalOpen = false;
+    currentScreen = map[key];
+    activeNavKey = key;
+    document.getElementById('screen-select').value = currentScreen;
+    renderAll();
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  setDevice('desktop');
+});
+</script>
+</body>
+</html>
