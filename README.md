@@ -71,6 +71,20 @@ npm run android     # Android emulator
 npm run web         # Browser
 ```
 
+### On a phone (Expo Go)
+
+No build needed: the app runs in [Expo Go](https://expo.dev/go), on the mocked API (sign in with `martin@priozen.app` / `password123`).
+
+1. Install **Expo Go** from the App Store or the Play Store. The phone must be on the same Wi-Fi as the computer.
+2. Run `npm start`: a QR code shows in the terminal.
+3. **iPhone**: scan it with the Camera app. **Android**: scan it from Expo Go.
+
+If it fails:
+
+- **"The request timed out"** (iPhone): allow Expo Go in **Settings → Privacy & Security → Local Network**, then quit Expo Go and scan again. Otherwise check that the phone isn't on mobile data, a guest Wi-Fi or a VPN.
+- **Network that isolates devices** (office, some routers): `npx expo start --tunnel` goes through the internet instead (installs `@expo/ngrok` the first time; slower).
+- **Android emulator "unauthorized" / "offline"**: Expo tried before Android finished booting. Start the emulator first, wait for the home screen and for `adb devices` to list it as `device`, then press `a` in the Expo terminal.
+
 ### Code quality
 
 ```bash
@@ -84,7 +98,7 @@ npm run test:coverage   # Coverage report
 
 The backend and PostgreSQL database aren't ready yet. The app runs standalone against a mocked API powered by [Mock Service Worker](https://mswjs.io), so every screen can be built and tested end-to-end without a real server.
 
-- **Native (iOS/Android)** — [`src/mocks/native.ts`](src/mocks/native.ts) uses `msw/native` (not `msw/node`, which depends on Node internals unavailable on Hermes) plus polyfills in [`src/mocks/msw.polyfills.ts`](src/mocks/msw.polyfills.ts) (`fast-text-encoding`, `react-native-url-polyfill`, and stubs for `MessageEvent`/`Event`/`EventTarget`/`BroadcastChannel`).
+- **Native (iOS/Android)** — [`src/mocks/native.ts`](src/mocks/native.ts) replaces `fetch` with a function that resolves each request against the handlers through MSW's `getResponse()`. Not `msw/native`: its interceptors rebuild the mocked response from `response.body`, a stream React Native doesn't expose, so every body arrived empty. Polyfills in [`src/mocks/msw.polyfills.native.ts`](src/mocks/msw.polyfills.native.ts) (`fast-text-encoding`, `react-native-url-polyfill`, and stubs for `MessageEvent`/`Event`/`EventTarget`/`BroadcastChannel`, which Hermes lacks). Verified in Expo Go on an iPhone and on the Android emulator (sign in, dashboard, task creation).
 - **Web** — [`src/mocks/worker.ts`](src/mocks/worker.ts) uses `msw/browser` with the generated `public/mockServiceWorker.js`.
 - Both start from [`app/_layout.tsx`](app/_layout.tsx) via `startMocks()` ([`src/mocks/utils.ts`](src/mocks/utils.ts)).
 - **Handlers** are split by domain in [`src/mocks/apiHandlers/`](src/mocks/apiHandlers/) (`authHandler`, `tasksHandler`, `foldersHandler`, `userHandler`), backed by an in-memory store ([`src/mocks/database.ts`](src/mocks/database.ts)) seeded from [`src/mocks/data/fixtures.ts`](src/mocks/data/fixtures.ts).
