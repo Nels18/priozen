@@ -9,7 +9,7 @@ import {
 import { Stack } from 'expo-router';
 import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import { AuthProvider } from '@/src/auth/AuthProvider';
 import { DemoBanner } from '@/src/components/layout/DemoBanner';
 import { isDemo, isMocksEnabled } from '@/src/config/demo';
@@ -61,7 +61,9 @@ export default function RootLayout(): JSX.Element | null {
       <QueryProvider>
         <AuthProvider>
           <View className="flex-1 bg-page">
-            {isDemo && <DemoBanner />}
+            {/* The public demo is a web target; native preview builds (also
+                on the mocks) only reach testers who know it. */}
+            {isDemo && Platform.OS === 'web' && <DemoBanner />}
             <Stack screenOptions={{ headerShown: false }} />
           </View>
         </AuthProvider>

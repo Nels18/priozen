@@ -156,10 +156,9 @@ The API URL is a placeholder that is never reached: MSW only intercepts requests
 to the API host, so it must be set. To deploy by hand: **expo.dev → Workflows →
 Deploy Web (demo) → Run**, or `npx eas-cli workflow:run deploy-web-demo.yml`.
 
-The demo is kept out of search engines (a `noindex` meta in every page and a
-`robots.txt` written by the workflow) and shows a « Démo — données fictives »
-banner. Both depend on the build, not on the host: a production build without
-mocks has neither.
+The demo is kept out of search results (a `noindex` meta in every page) and
+shows a « Démo — données fictives » banner. Both depend on the build, not on the
+host: a production build without mocks has neither.
 
 ## Changelog
 
