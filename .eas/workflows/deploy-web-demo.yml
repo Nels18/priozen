@@ -5,6 +5,9 @@ name: Deploy Web (demo)
 #   EXPO_PUBLIC_USE_MOCKS=true  → MSW answers every API call
 #   EXPO_PUBLIC_API_URL         → placeholder host MSW intercepts (required:
 #                                 handlers only match the API host)
+# Kept out of search results by the noindex meta of app/+html.tsx (demo
+# builds only). No robots.txt on purpose: blocking the crawl would stop
+# search engines from reading that noindex.
 # Production stays on deploy-web.yml (tags v*).
 on:
   push:

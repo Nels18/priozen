@@ -9,15 +9,13 @@ import {
 import { Stack } from 'expo-router';
 import type { JSX } from 'react';
 import { useEffect, useState } from 'react';
+import { Platform, View } from 'react-native';
 import { AuthProvider } from '@/src/auth/AuthProvider';
+import { DemoBanner } from '@/src/components/layout/DemoBanner';
+import { isDemo, isMocksEnabled } from '@/src/config/demo';
 import { QueryProvider } from '@/src/query/QueryProvider';
 import '@/src/i18n';
 import '../global.css';
-
-// Mocks run in development unless EXPO_PUBLIC_USE_MOCKS says otherwise.
-const isMocksEnabled = process.env.EXPO_PUBLIC_USE_MOCKS
-  ? process.env.EXPO_PUBLIC_USE_MOCKS === 'true'
-  : process.env.NODE_ENV === 'development';
 
 function MocksProvider({
   children,
@@ -62,7 +60,12 @@ export default function RootLayout(): JSX.Element | null {
     <MocksProvider>
       <QueryProvider>
         <AuthProvider>
-          <Stack screenOptions={{ headerShown: false }} />
+          <View className="flex-1 bg-page">
+            {/* The public demo is a web target; native preview builds (also
+                on the mocks) only reach testers who know it. */}
+            {isDemo && Platform.OS === 'web' && <DemoBanner />}
+            <Stack screenOptions={{ headerShown: false }} />
+          </View>
         </AuthProvider>
       </QueryProvider>
     </MocksProvider>
