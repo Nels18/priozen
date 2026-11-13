@@ -20,7 +20,9 @@ export default function Root({
     useServerDocumentContext();
 
   return (
-    <html lang="en" {...htmlAttributes}>
+    // French: the app's reference language. Following the language picked by
+    // i18next at load time is UX-05.
+    <html lang="fr" {...htmlAttributes}>
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />

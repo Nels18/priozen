@@ -14,10 +14,7 @@ export function DemoBanner(): JSX.Element {
   const iconColors = useIconColors();
 
   return (
-    <View
-      role="note"
-      className="flex-row items-center justify-center gap-1.5 bg-primary-light px-4 py-1.5"
-    >
+    <View className="flex-row items-center justify-center gap-1.5 bg-primary-light px-4 py-1.5">
       <Ionicons
         name="flask-outline"
         aria-hidden
