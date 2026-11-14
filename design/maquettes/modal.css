@@ -1,0 +1,127 @@
+/* ============================================================
+   MODALE « NOUVELLE TÂCHE » (TASK-01)
+   Réutilise les tokens de la page ; ajoute 3 tokens locaux.
+   ============================================================ */
+:root { --text-soft: #55657A; --err: #B91C1C; --on-primary: #FFFFFF; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --text-soft: #94A3B8; --err: #F87171; --on-primary: #0A0918; }
+}
+:root[data-theme="dark"] { --text-soft: #94A3B8; --err: #F87171; --on-primary: #0A0918; }
+
+.tablet-frame, .desktop-frame { position: relative; }
+.phone-notch { z-index: 60; }
+
+.modal-layer { position: absolute; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; }
+.modal-layer.is-sheet { align-items: flex-end; }
+.modal-scrim { position: absolute; inset: 0; background: rgba(10,9,24,0.5); }
+
+.modal {
+  position: relative;
+  width: 520px;
+  max-width: calc(100% - 32px);
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+}
+.is-sheet .modal {
+  width: 100%;
+  max-width: none;
+  max-height: calc(100% - 44px);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.25);
+}
+.modal-handle { display: none; justify-content: center; padding: 10px 0 0; }
+.is-sheet .modal-handle { display: flex; }
+.modal-handle span { width: 36px; height: 4px; border-radius: 2px; background: var(--border); }
+
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 20px 8px 28px; }
+.is-sheet .modal-head { padding: 4px 12px 4px 20px; }
+.modal-title { font-family: 'DM Serif Display', serif; font-weight: 400; font-size: 26px; letter-spacing: -0.02em; color: var(--text-primary); }
+.is-sheet .modal-title { font-size: 24px; }
+.modal-close {
+  width: 44px; height: 44px; border: 0; border-radius: 50%;
+  background: transparent; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.modal-close:hover { background: var(--bg-input); }
+
+.modal-form { padding: 8px 28px 0; display: flex; flex-direction: column; gap: 16px; }
+.is-sheet .modal-form { padding: 8px 20px 0; }
+
+.m-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.m-opt { font-weight: 400; color: var(--text-soft); }
+.m-input {
+  width: 100%; height: 46px; padding: 0 14px;
+  background: var(--bg-input); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-primary); font: 400 14px 'Inter', system-ui, sans-serif; outline: none;
+}
+.m-input:focus { border-color: var(--primary); }
+.m-input::placeholder { color: var(--text-soft); }
+.m-input.has-error { border-color: var(--critique); }
+textarea.m-input { height: 76px; padding: 12px 14px; line-height: 1.4; resize: none; }
+.m-error { display: flex; align-items: center; gap: 6px; margin: 6px 0 0; font-size: 12px; color: var(--err); }
+.m-error[hidden] { display: none; }
+
+.m-fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.m-legend { padding: 0; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.q-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.q-opt {
+  position: relative; box-sizing: border-box; min-height: 64px; padding: 10px 12px;
+  border: 2px solid var(--border); border-radius: var(--radius-md); background: var(--bg-input);
+  display: flex; flex-direction: column; gap: 2px; cursor: pointer;
+}
+.q-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.q-opt:has(input:checked) { border-color: var(--q); background: var(--qbg); }
+.q-opt:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
+.q-name { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.q-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--q); }
+.q-check { display: none; margin-left: auto; color: var(--q); }
+.q-opt:has(input:checked) .q-check { display: block; }
+.q-desc { font-size: 12px; color: var(--text-soft); }
+
+.m-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.m-field { position: relative; }
+.m-field .m-ico { position: absolute; left: 12px; top: 13px; color: var(--text-soft); pointer-events: none; }
+.m-field .m-input { padding-left: 40px; }
+.m-field select.m-input { appearance: none; -webkit-appearance: none; padding-right: 34px; }
+.m-field .m-chev { position: absolute; right: 12px; top: 15px; color: var(--text-soft); pointer-events: none; }
+
+.modal-foot { display: flex; justify-content: flex-end; gap: 12px; padding: 24px 28px 28px; }
+.is-sheet .modal-foot { padding: 20px 20px 32px; }
+.m-btn { height: 48px; border-radius: var(--radius-sm); font: 600 15px 'Inter', system-ui, sans-serif; cursor: pointer; }
+.m-btn-cancel { width: 120px; border: 1.5px solid var(--border); background: transparent; color: var(--text-primary); }
+.m-btn-ok { width: 176px; border: 0; background: var(--primary); color: var(--on-primary); }
+.m-btn-ok:hover { opacity: 0.9; }
+.is-sheet .m-btn-cancel { flex: 1; width: auto; }
+.is-sheet .m-btn-ok { flex: 1.6; width: auto; }
+
+/* Sous-tâches dans la modale (TASK-10) */
+.m-subs { list-style: none; margin: 0 0 8px; padding: 0; }
+.m-sub { display: flex; align-items: center; gap: 8px; min-height: 44px; border-bottom: 1px solid var(--border); }
+.m-sub-t { flex: 1; font-size: 14px; color: var(--text-primary); }
+.m-sub-t.done { text-decoration: line-through; color: var(--text-muted); }
+.m-sub-del { width: 44px; height: 44px; border: 0; border-radius: 50%; background: transparent; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.m-sub-del:hover { background: var(--bg-input); color: var(--text-primary); }
+.m-sub-add { display: flex; gap: 8px; }
+.m-sub-add .m-input { flex: 1; }
+.m-sub-btn { height: 46px; flex-shrink: 0; }
+
+/* Animations (UX-06) */
+@keyframes m-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes m-pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes m-sheet { from { transform: translateY(100%); } to { transform: none; } }
+.modal-layer.anim .modal-scrim { animation: m-fade .2s ease-out; }
+.modal-layer.anim .modal { animation: m-pop .2s cubic-bezier(.2,.8,.2,1); }
+.modal-layer.anim.is-sheet .modal { animation: m-sheet .28s cubic-bezier(.2,.8,.2,1); }
+@media (prefers-reduced-motion: reduce) {
+  .modal-layer.anim .modal-scrim, .modal-layer.anim .modal, .modal-layer.anim.is-sheet .modal { animation: none; }
+}
+
+.m-sub-input { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; font: inherit; font-size: 16px; color: var(--text-primary); outline: none; border-radius: 8px; padding: 0 6px; margin: 0 -6px; }
+.m-sub-input:focus { background: var(--bg-input); box-shadow: 0 0 0 2px var(--primary); }
+.m-sub-input.done { text-decoration: line-through; color: var(--text-muted); }

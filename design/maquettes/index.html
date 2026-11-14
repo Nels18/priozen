@@ -1160,6 +1160,101 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
 .cgu-check-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .cgu-check-row input { width: 18px; height: 18px; accent-color: var(--primary); }
 .cgu-check-row label { font-size: 13px; color: var(--text-muted); }
+/* ---- Pastille dossier, crayon, détail ---- */
+.folder-dot { display:inline-block; border-radius:50%; flex-shrink:0; }
+.task-folder { gap:5px; }
+.task-subtasks { display:inline-flex; align-items:center; gap:3px; }
+.task-edit { width:44px; height:44px; margin:-10px -8px -10px 0; border:0; background:transparent; color:var(--text-muted); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+.task-edit:hover { background:var(--bg-input); color:var(--text-primary); }
+.dt-badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:var(--text-primary); background:var(--bg-input); padding:4px 10px; border-radius:12px; }
+.dt-title { font-family:'DM Serif Display',serif; font-weight:400; font-size:26px; line-height:1.2; margin:12px 0 10px; color:var(--text-primary); }
+.dt-meta { display:flex; align-items:center; gap:12px; font-size:13px; color:var(--text-muted); margin-bottom:18px; }
+.dt-meta > span:first-child { display:inline-flex; align-items:center; gap:6px; }
+.dt-label { font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.04em; margin:16px 0 8px; display:flex; justify-content:space-between; }
+.dt-frac { text-transform:none; letter-spacing:0; font-variant-numeric:tabular-nums; }
+.dt-desc { font-size:14px; line-height:1.5; color:var(--text-primary); outline:none; padding:8px 10px; margin:0 -10px; border-radius:8px; }
+.dt-desc:hover, .dt-desc:focus { background:var(--bg-input); }
+.dt-desc.empty { color:var(--text-muted); }
+.dt-subs { display:flex; flex-direction:column; }
+.dt-sub { display:flex; align-items:center; gap:10px; min-height:44px; border-bottom:1px solid var(--border); }
+.dt-sub-t { flex:1; font-size:14px; outline:none; color:var(--text-primary); }
+.dt-sub-t.done { text-decoration:line-through; color:var(--text-muted); }
+.dt-icon-btn { width:44px; height:44px; border:0; background:transparent; color:var(--text-muted); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.dt-icon-btn:hover { background:var(--bg-input); color:var(--text-primary); }
+.dt-add { display:flex; align-items:center; gap:10px; min-height:44px; color:var(--text-muted); }
+.dt-add input { flex:1; border:0; background:transparent; outline:none; font:inherit; font-size:14px; color:var(--text-primary); }
+.dt-alldone { display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--primary-light); color:var(--text-primary); border-radius:10px; padding:10px 12px; font-size:13px; font-weight:600; margin-bottom:8px; }
+.dt-m-head { display:flex; align-items:center; justify-content:space-between; padding:44px 8px 0 12px; }
+.dt-back { border:0; background:transparent; color:var(--primary); font:inherit; font-size:16px; font-weight:600; min-height:44px; padding:0 8px; cursor:pointer; }
+.dt-m-foot { position:absolute; left:0; right:0; bottom:0; padding:12px 16px 28px; background:var(--bg-card); border-top:1px solid var(--border); }
+.detail-layer { position:absolute; inset:0; z-index:40; display:flex; justify-content:flex-end; }
+.detail-scrim { position:absolute; inset:0; background:rgba(15,23,42,.35); }
+.detail-panel { position:relative; width:380px; max-width:90%; height:100%; background:var(--bg-card); box-shadow:-8px 0 30px rgba(15,23,42,.18); display:flex; flex-direction:column; }
+.dt-p-head { display:flex; justify-content:flex-end; gap:4px; padding:12px 12px 0; }
+.dt-p-body { flex:1; overflow-y:auto; padding:0 24px 16px; }
+.dt-p-foot { padding:14px 24px 20px; border-top:1px solid var(--border); }
+
+.search-bar { display:flex; align-items:center; gap:8px; height:44px; padding:0 4px 0 12px; margin-bottom:12px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; color:var(--text-muted); }
+.search-bar:focus-within { border-color:var(--primary); }
+.search-input { flex:1; min-width:0; border:0; background:transparent; outline:none; font:inherit; font-size:16px; color:var(--text-primary); }
+.btn-secondary-sm { border:1px solid var(--border); background:var(--bg-card); color:var(--text-primary); border-radius:10px; font:inherit; font-size:14px; font-weight:600; cursor:pointer; }
+.toast { position:absolute; left:50%; bottom:96px; transform:translateX(-50%); z-index:60; max-width:92%; display:flex; align-items:center; gap:14px; padding:6px 8px 6px 16px; background:#1E293B; color:#fff; border-radius:12px; font-size:14px; box-shadow:0 8px 24px rgba(15,23,42,.3); white-space:nowrap; }
+.toast button { background:none; border:0; color:#A5B4FC; font:inherit; font-weight:700; min-height:44px; padding:0 10px; cursor:pointer; }
+.desktop-frame .toast, .tablet-frame .toast { left:auto; right:24px; bottom:24px; transform:none; }
+.skeleton-row { display:flex; align-items:center; gap:12px; padding:14px 16px; border-top:1px solid var(--border); }
+.skeleton-row:first-child { border-top:0; }
+.sk-c { width:22px; height:22px; border-radius:50%; background:var(--bg-input); }
+.sk-l { flex:1; display:flex; flex-direction:column; gap:8px; }
+.sk-l i { display:block; height:10px; border-radius:5px; background:var(--bg-input); animation:skp 1.2s ease-in-out infinite; }
+.sk-l i:last-child { width:55%; }
+@keyframes skp { 50% { opacity:.45; } }
+@media (prefers-reduced-motion: reduce) { .sk-l i { animation:none; } }
+.m-btn-danger { margin-right:auto; background:transparent; border:0; color:var(--critique); font:inherit; font-weight:600; cursor:pointer; padding:0 8px; }
+.task-check { padding:0; background:transparent; cursor:pointer; position:relative; color:inherit; }
+.task-check.done { background:var(--success); }
+.task-check::after { content:''; position:absolute; inset:-12px; }
+.task-check:focus-visible { outline:2px solid var(--primary); outline-offset:2px; }
+
+/* ---- Édition explicite + animations ---- */
+.dt-desc:empty::before { content:attr(data-empty); color:var(--text-muted); }
+.dt-desc.dirty, .dt-sub.dirty .dt-sub-t { background:var(--bg-input); box-shadow:0 0 0 2px var(--primary); border-radius:8px; }
+.dt-edit-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.dt-edit-actions[hidden] { display:none; }
+.dt-edit-actions .btn-primary-sm, .dt-edit-actions .btn-secondary-sm { height:44px; padding:0 14px; }
+.dt-unsaved { flex:1; font-size:12px; color:var(--text-muted); min-width:120px; }
+.dt-sub .sub-actions { display:none; }
+.dt-sub.dirty .sub-actions { display:flex; }
+.dt-sub.dirty .sub-del { display:none; }
+.dt-sub .sub-ok { color:var(--success); }
+.dt-sub-t { padding:4px 6px; margin:0 -6px; }
+@keyframes slide-in-right { from { transform:translateX(24px); opacity:0; } to { transform:none; opacity:1; } }
+@keyframes fade-in { from { opacity:0; } to { opacity:1; } }
+@keyframes toast-in { from { opacity:0; translate:0 8px; } to { opacity:1; translate:0 0; } }
+@keyframes check-pop { 0% { transform:scale(.8); } 60% { transform:scale(1.12); } 100% { transform:scale(1); } }
+@keyframes bar-grow { from { width:var(--from); } }
+.detail-layer.anim .detail-panel { animation:slide-in-right .22s cubic-bezier(.2,.8,.2,1); }
+.detail-layer.anim .detail-scrim { animation:fade-in .2s ease-out; }
+.toast { animation:toast-in .18s ease-out; }
+.task-check { transition:background-color .15s ease, border-color .15s ease; }
+.task-check.pop { animation:check-pop .22s ease-out; }
+.progress-bar-fill.grow { animation:bar-grow .3s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .detail-layer.anim .detail-panel, .detail-layer.anim .detail-scrim, .toast, .task-check.pop, .progress-bar-fill.grow { animation:none; }
+  .task-check { transition:none; }
+}
+.dt-desc-ro { font-size:14px; line-height:1.5; color:var(--text-primary); margin:0; white-space:pre-wrap; }
+.dt-desc-ro.empty { color:var(--text-muted); }
+.trash-item { opacity:1; flex-wrap:wrap; }
+.trash-meta { flex-basis:100%; font-size:12px; color:var(--text-muted); margin:-6px 0 0 32px; }
+.trash-meta .soon { color:var(--critique); font-weight:600; }
+.trash-btn { border:0; background:transparent; font:inherit; font-size:13px; font-weight:600; min-height:44px; padding:0 10px; cursor:pointer; color:var(--primary); border-radius:8px; }
+.trash-btn.danger { color:var(--critique); }
+.trash-btn:hover { background:var(--bg-input); }
+.trash-plan { display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--primary-light); border-radius:10px; padding:10px 12px; font-size:13px; margin-bottom:12px; }
+.trash-empty { padding:28px 0; text-align:center; color:var(--text-muted); font-size:14px; }
+.sidebar-trash { margin-top:8px; border-top:1px solid rgba(255,255,255,.1); border-radius:0 0 8px 8px; padding-top:12px; }
+.nav-badge { margin-left:auto; min-width:20px; padding:1px 6px; border-radius:10px; background:rgba(129,140,248,.3); color:inherit; font-size:12px; font-weight:700; text-align:center; }
+.profile-row .nav-badge { background:var(--primary-light); color:var(--primary); }
 </style>
 <link rel="stylesheet" href="modal.css">
 </head>
@@ -1189,6 +1284,8 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
     <option value="profile">Profil</option>
     <option value="trash">Corbeille</option>
     <option value="empty">État vide</option>
+    <option value="tasks-loading">Tâches (chargement)</option>
+    <option value="tasks-error">Tâches (erreur)</option>
     <option value="task-modal">Nouvelle tâche (modale)</option>
     <option value="task-modal-filled">Nouvelle tâche (remplie)</option>
     <option value="task-modal-error">Nouvelle tâche (erreur)</option>
@@ -1279,6 +1376,8 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
    ICONES (SVG inline, trait 1.8, héritent de currentColor — équivalent Ionicons de l'appli)
    ============================================================ */
 const ICONS = {
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/>',
+  close:'<path d="M6 6l12 12M18 6L6 18"/>',
   task:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/>',
   check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
   folder:'<path d="M3.5 7.5A2 2 0 015.5 5.5h4l2 2.5h7a2 2 0 012 2v7.5a2 2 0 01-2 2h-13a2 2 0 01-2-2z"/>',
@@ -1318,7 +1417,8 @@ const TASKS = [
     quadrant: "critique",
     folder: "Priozen App",
     folderIcon: ic('laptop', 13),
-    subtasks: { done: 1, total: 3 },
+    subtasks: [{t:'Maquetter l\'écran',d:true},{t:'Brancher l\'API d\'authentification',d:false},{t:'Gérer les messages d\'erreur',d:false}],
+    description: 'Écran de connexion complet : champs e-mail et mot de passe, lien « Mot de passe oublié », états d\'erreur.',
     date: "Aujourd'hui",
     dateType: "today",
     done: false
@@ -1340,7 +1440,8 @@ const TASKS = [
     quadrant: "schedule",
     folder: "Priozen App",
     folderIcon: ic('laptop', 13),
-    subtasks: null,
+    subtasks: [{t:'Configurer Vitest',d:false},{t:'Écrire les premiers tests',d:false}],
+    description: '',
     date: "Dans 7 jours",
     dateType: "future",
     done: false
@@ -1379,6 +1480,122 @@ const TASKS = [
     done: false
   }
 ];
+
+const FOLDER_COLORS = { 'Priozen App':'#14B8A6', 'Travail':'#0EA5E9', 'Perso':'#EC4899', 'Études':'#84CC16' };
+function folderDot(name, size) { return `<span class="folder-dot" style="width:${size||8}px;height:${size||8}px;background:${FOLDER_COLORS[name]||'#64748B'}"></span>`; }
+function subProg(t) { const a = t.subtasks || []; return { done: a.filter(x=>x.d).length, total: a.length }; }
+let detailId = null;
+function openDetail(id) { detailAnim = true; detailId = id; renderAll(); }
+function closeDetail() { detailId = null; renderAll(); }
+let popKey = null, progFrom = null, detailAnim = false;
+const escAttr = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+function toggleSub(i) {
+  const t = TASKS.find(x=>x.id===detailId);
+  const p = subProg(t); progFrom = p.total ? Math.round(p.done / p.total * 100) : 0;
+  t.subtasks[i].d = !t.subtasks[i].d; popKey = 's' + i; renderAll(); popKey = null; progFrom = null;
+}
+function showReadonlyHint() { showToast('Pour modifier, utilisez le crayon'); }
+function finishTask() { const t = TASKS.find(x=>x.id===detailId); t.done = true; detailId = null; renderAll(); showToast('Tâche terminée', () => { t.done = false; renderAll(); }); }
+function toggleDone(id) {
+  const t = TASKS.find(x => x.id === id); if (!t) return;
+  t.done = !t.done; popKey = 't' + id; renderAll(); popKey = null;
+  showToast(t.done ? 'Tâche terminée' : 'Tâche rouverte', () => { t.done = !t.done; renderAll(); });
+}
+function reopenTask() { const t = TASKS.find(x=>x.id===detailId); t.done = false; renderAll(); }
+let editId = null, searchQuery = '', listState = 'ok', toastTimer = null;
+const PLAN = { name: 'Gratuit', retention: 7, premiumRetention: 30 };  // durée de conservation selon l'offre
+const TRASH = [
+  { id: 901, title: 'Réviser les maquettes v1', quadrant: 'secondary', folder: 'Priozen App', subtasks: null, date: null, dateType: null, done: false, deletedDays: 1 },
+  { id: 902, title: "Appel avec l'équipe design", quadrant: 'delegate', folder: 'Travail', subtasks: null, date: null, dateType: null, done: false, deletedDays: 3 },
+  { id: 903, title: 'Mettre à jour les dépendances npm', quadrant: 'schedule', folder: 'Priozen App', subtasks: null, date: null, dateType: null, done: false, deletedDays: 6 }
+];
+let trashConfirm = null;   // null | 'all' | id de la tâche dont on confirme la suppression définitive
+function restoreTask(id) {
+  const k = TRASH.findIndex(x => x.id === id); if (k < 0) return;
+  const t = TRASH.splice(k, 1)[0]; delete t.deletedDays; TASKS.push(t); renderAll();
+  showToast('Tâche restaurée', () => { t.deletedDays = 0; TASKS.splice(TASKS.indexOf(t), 1); TRASH.splice(k, 0, t); renderAll(); });
+}
+function askPurge(what) { trashConfirm = what; renderAll(); }
+function purge(what) {
+  if (what === 'all') TRASH.length = 0; else { const k = TRASH.findIndex(x => x.id === what); if (k >= 0) TRASH.splice(k, 1); }
+  trashConfirm = null; renderAll(); showToast(what === 'all' ? 'Corbeille vidée' : 'Tâche supprimée définitivement');
+}
+function editTask(id) { editId = id; openModal('filled'); }
+function deleteTask(id) {
+  const i = TASKS.findIndex(x => x.id === id); if (i < 0) return;
+  const t = TASKS.splice(i, 1)[0]; t.deletedDays = 0; TRASH.unshift(t);
+  if (detailId === id) detailId = null;
+  modalOpen = false; renderAll();
+  showToast('Tâche envoyée à la corbeille', () => { TRASH.splice(TRASH.indexOf(t), 1); delete t.deletedDays; TASKS.splice(Math.min(i, TASKS.length), 0, t); renderAll(); });
+}
+function showToast(msg, undo) {
+  document.querySelectorAll('.toast').forEach(e => e.remove());
+  clearTimeout(toastTimer);
+  const frame = document.getElementById('frame-' + currentDevice); if (!frame) return;
+  const el = document.createElement('div'); el.className = 'toast'; el.setAttribute('role', 'status');
+  el.innerHTML = '<span>' + msg + '</span>' + (undo ? '<button type="button">Annuler</button>' : '');
+  if (undo) el.querySelector('button').onclick = () => { el.remove(); undo(); };
+  frame.appendChild(el);
+  toastTimer = setTimeout(() => el.remove(), 5000);
+}
+function onSearch(v) { searchQuery = v; renderAll(); const i = document.querySelector('#frame-' + currentDevice + ' .search-input'); if (i) { i.focus(); i.setSelectionRange(v.length, v.length); } }
+function searchBarHTML() {
+  const q = searchQuery.replace(/"/g, '&quot;');
+  return `<div class="search-bar">${ic('search',18)}<input class="search-input" type="search" placeholder="Rechercher une tâche" aria-label="Rechercher une tâche" value="${q}" oninput="onSearch(this.value)">${searchQuery ? `<button type="button" class="dt-icon-btn" aria-label="Effacer la recherche" onclick="onSearch('')">${ic('close',16)}</button>` : ''}</div>`;
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && detailId !== null && !modalOpen) closeDetail(); });
+
+function detailBodyHTML(t) {
+  const q = QUADRANTS.find(x => x.key === t.quadrant);
+  const pr = subProg(t);
+  const pct = pr.total ? Math.round(pr.done / pr.total * 100) : 0;
+  const all = pr.total > 0 && pr.done === pr.total && !t.done;
+  return `
+    <span class="dt-badge"><span class="task-quad-dot" style="background:${Q_DOT[q.key]}"></span>${q.label}</span>
+    <h2 class="dt-title">${t.title}</h2>
+    <div class="dt-meta">
+      ${t.folder ? `<span>${folderDot(t.folder,9)} ${t.folder}</span>` : ''}
+      ${t.date ? `<span class="task-date ${t.dateType}">${t.date}</span>` : ''}
+    </div>
+    <div class="dt-label">Description</div>
+    <p class="dt-desc-ro${t.description ? '' : ' empty'}">${t.description || 'Aucune description'}</p>
+    <div class="dt-label">Sous-tâches ${pr.total ? `<span class="dt-frac">${pr.done}/${pr.total}</span>` : ''}</div>
+    ${pr.total ? `<div class="progress-bar-wrap" style="margin-bottom:8px"><div class="progress-bar-fill${progFrom !== null ? ' grow' : ''}" style="width:${pct}%${progFrom !== null ? ';--from:' + progFrom + '%' : ''}"></div></div>` : ''}
+    ${all ? `<div class="dt-alldone"><span>Tout est fait. Terminer la tâche ?</span><button class="btn-primary-sm" onclick="finishTask()">Terminer</button></div>` : ''}
+    <div class="dt-subs">
+      ${(t.subtasks||[]).map((s,i) => `
+        <div class="dt-sub">
+          <button class="task-check ${s.d?'done':''}${popKey === 's' + i ? ' pop' : ''}" style="margin:0;background:${s.d?'var(--success)':'transparent'}" role="checkbox" aria-checked="${s.d}" aria-label="${s.d?'Décocher':'Cocher'} : ${escAttr(s.t)}" onclick="toggleSub(${i})">${s.d?ic('check',14):''}</button>
+          <span class="dt-sub-t ${s.d?'done':''}">${s.t}</span>
+        </div>`).join('') || '<div class="dt-desc-ro empty">Aucune sous-tâche</div>'}
+    </div>`;
+}
+function detailMobileHTML() {
+  const t = TASKS.find(x => x.id === detailId);
+  return `
+    <div class="dt-m-head">
+      <button class="dt-back" onclick="closeDetail()">‹ Tâches</button>
+      <div style="display:flex"><button class="dt-icon-btn" aria-label="Mettre à la corbeille" onclick="deleteTask(detailId)">${ic('trash',20)}</button><button class="dt-icon-btn" aria-label="Modifier la tâche" onclick="editTask(detailId)">${ic('pen',20)}</button></div>
+    </div>
+    <div style="padding:8px 20px 110px">${detailBodyHTML(t)}</div>
+    <div class="dt-m-foot">${t.done ? `<button class="btn-secondary-sm" style="width:100%;height:48px;font-size:15px" onclick="reopenTask()">Rouvrir la tâche</button>` : `<button class="btn-primary-sm" style="width:100%;height:48px;font-size:15px" onclick="finishTask()">Marquer comme terminée</button>`}</div>`;
+}
+function renderDetailPanel() {
+  document.querySelectorAll('.detail-layer').forEach(el => el.remove());
+  if (detailId === null || currentDevice === 'mobile' || modalOpen) return;
+  const frame = document.getElementById(currentDevice === 'tablet' ? 'frame-tablet' : 'frame-desktop');
+  if (!frame || !['dashboard'].includes(currentScreen)) return;
+  const t = TASKS.find(x => x.id === detailId);
+  const layer = document.createElement('div');
+  layer.className = 'detail-layer' + (detailAnim ? ' anim' : ''); detailAnim = false;
+  layer.innerHTML = `<div class="detail-scrim" onclick="closeDetail()"></div>
+    <aside class="detail-panel" role="dialog" aria-label="Détail de la tâche">
+      <div class="dt-p-head" style="justify-content:space-between"><button class="dt-icon-btn" aria-label="Mettre à la corbeille" onclick="deleteTask(detailId)">${ic('trash',20)}</button><span style="display:flex"><button class="dt-icon-btn" aria-label="Modifier la tâche" onclick="editTask(detailId)">${ic('pen',20)}</button><button class="dt-icon-btn" aria-label="Fermer" onclick="closeDetail()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></span></div>
+      <div class="dt-p-body">${detailBodyHTML(t)}</div>
+      <div class="dt-p-foot">${t.done ? `<button class="btn-secondary-sm" style="width:100%;height:42px" onclick="reopenTask()">Rouvrir la tâche</button>` : `<button class="btn-primary-sm" style="width:100%;height:42px" onclick="finishTask()">Marquer comme terminée</button>`}</div>
+    </aside>`;
+  frame.appendChild(layer);
+}
 
 const QUADRANTS = [
   { key: "critique", label: "Critique", description: "Important & urgent" },
@@ -1430,6 +1647,12 @@ function toggleTheme() {
 }
 
 function switchScreen(name) {
+  detailId = null;
+  if (name.indexOf('tasks-') === 0) {
+    currentScreen = 'dashboard'; activeNavKey = 'dashboard'; listState = name.slice(6); modalOpen = false;
+    renderAll(); return;
+  }
+  listState = 'ok';
   if (name.indexOf('task-modal') === 0) {
     currentScreen = 'dashboard';
     activeNavKey = 'dashboard';
@@ -1443,6 +1666,7 @@ function switchScreen(name) {
   // Update nav active key
   const match = NAV_ITEMS.find(n => n.screen === name);
   if (match) activeNavKey = match.key;
+  if (name === 'trash') activeNavKey = currentDevice === 'mobile' ? 'profile' : 'trash';
   renderAll();
 }
 
@@ -1455,6 +1679,7 @@ function renderAll() {
   renderTablet();
   renderDesktop();
   renderModal();
+  renderDetailPanel();
 }
 
 /* ============================================================
@@ -1468,7 +1693,12 @@ function buildSidebar(containerId) {
       <span class="nav-icon">${item.icon}</span>
       <span>${item.label}</span>
     </div>
-  `).join('');
+  `).join('') + `
+    <div class="sidebar-nav-item sidebar-trash ${activeNavKey === 'trash' ? 'active' : ''}" onclick="switchScreen('trash')">
+      <span class="nav-icon">${ic('trash', 22)}</span>
+      <span>Corbeille</span>
+      ${TRASH.length ? `<span class="nav-badge" aria-label="${TRASH.length} tâche(s) en corbeille">${TRASH.length}</span>` : ''}
+    </div>`;
 }
 
 function buildSidebars() {
@@ -1484,20 +1714,22 @@ function buildSidebars() {
 function taskItemHTML(task, showQuadrant) {
   const q = showQuadrant ? QUADRANTS.find(x => x.key === task.quadrant) : null;
   const qDot = { critique: 'var(--critique)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
+  const pr = subProg(task);
   return `
-    <div class="task-item">
-      <div class="task-check ${task.done ? 'done' : ''}">
+    <div class="task-item" onclick="openDetail(${task.id})">
+      <button type="button" class="task-check ${task.done ? 'done' : ''}${popKey === 't' + task.id ? ' pop' : ''}" role="checkbox" aria-checked="${task.done}" aria-label="${task.done ? 'Rouvrir' : 'Terminer'} : ${task.title.replace(/"/g,'&quot;')}" onclick="event.stopPropagation();toggleDone(${task.id})">
         ${task.done ? ic('check', 14) : ''}
-      </div>
+      </button>
       <div class="task-body">
         <div class="task-title ${task.done ? 'done' : ''}">${task.title}</div>
         <div class="task-meta">
           ${q ? `<span class="task-quad"><span class="task-quad-dot" style="background:${qDot[q.key]}"></span>${q.label}</span>` : ''}
-          ${task.folder ? `<span class="task-folder">${task.folderIcon} ${task.folder}</span>` : ''}
-          ${task.subtasks ? `<span class="task-subtasks">${task.subtasks.done}/${task.subtasks.total} sous-tâches</span>` : ''}
+          ${task.folder ? `<span class="task-folder">${folderDot(task.folder)} ${task.folder}</span>` : ''}
+          ${pr.total ? `<span class="task-subtasks">${ic('check',12)} ${pr.done}/${pr.total}</span>` : ''}
           ${task.date ? `<span class="task-date ${task.dateType}">${task.date}</span>` : ''}
         </div>
       </div>
+      <button class="task-edit" aria-label="Modifier la tâche" onclick="event.stopPropagation();editTask(${task.id})">${ic('pen',16)}</button>
     </div>`;
 }
 
@@ -1524,7 +1756,8 @@ let taskTab = 'todo';      // 'todo' | 'late' | 'done'
 let mobileFilter = null;   // null | clé de quadrant
 const TAB_LABELS = { todo: 'À faire', late: 'En retard', done: 'Terminées' };
 const Q_DOT = { critique: 'var(--critique)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
-function tabTasks(tab) {
+function tabTasks(tab) { return tabTasksRaw(tab).filter(t => !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase())); }
+function tabTasksRaw(tab) {
   if (tab === 'done') return TASKS.filter(t => t.done);
   if (tab === 'late') return TASKS.filter(t => !t.done && t.dateType === 'late');
   return TASKS.filter(t => !t.done);
@@ -1557,9 +1790,13 @@ function mobileOverviewStrip(completedCount, totalCount, pct, device) {
 }
 
 function taskListHTML(device) {
+  if (listState === 'loading') return `<div class="quadrant-card" aria-busy="true" aria-label="Chargement des tâches">${[0,1,2,3].map(() => '<div class="skeleton-row"><span class="sk-c"></span><span class="sk-l"><i></i><i></i></span></div>').join('')}</div>`;
+  if (listState === 'error') return `<div class="quadrant-card"><div class="ov-empty" role="alert" style="padding:32px 16px"><div style="font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:6px">Impossible de charger vos tâches</div><div style="margin-bottom:14px">Vérifiez votre connexion puis réessayez.</div><button type="button" class="btn-primary-sm" onclick="listState='ok';renderAll()">Réessayer</button></div></div>`;
   const list = mobileFilter ? tabTasks(taskTab).filter(t => t.quadrant === mobileFilter) : tabTasks(taskTab);
   const fq = mobileFilter ? QUADRANTS.find(x => x.key === mobileFilter) : null;
   const filterBar = fq ? `<div class="ov-filter-bar"><span>Filtre : ${fq.label} · ${list.length}</span><button type="button" onclick="setMobileFilter(null)">Tout afficher</button></div>` : '';
+  if (searchQuery && list.length === 0) return filterBar + `<div class="quadrant-card"><div class="ov-empty">Aucun résultat pour « ${searchQuery} »</div></div>`;
+  if (taskTab === 'todo' && list.length === 0) return filterBar + `<div class="quadrant-card"><div class="ov-empty">Rien à faire pour le moment</div></div>`;
   if (taskTab === 'todo') {
     const qs = fq ? [fq] : QUADRANTS;
     const grid = device === 'desktop' && !fq;
@@ -1584,6 +1821,7 @@ function screenDashboard(device) {
         <div class="mobile-avatar">MD</div>
       </div>
       <div class="screen-content-mobile" style="padding:12px 16px 80px">
+        ${searchBarHTML()}
         ${mobileOverviewStrip(completedCount, totalCount, pct, 'mobile')}
         ${taskTabsHTML('mobile')}
         ${taskListHTML('mobile')}
@@ -1616,6 +1854,7 @@ function screenDashboard(device) {
         <div class="progress-bar-fill" style="width:${pct}%"></div>
       </div>
     </div>
+    ${searchBarHTML()}
     <div class="ov-wide-head">
       <div class="ov-wide-strip">${mobileOverviewStrip(completedCount, totalCount, pct, device)}</div>
       <button class="btn-primary-sm ov-add" onclick="openModal()">+ Nouvelle tâche</button>
@@ -1780,9 +2019,10 @@ function screenFolder() {
       <div class="folder-card">
         <div class="folder-icon" style="background:${f.color}">${f.icon}</div>
         <div class="folder-info">
-          <div class="folder-name">${f.name}</div>
+          <div class="folder-name">${folderDot(f.name,10)} ${f.name}</div>
           <div class="folder-count">${f.count} tâche${f.count !== 1 ? 's' : ''}</div>
         </div>
+        <button class="task-edit" aria-label="Modifier le dossier" onclick="event.stopPropagation()">${ic('pen',16)}</button>
         <span class="folder-arrow">›</span>
       </div>`).join('')}`;
 }
@@ -1797,6 +2037,7 @@ function screenProfile() {
     </div>
     <div class="profile-section">
       <div class="profile-row"><span class="profile-row-label">${ic('pen', 18)}<span>Modifier le profil</span></span><span class="profile-row-value">›</span></div>
+      ${currentDevice === 'mobile' ? `<div class="profile-row" onclick="switchScreen('trash')" style="cursor:pointer"><span class="profile-row-label">${ic('trash', 18)}<span>Corbeille</span></span><span class="profile-row-value">${TRASH.length ? '<span class="nav-badge">' + TRASH.length + '</span> ' : ''}›</span></div>` : ''}
       <div class="profile-row"><span class="profile-row-label">${ic('lock', 18)}<span>Sécurité</span></span><span class="profile-row-value">›</span></div>
       <div class="profile-row"><span class="profile-row-label">${ic('bell', 18)}<span>Notifications</span></span><span class="profile-row-value">Activées ›</span></div>
     </div>
@@ -1963,25 +2204,24 @@ function screenAnalytics(device) {
 
 // ---- SCREEN: Trash ----
 function screenTrash(device) {
-  const trashItems = [
-    "Réviser les maquettes v1",
-    "Appel avec l'équipe design",
-    "Mettre à jour les dépendances npm"
-  ];
-  const content = `
-    <div class="section-title">Corbeille</div>
-    <div class="section-subtitle">Ces tâches seront supprimées définitivement dans 7 jours.</div>
-    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:4px 16px;box-shadow:var(--shadow-sm)">
-      ${trashItems.map(t => `
+  const left = t => PLAN.retention - t.deletedDays;
+  const rows = TRASH.map(t => `
         <div class="trash-item">
           <span class="trash-icon">${ic('trash', 20)}</span>
-          <span class="trash-title">${t}</span>
-          <span class="trash-restore">Restaurer</span>
-        </div>`).join('')}
-    </div>
-    <div style="margin-top:16px;text-align:center">
-      <button style="font-size:13px;color:var(--critique);background:none;border:none;cursor:pointer;font-weight:500">Vider la corbeille</button>
-    </div>`;
+          <span class="trash-title">${t.title}</span>
+          ${trashConfirm === t.id
+            ? `<button class="trash-btn danger" onclick="purge(${t.id})">Confirmer</button><button class="trash-btn" onclick="askPurge(null)">Annuler</button>`
+            : `<button class="trash-btn" onclick="restoreTask(${t.id})">Restaurer</button><button class="trash-btn danger" aria-label="Supprimer définitivement : ${escAttr(t.title)}" onclick="askPurge(${t.id})">Supprimer</button>`}
+          <span class="trash-meta">Supprimée ${t.deletedDays === 0 ? "aujourd'hui" : 'il y a ' + t.deletedDays + ' j'} · <span class="${left(t) <= 2 ? 'soon' : ''}">purge dans J-${left(t)}</span></span>
+        </div>`).join('');
+  const content = `
+    <div class="section-title">Corbeille</div>
+    <div class="section-subtitle">Les tâches supprimées sont conservées ${PLAN.retention} jours, puis effacées définitivement.</div>
+    <div class="trash-plan"><span>Offre ${PLAN.name} : conservation ${PLAN.retention} jours. Avec Premium : ${PLAN.premiumRetention} jours.</span><button class="btn-primary-sm" style="height:44px;padding:0 14px">Découvrir Premium</button></div>
+    ${TRASH.length ? `<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:4px 16px;box-shadow:var(--shadow-sm)">${rows}</div>
+    <div style="margin-top:16px;text-align:center">${trashConfirm === 'all'
+      ? `<span style="font-size:13px">Supprimer définitivement ${TRASH.length} tâche(s) ?</span> <button class="trash-btn danger" onclick="purge('all')">Confirmer</button><button class="trash-btn" onclick="askPurge(null)">Annuler</button>`
+      : `<button class="trash-btn danger" onclick="askPurge('all')">Vider la corbeille</button>`}</div>` : `<div class="trash-empty">La corbeille est vide.</div>`}`;
 
   if (device === 'mobile') {
     return `
@@ -2050,7 +2290,7 @@ function renderMobile() {
     // Auth: centered, no notch area issues
     html = `<div style="display:flex;align-items:center;justify-content:center;min-height:100%;padding:24px 16px;">${getAuthContent()}</div>`;
   } else if (currentScreen === 'dashboard') {
-    html = screenDashboard('mobile');
+    html = detailId !== null ? detailMobileHTML() : screenDashboard('mobile');
   } else if (currentScreen === 'folder') {
     html = `
       <div class="mobile-header"><span class="mobile-logo">Prio<span>zen</span></span><div class="mobile-avatar">MD</div></div>
@@ -2233,6 +2473,7 @@ function getAuthContent() {
    MOBILE NAV
    ============================================================ */
 function switchScreenMobile(key) {
+  detailId = null;
   const map = { dashboard:'dashboard', folder:'folder', focus:'focus', analytics:'analytics', profile:'profile' };
   if (map[key]) {
     modalOpen = false;
