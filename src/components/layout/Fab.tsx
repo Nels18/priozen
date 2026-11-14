@@ -1,7 +1,6 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import type { JSX } from 'react';
 import { Pressable } from 'react-native';
-import fixedColors from '@/src/theme/fixedColors';
 
 interface FabProps {
   label: string;
@@ -20,7 +19,7 @@ export function Fab({ label, onPress, bottom }: FabProps): JSX.Element {
       style={{ bottom }}
       className="absolute right-5 h-[52px] w-[52px] items-center justify-center rounded-full bg-primary shadow-lg active:bg-primary-hover"
     >
-      <Ionicons name="add" size={28} color={fixedColors.white} />
+      <Icon name="add" size={28} color="white" />
     </Pressable>
   );
 }

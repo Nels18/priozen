@@ -1,5 +1,6 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import type { ComponentProps, ComponentRef, JSX, Ref } from 'react';
+import type { IconName } from '@/src/components/ui/Icon';
+import { Icon } from '@/src/components/ui/Icon';
+import type { ComponentRef, JSX, Ref } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TextInputProps } from 'react-native';
@@ -14,7 +15,7 @@ interface TextFieldProps extends Omit<TextInputProps, 'secureTextEntry'> {
   /** Shown after the label, muted ("(facultatif)"). */
   optionalLabel?: string;
   /** Decorative icon inside the field, on the left. */
-  icon?: ComponentProps<typeof Ionicons>['name'];
+  icon?: IconName;
   /** To move the focus to the field (e.g. on a validation error). */
   inputRef?: Ref<ComponentRef<typeof TextInput>>;
   /** Spacing around the field (default: margin below). */
@@ -58,12 +59,7 @@ export function TextField({
       >
         {icon && (
           <View className={`pl-3 ${multiline ? 'pt-3' : ''}`}>
-            <Ionicons
-              name={icon}
-              aria-hidden
-              size={20}
-              color={iconColors.muted}
-            />
+            <Icon name={icon} size={20} color="muted" />
           </View>
         )}
         <TextInput
@@ -97,10 +93,10 @@ export function TextField({
             hitSlop={8}
             className="px-3"
           >
-            <Ionicons
+            <Icon
               name={isRevealed ? 'eye-off-outline' : 'eye-outline'}
               size={20}
-              color={iconColors.muted}
+              color="muted"
             />
           </Pressable>
         )}
@@ -111,12 +107,7 @@ export function TextField({
           accessibilityLiveRegion="polite"
           className="mt-1.5 flex-row items-center gap-1.5"
         >
-          <Ionicons
-            name="alert-circle-outline"
-            aria-hidden
-            size={14}
-            color={iconColors.critical}
-          />
+          <Icon name="alert-circle-outline" size={14} color="critical" />
           <Text className="flex-1 font-sans text-xs text-critical">
             {error}
           </Text>

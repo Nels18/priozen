@@ -26,7 +26,7 @@ Le backend et la base de données ne sont pas encore prêts : le frontend tourne
 
 GitHub Actions (`.github/workflows/`) :
 
-- `ci.yml` — push et PR vers `main` / `develop` : scan de secrets (gitleaks), puis lint, typecheck, tests Vitest (fichiers modifiés sur une PR, suite complète avec couverture sur un push) et build web de production (`expo export --platform web`, rendu statique compris)
+- `ci.yml` — push et PR vers `main` / `develop` : scan de secrets (gitleaks), puis lint, typecheck, tests Vitest (fichiers modifiés sur une PR, plus le test anti-émoji, qui n'importe aucun fichier de l'app et serait sinon ignoré ; suite complète avec couverture sur un push) et build web de production (`expo export --platform web`, rendu statique compris)
 - `branch-guard.yml` — PR vers `main` : seule `develop` peut y être mergée
 - `branch-name.yml` — toute PR : le nom de branche respecte `.validate-branch-namerc.js` (même règle que le hook `pre-push`)
 - `claude-review.yml` — PR vers `develop` : relecture par Claude des PR qui portent le label `ai-review`, à l'ajout du label, au passage en « prête » et à chaque nouveau push (workflow réutilisable de `Nels18/dev-agents`, guidelines dans `.github/review-guidelines.md`) ; PR de doc ignorées
@@ -56,7 +56,7 @@ Workflows EAS (`.eas/workflows/`) :
 Déclarées comme variables CSS dans `global.css` (bascule light/dark automatique via `prefers-color-scheme`) et exposées en classes NativeWind dans `tailwind.config.js` : `bg-page`, `bg-card`, `bg-input`, `bg-sidebar`, `text-text`, `text-muted`, `border-border`, `bg-primary` / `primary-hover` / `primary-light`, et par quadrant `critical`, `schedule`, `delegate`, `secondary` (+ variante `-bg`). Toujours utiliser ces classes sémantiques, jamais de couleur en dur ni de variante `dark:`.
 
 - Couleurs identiques dans les deux thèmes (blanc, premier plan de la sidebar) : `src/theme/fixedColors.js`, utilisé par `tailwind.config.js` (`text-sidebar-text`, `bg-sidebar-active`…) et par les composants qui attendent une couleur brute
-- Props de couleur brute qui suivent le thème (icônes, `placeholderTextColor`) : `useIconColors()` (`src/theme/useIconColors.ts`), à garder synchronisé avec `global.css`
+- Props de couleur brute qui suivent le thème (`placeholderTextColor`…) : `useIconColors()` (`src/theme/useIconColors.ts`), à garder synchronisé avec `global.css` ; ses clés (`primary`, `muted`, `critical`, `white`, `sidebarText`, un par quadrant) sont aussi les couleurs du composant `Icon`
 - Couleurs par quadrant : `QUADRANT_CLASSES` (`src/tasks/quadrants.ts`) — pastille, badge, texte ; ne jamais réécrire les classes `bg-critical`… à la main
 
 ## Maquette
@@ -72,7 +72,7 @@ Décisions de design (maquette ; livrées par MOB-01 et DASH-06) :
 - **Case = cocher, clic = consulter, crayon = modifier** (toute liste de ressources) : sur une tâche, la case à gauche la coche / décoche sans ouvrir le détail ; un clic sur le reste de la ligne ouvre son détail (tâche : panneau latéral sur tablette et bureau, écran plein écran sur mobile ; dossier : `/folders/:id`) ; l'édition passe par l'icône crayon à droite de la ligne (cible ≥ 44 px, libellé accessible, sans ouvrir le détail). La ligne d'une tâche affiche « ✓ 1/3 » si elle a des sous-tâches. Une corbeille n'a pas de crayon (restaurer / purger)
 - **Pastille de couleur du dossier** à côté de son nom (palette de 8 couleurs distincte des quadrants, FOLD-07) ; la pastille du quadrant n'apparaît que dans les listes à plat (« En retard », « Terminées »)
 - **Détail d'une tâche** : lecture seule. Le clic sur une ligne ouvre le détail (panneau latéral sur tablette/bureau, écran dédié sur mobile). La seule action sur les sous-tâches y est cocher / décocher. Ajout, renommage et suppression des sous-tâches, comme toute modification de la tâche, passent par la modale d'édition (crayon) et sont enregistrés ensemble à la validation.
-- **Pas d'émoji dans l'UI** : tout pictogramme est une icône Ionicons (`@expo/vector-icons`), décorative = masquée aux lecteurs d'écran ; via le composant `Icon` dès qu'il existe (UX-04)
+- **Pas d'émoji dans l'UI** : tout pictogramme passe par le composant `Icon` (`src/components/ui/Icon.tsx`, Ionicons) : `<Icon name="…" size={16} color="muted" />`, taille parmi celles de la maquette (`IconSize`), couleur = jeton du thème ; sans `label`, l'icône est décorative et masquée aux lecteurs d'écran, avec `label` elle est lue. Importer `@expo/vector-icons` ailleurs est refusé par ESLint, et `src/test/noEmoji.test.ts` échoue si un émoji apparaît dans `app/` ou `src/`
 
 ## Badges Eisenhower
 
@@ -125,10 +125,11 @@ Vues :
 - Les mocks importent les types depuis `src/types/models.ts` ; le code de l'app n'importe **jamais** depuis `src/mocks/`
 - Tests : URL d'API `TEST_API_URL` (`src/test/constants.ts`) ; les valeurs attendues des assertions restent écrites en dur
 - Composants en PascalCase, hooks en camelCase avec préfixe `use`
-- ESLint (`eslint.config.js`) fait respecter trois de ces règles :
+- ESLint (`eslint.config.js`) fait respecter quatre de ces règles :
   - pas de couleur hexadécimale ni de variante `dark:` dans une prop `*ClassName` (sauf `src/theme/**`) ;
   - pas de texte brut affiché dans le JSX (`i18next/no-literal-string`, sauf tests et `src/mocks/**`) : tout texte passe par `t()`, un nom de marque passe par une constante nommée (cf. `Logo`) ;
-  - pas d'URL `http(s)://` écrite en dur (sauf tests, `src/test/**` et `src/mocks/**`)
+  - pas d'URL `http(s)://` écrite en dur (sauf tests, `src/test/**` et `src/mocks/**`) ;
+  - pas d'import de `@expo/vector-icons` hors du composant `Icon`
 - Styles via classes NativeWind (`className`), pas de StyleSheet sauf cas non couvert par Tailwind
 - Alias d'import `@/*` disponible (voir `tsconfig.json`)
 - **Aucun texte affiché en dur** : tout passe par i18next (`src/i18n/`). Un namespace par domaine (`common`, `auth`, `dashboard`…), un fichier JSON par langue et par namespace dans `src/i18n/locales/{fr,en}/`. Le français est la langue de référence (les types des clés en dérivent) ; chaque clé doit exister en `fr` et en `en` (test de parité). Nouveau namespace → créer les deux JSON puis l'enregistrer dans `src/i18n/resources.ts`.

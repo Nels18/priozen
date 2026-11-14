@@ -1,9 +1,8 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import { router, usePathname } from 'expo-router';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
-import fixedColors from '@/src/theme/fixedColors';
 import type { User } from '@/src/types/models';
 import { getActiveNavItem, NAV_ITEMS } from '@/src/navigation/navItems';
 import { Avatar } from '../ui/Avatar';
@@ -42,10 +41,10 @@ export function Sidebar({ user, width }: SidebarProps): JSX.Element {
                 isActive ? 'bg-sidebar-active' : ''
               }`}
             >
-              <Ionicons
+              <Icon
                 name={item.icon}
                 size={18}
-                color={isActive ? fixedColors.white : fixedColors.sidebar.text}
+                color={isActive ? 'white' : 'sidebarText'}
               />
               <Text
                 className={`font-sans-medium text-sm ${

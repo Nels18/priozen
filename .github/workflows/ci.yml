@@ -52,6 +52,13 @@ jobs:
         if: github.event_name == 'pull_request'
         run: npx vitest run --changed origin/${{ github.base_ref }} --coverage
 
+      # --changed only picks tests that import a changed file. This guard reads
+      # app/ and src/ from disk and imports nothing, so it never would: a PR
+      # adding an emoji would only fail after the merge. Run it on every PR.
+      - name: Tests (PR — no emoji guard)
+        if: github.event_name == 'pull_request'
+        run: npx vitest run src/test/noEmoji.test.ts
+
       - name: Tests (push — full suite)
         if: github.event_name == 'push'
         run: npm run test:coverage

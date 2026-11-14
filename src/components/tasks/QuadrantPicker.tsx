@@ -1,9 +1,8 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { EISENHOWER_QUADRANTS, QUADRANT_CLASSES } from '@/src/tasks/quadrants';
-import fixedColors from '@/src/theme/fixedColors';
 import type { EisenhowerQuadrant } from '@/src/types/models';
 
 interface QuadrantPickerProps {
@@ -61,12 +60,7 @@ export function QuadrantPicker({
                       {t(`quadrants.${quadrant}`)}
                     </Text>
                     {isSelected && (
-                      <Ionicons
-                        name="checkmark"
-                        aria-hidden
-                        size={16}
-                        color={fixedColors.quadrant[quadrant]}
-                      />
+                      <Icon name="checkmark" size={16} color={quadrant} />
                     )}
                   </View>
                   <Text className="font-sans text-xs text-muted">

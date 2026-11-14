@@ -1,11 +1,10 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import { Link } from 'expo-router';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { editTaskRoute } from '@/src/navigation/routes';
 import { QUADRANT_CLASSES } from '@/src/tasks/quadrants';
-import fixedColors from '@/src/theme/fixedColors';
 import type { Folder, Task } from '@/src/types/models';
 import { DueDateChip } from './DueDateChip';
 
@@ -51,14 +50,7 @@ export function TaskItem({
           task.isDone ? 'border-success bg-success' : 'border-border'
         }`}
       >
-        {task.isDone && (
-          <Ionicons
-            name="checkmark"
-            aria-hidden
-            size={12}
-            color={fixedColors.white}
-          />
-        )}
+        {task.isDone && <Icon name="checkmark" size={12} color="white" />}
       </Pressable>
 
       <Link href={editTaskRoute(task.id)} asChild>

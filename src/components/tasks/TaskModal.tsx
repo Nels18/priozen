@@ -1,4 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import type { JSX, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useScreenSize } from '@/src/layout/screenSize';
-import { useIconColors } from '@/src/theme/useIconColors';
 
 interface TaskModalProps {
   title: string;
@@ -93,7 +92,6 @@ export function TaskModal({
   children,
 }: TaskModalProps): JSX.Element {
   const { t } = useTranslation('tasks');
-  const iconColors = useIconColors();
   const insets = useSafeAreaInsets();
   const isSheet = useScreenSize() === 'small';
   useWebDialogBehavior(onClose);
@@ -148,12 +146,7 @@ export function TaskModal({
             onPress={onClose}
             className="h-11 w-11 items-center justify-center rounded-full active:bg-input"
           >
-            <Ionicons
-              name="close"
-              aria-hidden
-              size={22}
-              color={iconColors.muted}
-            />
+            <Icon name="close" size={22} color="muted" />
           </Pressable>
         </View>
 

@@ -1,7 +1,7 @@
 {
   "greeting": "Bonjour,",
-  "greetingName": "{{firstName}} 👋",
-  "greetingInline": "Bonjour, {{firstName}} 👋",
+  "greetingName": "{{firstName}}",
+  "greetingInline": "Bonjour, {{firstName}}",
   "todaySubtitle": "Voici vos tâches du jour",
   "completedPercent": "complété",
   "completedTasks": "Tâches complétées",

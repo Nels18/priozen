@@ -1,8 +1,7 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
-import { useIconColors } from '@/src/theme/useIconColors';
 
 /**
  * Thin strip above every screen of the public demo: its data is fictitious.
@@ -11,16 +10,10 @@ import { useIconColors } from '@/src/theme/useIconColors';
  */
 export function DemoBanner(): JSX.Element {
   const { t } = useTranslation('common');
-  const iconColors = useIconColors();
 
   return (
     <View className="flex-row items-center justify-center gap-1.5 bg-primary-light px-4 py-1.5">
-      <Ionicons
-        name="flask-outline"
-        aria-hidden
-        size={14}
-        color={iconColors.primary}
-      />
+      <Icon name="flask-outline" size={14} color="primary" />
       <Text className="font-sans-medium text-caption text-primary">
         {t('demoBanner')}
       </Text>

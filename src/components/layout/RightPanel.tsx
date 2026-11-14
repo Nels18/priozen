@@ -1,4 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import type { JSX, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
@@ -6,7 +6,6 @@ import type { TaskSummary } from '@/src/tasks/summary';
 import { getCompletionPercent } from '@/src/tasks/summary';
 import { EISENHOWER_QUADRANTS, QUADRANT_CLASSES } from '@/src/tasks/quadrants';
 import { useTaskSummary } from '@/src/tasks/useTaskSummary';
-import { useIconColors } from '@/src/theme/useIconColors';
 import { ProgressBar } from '../ui/ProgressBar';
 
 function Section({
@@ -31,7 +30,6 @@ function Section({
 
 function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
   const { t } = useTranslation(['layout', 'tasks']);
-  const iconColors = useIconColors();
 
   return (
     <>
@@ -88,12 +86,7 @@ function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
               key={task.id}
               className="mb-2 flex-row items-start gap-2 rounded-sm bg-critical-bg px-3 py-2.5"
             >
-              <Ionicons
-                name="warning-outline"
-                aria-hidden
-                size={14}
-                color={iconColors.critical}
-              />
+              <Icon name="warning-outline" size={14} color="critical" />
               <Text className="flex-1 font-sans-medium text-caption text-critical">
                 {task.title}
               </Text>
