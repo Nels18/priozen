@@ -61,7 +61,7 @@ Déclarées comme variables CSS dans `global.css` (bascule light/dark automatiqu
 
 ## Maquette
 
-Maquette de référence (responsive mobile / tablette / bureau) : **`design/maquettes/index.html`**, à lire avant de coder un écran (onglets Mobile / Tablette / Bureau, clair et sombre). C'est une copie de l'artefact https://claude.ai/artifact/UWBMeXCP5cPEhwteH7VoCV, où se fait la conception : à recopier après chaque mise à jour de la maquette, en remplaçant le vrai nom par l'utilisateur fictif. Fichier exclu de Prettier et d'ESLint, pour que le diff d'une nouvelle copie reste lisible.
+Maquette de référence (responsive mobile / tablette / bureau) : **`design/maquettes/index.html`**, à lire avant de coder un écran (onglets Mobile / Tablette / Bureau, clair et sombre). C'est une copie de l'artefact https://claude.ai/artifact/9VQRagpRfadYQL5Hrg4AUt, où se fait la conception : à recopier après chaque mise à jour de la maquette, avec ses fichiers `modal.css` et `modal.js` (modale « Nouvelle tâche »), en remplaçant le vrai nom par l'utilisateur fictif. Dossier exclu de Prettier et d'ESLint, pour que le diff d'une nouvelle copie reste lisible.
 
 Décisions de design (maquette ; livrées par MOB-01 et DASH-06) :
 
@@ -69,6 +69,9 @@ Décisions de design (maquette ; livrées par MOB-01 et DASH-06) :
 - **Onglets de statut** sous la bande : À faire / En retard / Terminées, avec compteur (« En retard » en rouge s'il est non nul)
 - Une tâche en retard figure **dans deux onglets** : « À faire » (elle n'est pas terminée) et « En retard » (vue filtrée, pas un statut exclusif)
 - Toute cible tactile fait **au moins 44 px** (pastilles, onglets, liens « Tout afficher »)
+- **Case = cocher, clic = consulter, crayon = modifier** (toute liste de ressources) : sur une tâche, la case à gauche la coche / décoche sans ouvrir le détail ; un clic sur le reste de la ligne ouvre son détail (tâche : panneau latéral sur tablette et bureau, écran plein écran sur mobile ; dossier : `/folders/:id`) ; l'édition passe par l'icône crayon à droite de la ligne (cible ≥ 44 px, libellé accessible, sans ouvrir le détail). La ligne d'une tâche affiche « ✓ 1/3 » si elle a des sous-tâches. Une corbeille n'a pas de crayon (restaurer / purger)
+- **Pastille de couleur du dossier** à côté de son nom (palette de 8 couleurs distincte des quadrants, FOLD-07) ; la pastille du quadrant n'apparaît que dans les listes à plat (« En retard », « Terminées »)
+- **Détail d'une tâche** : lecture seule. Le clic sur une ligne ouvre le détail (panneau latéral sur tablette/bureau, écran dédié sur mobile). La seule action sur les sous-tâches y est cocher / décocher. Ajout, renommage et suppression des sous-tâches, comme toute modification de la tâche, passent par la modale d'édition (crayon) et sont enregistrés ensemble à la validation.
 - **Pas d'émoji dans l'UI** : tout pictogramme est une icône Ionicons (`@expo/vector-icons`), décorative = masquée aux lecteurs d'écran ; via le composant `Icon` dès qu'il existe (UX-04)
 
 ## Badges Eisenhower
@@ -208,5 +211,5 @@ Conventions lues par le skill `/pr-message` (skill personnel, générique) :
 - **Ticket** : Jira `https://priozen.atlassian.net/browse/PRIO-XX`, clé dans le footer `Refs: PRIO-XX` des commits ; le code ticket (`AUTH-01`, `DASH-02`…) figure dans le nom de branche et le résumé du ticket
 - **Sections** (titres en français, avec emoji) : 💡 Contexte · 🏗️ Ce qui a été fait · 🛠️ Détails techniques · 🧪 Comment tester · 📸 Rendu Visuel (tableau Desktop / Mobile) · 💬 Notes pour le relecteur
 - **Comment tester** : données mockées MSW, utilisateur `martin@priozen.app` / `password123` ; préciser light/dark et mobile/desktop pour toute PR qui touche l'UI
-- **Maquette** à citer dans le contexte pour une PR UI : https://claude.ai/artifact/UWBMeXCP5cPEhwteH7VoCV
+- **Maquette** à citer dans le contexte pour une PR UI : https://claude.ai/artifact/9VQRagpRfadYQL5Hrg4AUt
 - Après ouverture de la PR : passer le ticket Jira en « En cours de revue »
