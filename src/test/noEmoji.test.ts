@@ -1,5 +1,5 @@
 import { readdirSync, readFileSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 // No emoji in the UI (CLAUDE.md, UX-04): every pictogram is an Icon. Emojis
@@ -21,9 +21,7 @@ const findEmojiLines = (file: string): string[] =>
   readFileSync(join(ROOT, file), 'utf8')
     .split('\n')
     .flatMap((line, index) =>
-      EMOJI.test(line)
-        ? [`${relative(ROOT, join(ROOT, file))}:${index + 1}`]
-        : [],
+      EMOJI.test(line) ? [`${file}:${index + 1}`] : [],
     );
 
 describe('no emoji', () => {

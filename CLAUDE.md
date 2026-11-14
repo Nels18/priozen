@@ -26,7 +26,7 @@ Le backend et la base de données ne sont pas encore prêts : le frontend tourne
 
 GitHub Actions (`.github/workflows/`) :
 
-- `ci.yml` — push et PR vers `main` / `develop` : scan de secrets (gitleaks), puis lint, typecheck, tests Vitest (fichiers modifiés sur une PR, suite complète avec couverture sur un push) et build web de production (`expo export --platform web`, rendu statique compris)
+- `ci.yml` — push et PR vers `main` / `develop` : scan de secrets (gitleaks), puis lint, typecheck, tests Vitest (fichiers modifiés sur une PR, plus le test anti-émoji, qui n'importe aucun fichier de l'app et serait sinon ignoré ; suite complète avec couverture sur un push) et build web de production (`expo export --platform web`, rendu statique compris)
 - `branch-guard.yml` — PR vers `main` : seule `develop` peut y être mergée
 - `branch-name.yml` — toute PR : le nom de branche respecte `.validate-branch-namerc.js` (même règle que le hook `pre-push`)
 - `claude-review.yml` — PR vers `develop` : relecture par Claude des PR qui portent le label `ai-review`, à l'ajout du label, au passage en « prête » et à chaque nouveau push (workflow réutilisable de `Nels18/dev-agents`, guidelines dans `.github/review-guidelines.md`) ; PR de doc ignorées
