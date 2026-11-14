@@ -114,6 +114,12 @@ module.exports = defineConfig([
           trailingUnderscore: 'allow',
         },
         {
+          // Keys that need quotes are not identifiers ('aria-hidden').
+          selector: ['objectLiteralProperty', 'typeProperty'],
+          modifiers: ['requiresQuotes'],
+          format: null,
+        },
+        {
           selector: 'import',
           format: ['camelCase', 'PascalCase'],
         },
@@ -154,6 +160,25 @@ module.exports = defineConfig([
         'error',
         ...THEME_COLOR_RESTRICTIONS,
         ...HARDCODED_URL_RESTRICTIONS,
+      ],
+    },
+  },
+  {
+    // Every pictogram goes through Icon (theme colors, accessibility).
+    files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['src/components/ui/Icon.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@expo/vector-icons', '@expo/vector-icons/*'],
+              message:
+                'Use the Icon component (src/components/ui/Icon.tsx): theme colors and accessibility built in.',
+            },
+          ],
+        },
       ],
     },
   },

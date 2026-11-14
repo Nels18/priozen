@@ -1,11 +1,10 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import type { JSX } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import type { FoldersStatus } from '@/src/folders/folderField';
 import { getFolderFieldState } from '@/src/folders/folderField';
-import { useIconColors } from '@/src/theme/useIconColors';
 import type { Folder } from '@/src/types/models';
 
 interface FolderSelectProps {
@@ -34,7 +33,6 @@ export function FolderSelect({
   onChange,
 }: FolderSelectProps): JSX.Element {
   const { t } = useTranslation('tasks');
-  const iconColors = useIconColors();
   const [isOpen, setIsOpen] = useState(false);
 
   const state = getFolderFieldState(value, folders, foldersStatus);
@@ -78,21 +76,15 @@ export function FolderSelect({
           isOpen && !isLocked ? 'border-primary' : 'border-border'
         } ${isLocked ? 'opacity-60' : ''}`}
       >
-        <Ionicons
-          name="folder-outline"
-          aria-hidden
-          size={20}
-          color={iconColors.muted}
-        />
+        <Icon name="folder-outline" size={20} color="muted" />
         <Text numberOfLines={1} className="flex-1 font-sans text-sm text-text">
           {currentLabel}
         </Text>
         {!isLocked && (
-          <Ionicons
+          <Icon
             name={isOpen ? 'chevron-up' : 'chevron-down'}
-            aria-hidden
             size={16}
-            color={iconColors.muted}
+            color="muted"
           />
         )}
       </Pressable>
@@ -102,12 +94,7 @@ export function FolderSelect({
           accessibilityRole="alert"
           className="mt-1.5 flex-row items-center gap-1.5"
         >
-          <Ionicons
-            name="alert-circle-outline"
-            aria-hidden
-            size={14}
-            color={iconColors.critical}
-          />
+          <Icon name="alert-circle-outline" size={14} color="critical" />
           <Text className="flex-1 font-sans text-xs text-critical">
             {t('form.foldersLoadFailed')}
           </Text>
@@ -150,12 +137,7 @@ export function FolderSelect({
                   {option.name}
                 </Text>
                 {isSelected && (
-                  <Ionicons
-                    name="checkmark"
-                    aria-hidden
-                    size={16}
-                    color={iconColors.primary}
-                  />
+                  <Icon name="checkmark" size={16} color="primary" />
                 )}
               </Pressable>
             );

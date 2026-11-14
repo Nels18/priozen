@@ -1,4 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { Icon } from '@/src/components/ui/Icon';
 import type { ComponentRef, JSX } from 'react';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,6 @@ import type { FoldersStatus } from '@/src/folders/folderField';
 import { useScreenSize } from '@/src/layout/screenSize';
 import type { TaskFormErrors, TaskFormValues } from '@/src/tasks/taskForm';
 import { validateTaskForm } from '@/src/tasks/taskForm';
-import { useIconColors } from '@/src/theme/useIconColors';
 import type { Folder } from '@/src/types/models';
 import { Button } from '../ui/Button';
 import { TextField } from '../ui/TextField';
@@ -36,7 +35,6 @@ export function TaskForm({
   onCancel,
 }: TaskFormProps): JSX.Element {
   const { t, i18n } = useTranslation('tasks');
-  const iconColors = useIconColors();
   const isSheet = useScreenSize() === 'small';
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<TaskFormErrors>({});
@@ -145,12 +143,7 @@ export function TaskForm({
           accessibilityRole="alert"
           className="flex-row items-center gap-2 rounded-sm bg-critical-bg px-3 py-2.5"
         >
-          <Ionicons
-            name="warning-outline"
-            aria-hidden
-            size={16}
-            color={iconColors.critical}
-          />
+          <Icon name="warning-outline" size={16} color="critical" />
           <Text className="flex-1 font-sans text-caption text-critical">
             {t('form.errors.saveFailed')}
           </Text>

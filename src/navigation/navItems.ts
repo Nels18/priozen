@@ -1,5 +1,4 @@
-import type Ionicons from '@expo/vector-icons/Ionicons';
-import type { ComponentProps } from 'react';
+import type { IconName } from '@/src/components/ui/Icon';
 import type { AppRoute } from './routes';
 import { ROUTES } from './routes';
 
@@ -8,7 +7,7 @@ export type NavKey = 'tasks' | 'folders' | 'focus' | 'analytics' | 'profile';
 export interface NavItem {
   key: NavKey;
   href: AppRoute;
-  icon: ComponentProps<typeof Ionicons>['name'];
+  icon: IconName;
 }
 
 /** The 5 entries shared by the sidebar (medium/large) and the bottom nav (small). */
