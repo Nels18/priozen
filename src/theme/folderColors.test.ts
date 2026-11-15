@@ -81,7 +81,11 @@ describe('FOLDER_COLORS', () => {
         );
       });
       expect(saturation(color)).toBeGreaterThanOrEqual(MIN_SATURATION);
-      expect(saturation(secondary)).toBeLessThan(MIN_SATURATION);
     },
   );
+
+  // Premise of the saturation check above: the secondary quadrant is a gray.
+  it('treats the secondary quadrant as a gray', (): void => {
+    expect(saturation(secondary)).toBeLessThan(MIN_SATURATION);
+  });
 });
