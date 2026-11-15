@@ -16,6 +16,7 @@ const makeTask = (overrides: Partial<Task>): Task => ({
   deletedAt: null,
   createdAt: '2026-10-01T00:00:00.000Z',
   updatedAt: '2026-10-01T00:00:00.000Z',
+  subTasks: [],
   ...overrides,
 });
 

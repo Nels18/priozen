@@ -3,7 +3,8 @@ import { http, HttpResponse } from 'msw';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createTestQueryClient } from '../test/queryClient';
 import { TEST_API_URL } from '../test/constants';
-import type { Task } from '../types/models';
+import type { SubTask, Task } from '../types/models';
+import { subtaskProgress } from './subtasks';
 
 // Re-import modules per test so the MSW database singleton starts fresh.
 let serverModule: typeof import('../mocks/server');
@@ -86,6 +87,104 @@ describe('taskMutations.setDone', () => {
   });
 });
 
+describe('taskMutations.setSubTaskDone', () => {
+  const findSubTask = (
+    tasks: Task[] | undefined,
+    taskId: string,
+    subTaskId: string,
+  ): SubTask | undefined =>
+    findTask(tasks, taskId)?.subTasks.find(
+      (subTask) => subTask.id === subTaskId,
+    );
+
+  const openSubTask = (tasks: Task[]): { task: Task; subTask: SubTask } => {
+    for (const task of tasks) {
+      const subTask = task.subTasks.find((candidate) => !candidate.isDone);
+      if (subTask) return { task, subTask };
+    }
+    throw new Error('fixtures need an open sub-task');
+  };
+
+  it('checks the sub-task in the cache at once, and keeps the task open', async (): Promise<void> => {
+    const queryClient = createTestQueryClient();
+    const { taskQueries, taskKeys } = taskQueriesModule;
+    const { task, subTask } = openSubTask(
+      await queryClient.query(taskQueries.list()),
+    );
+    const before = subtaskProgress(task);
+
+    const observer = new MutationObserver(
+      queryClient,
+      taskMutationsModule.taskMutations.setSubTaskDone(queryClient),
+    );
+    const pending = observer.mutate({
+      taskId: task.id,
+      subTaskId: subTask.id,
+      isDone: true,
+    });
+
+    // Optimistic: checked, and the progress already counts it.
+    await vi.waitFor((): void => {
+      expect(
+        findSubTask(
+          queryClient.getQueryData(taskKeys.list()),
+          task.id,
+          subTask.id,
+        )?.isDone,
+      ).toBe(true);
+    });
+    const optimistic = findTask(
+      queryClient.getQueryData(taskKeys.list()),
+      task.id,
+    );
+    expect(optimistic && subtaskProgress(optimistic).done).toBe(
+      before.done + 1,
+    );
+
+    const saved = await pending;
+    expect(saved.isDone).toBe(false);
+    await queryClient.refetchQueries({ queryKey: taskKeys.list() });
+    expect(
+      findSubTask(
+        queryClient.getQueryData(taskKeys.list()),
+        task.id,
+        subTask.id,
+      )?.isDone,
+    ).toBe(true);
+  });
+
+  it('restores the previous list when the request fails', async (): Promise<void> => {
+    const queryClient = createTestQueryClient();
+    const { taskQueries, taskKeys } = taskQueriesModule;
+    const tasks = await queryClient.query(taskQueries.list());
+    const { task, subTask } = openSubTask(tasks);
+
+    serverModule.server.use(
+      http.patch(`${TEST_API_URL}/tasks/:id/subtasks/:subTaskId`, () =>
+        HttpResponse.json({ message: 'Server error.' }, { status: 500 }),
+      ),
+      // The resync after the failure must not hide a missing rollback.
+      http.get(`${TEST_API_URL}/tasks`, () => HttpResponse.json(tasks)),
+    );
+
+    const observer = new MutationObserver(
+      queryClient,
+      taskMutationsModule.taskMutations.setSubTaskDone(queryClient),
+    );
+    await expect(
+      observer.mutate({ taskId: task.id, subTaskId: subTask.id, isDone: true }),
+    ).rejects.toThrow('Server error.');
+
+    expect(
+      findSubTask(
+        queryClient.getQueryData(taskKeys.list()),
+        task.id,
+        subTask.id,
+      )?.isDone,
+    ).toBe(false);
+  });
+});
+
 describe('taskMutations.create', () => {
   it('creates the task and resolves once the list shows it', async (): Promise<void> => {
     const queryClient = createTestQueryClient();
@@ -135,5 +234,38 @@ describe('taskMutations.update', () => {
     );
     expect(listed?.title).toBe('Titre modifié');
     expect(listed?.quadrant).toBe('secondary');
+  });
+
+  it('replaces the sub-tasks, and the list shows the new progress', async (): Promise<void> => {
+    const queryClient = createTestQueryClient();
+    const { taskQueries, taskKeys } = taskQueriesModule;
+    const tasks = await queryClient.query(taskQueries.list());
+    const target = tasks.find((task) => task.subTasks.length > 0);
+    if (!target) throw new Error('fixtures need a task with sub-tasks');
+    const [kept] = target.subTasks;
+
+    const observer = new MutationObserver(
+      queryClient,
+      taskMutationsModule.taskMutations.update(queryClient),
+    );
+    await observer.mutate({
+      id: target.id,
+      changes: {
+        subTasks: [
+          { id: kept.id, title: 'Renommée', isDone: true },
+          { title: 'Ajoutée', isDone: false },
+        ],
+      },
+    });
+
+    const listed = findTask(
+      queryClient.getQueryData(taskKeys.list()),
+      target.id,
+    );
+    expect(listed?.subTasks.map((subTask) => subTask.title)).toEqual([
+      'Renommée',
+      'Ajoutée',
+    ]);
+    expect(listed && subtaskProgress(listed)).toEqual({ done: 1, total: 2 });
   });
 });

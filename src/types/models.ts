@@ -41,6 +41,8 @@ export interface Task {
   deletedAt: string | null; // soft delete (trash)
   createdAt: string;
   updatedAt: string;
+  /** Checklist of the task, in creation order; empty when it has none. */
+  subTasks: SubTask[];
 }
 
 export interface SubTask {

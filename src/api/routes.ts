@@ -15,6 +15,8 @@ export const tasksRoutes = {
   detail: (id: string): string => `/tasks/${id}`,
   restore: (id: string): string => `/tasks/${id}/restore`,
   permanent: (id: string): string => `/tasks/${id}/permanent`,
+  subTask: (id: string, subTaskId: string): string =>
+    `/tasks/${id}/subtasks/${subTaskId}`,
   trashEmpty: (): string => '/tasks/trash/empty',
 };
 

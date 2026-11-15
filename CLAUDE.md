@@ -177,6 +177,7 @@ interface Task {
   deletedAt: string | null; // soft delete (corbeille)
   createdAt: string;
   updatedAt: string;
+  subTasks: SubTask[]; // ordre de création, [] si aucune
 }
 
 interface SubTask {
@@ -186,6 +187,13 @@ interface SubTask {
   isDone: boolean;
 }
 ```
+
+Sous-tâches (TASK-09) : renvoyées avec leur tâche, sans requête à part.
+
+- **Coche** (détail) : `PATCH /tasks/:id/subtasks/:subId` avec `{ isDone }`, qui renvoie la tâche entière ; mutation `taskMutations.setSubTaskDone()`
+- **Ajout, renommage, suppression** (modale) : `POST /tasks` et `PATCH /tasks/:id` acceptent la liste complète `subTasks: SubTaskInput[]` (`src/api/tasks.ts`), qui remplace l'ancienne : sans `id` = créée, avec `id` = gardée, absente = supprimée
+- Tâche et sous-tâches sont indépendantes : terminer la tâche ne coche pas ses sous-tâches, tout cocher ne termine pas la tâche (l'interface le propose seulement)
+- Progression « 1/3 » : `subtaskProgress(task)` (`src/tasks/subtasks.ts`)
 
 Le tableau des badges Eisenhower ci-dessus (Critique/À planifier/À déléguer/Secondaire) correspond respectivement à `quadrant: 'critical' | 'schedule' | 'delegate' | 'secondary'`.
 
