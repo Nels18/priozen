@@ -1481,7 +1481,8 @@ const TASKS = [
   }
 ];
 
-const FOLDER_COLORS = { 'Priozen App':'#14B8A6', 'Travail':'#0EA5E9', 'Perso':'#EC4899', 'Études':'#84CC16' };
+// Palette des dossiers (FOLD-07) : contraste ≥ 3:1 sur les fonds clairs et sombres, ni rouge, ni ambre, ni indigo, ni gris (couleurs des quadrants)
+const FOLDER_COLORS = { 'Priozen App':'#0D9488', 'Travail':'#0284C7', 'Perso':'#DB2777', 'Études':'#4D7C0F' };
 function folderDot(name, size) { return `<span class="folder-dot" style="width:${size||8}px;height:${size||8}px;background:${FOLDER_COLORS[name]||'#64748B'}"></span>`; }
 function subProg(t) { const a = t.subtasks || []; return { done: a.filter(x=>x.d).length, total: a.length }; }
 let detailId = null;
@@ -2007,17 +2008,17 @@ function screenCGU() {
 // ---- SCREEN: Folders ----
 function screenFolder() {
   const folders = [
-    { name: "Priozen App", icon: ic('laptop', 20), color: "#EEF2FF", count: 3 },
-    { name: "Travail", icon: ic('briefcase', 20), color: "#FFFBEB", count: 2 },
-    { name: "Perso", icon: ic('home', 20), color: "#F0FDF4", count: 1 },
-    { name: "Études", icon: ic('book', 20), color: "#FFF7ED", count: 0 }
+    { name: "Priozen App", icon: ic('laptop', 20), count: 3 },
+    { name: "Travail", icon: ic('briefcase', 20), count: 2 },
+    { name: "Perso", icon: ic('home', 20), count: 1 },
+    { name: "Études", icon: ic('book', 20), count: 0 }
   ];
   return `
     <div class="section-title">Mes dossiers</div>
     <div style="margin-bottom:20px"><button class="btn-primary-sm">+ Nouveau dossier</button></div>
     ${folders.map(f => `
       <div class="folder-card">
-        <div class="folder-icon" style="background:${f.color}">${f.icon}</div>
+        <div class="folder-icon" style="background:color-mix(in srgb, ${FOLDER_COLORS[f.name]} 14%, transparent);color:${FOLDER_COLORS[f.name]}">${f.icon}</div>
         <div class="folder-info">
           <div class="folder-name">${folderDot(f.name,10)} ${f.name}</div>
           <div class="folder-count">${f.count} tâche${f.count !== 1 ? 's' : ''}</div>

@@ -1,9 +1,8 @@
 import { fakerFR as faker } from '@faker-js/faker';
+import { FOLDER_COLOR, FOLDER_COLORS } from '../../theme/folderColors';
 import type { Folder } from '../../types/models';
 import { MOCK_USER_ID } from '../data/fixtures';
 import { createId } from '../utils';
-
-const FOLDER_COLORS = ['#6366F1', '#F59E0B', '#10B981', '#EF4444', '#0EA5E9'];
 
 const FOLDER_NAMES = [
   'Perso',
@@ -20,7 +19,7 @@ const FOLDER_NAMES = [
 export const makeDumbFolder = (overrides: Partial<Folder> = {}): Folder => ({
   id: 'folder-1',
   name: 'Perso',
-  color: '#6366F1',
+  color: FOLDER_COLOR.pink,
   userId: MOCK_USER_ID,
   taskCount: 0,
   createdAt: '2026-01-10T00:00:00.000Z',
