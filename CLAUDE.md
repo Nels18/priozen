@@ -74,6 +74,8 @@ Décisions de design (maquette ; livrées par MOB-01 et DASH-06) :
 - **Pastille de couleur du dossier** à côté de son nom (palette de 8 couleurs distincte des quadrants, FOLD-07) ; la pastille du quadrant n'apparaît que dans les listes à plat (« En retard », « Terminées »)
 - **Détail d'une tâche** : lecture seule. Le clic sur une ligne ouvre le détail (panneau latéral sur tablette/bureau, écran dédié sur mobile). La seule action sur les sous-tâches y est cocher / décocher. Ajout, renommage et suppression des sous-tâches, comme toute modification de la tâche, passent par la modale d'édition (crayon) et sont enregistrés ensemble à la validation.
 - **Pas d'émoji dans l'UI** : tout pictogramme passe par le composant `Icon` (`src/components/ui/Icon.tsx`, Ionicons) : `<Icon name="…" size={16} color="muted" />`, taille parmi celles de la maquette (`IconSize`), couleur = jeton du thème ; sans `label`, l'icône est décorative et masquée aux lecteurs d'écran, avec `label` elle est lue. Importer `@expo/vector-icons` ailleurs est refusé par ESLint, et `src/test/noEmoji.test.ts` échoue si un émoji apparaît dans `app/` ou `src/`
+- **Corbeille** : accessible par un item en bas de la sidebar (tablette, bureau) et par une ligne de l'écran Profil (mobile), avec badge compteur masqué à 0. Restaurer, ou supprimer définitivement avec confirmation ; indicateur « purge dans J-Y »
+- **Animations** : courtes (150 à 250 ms) et désactivées si « réduire les animations » est actif ; durées et liste dans UX-06 (PRIO-71)
 
 ## Badges Eisenhower
 
@@ -113,7 +115,7 @@ Vues :
 - `/` (dashboard) — Liste tâches groupées par quadrant
 - `/tasks/new`, `/tasks/:id` — Modale création / édition de tâche (raccourci N sur le web)
 - `/folders/:id` — Vue dossier avec stats
-- `/trash` — Corbeille (soft delete, purge 30j)
+- `/trash` — Corbeille (soft delete, durée de conservation configurable, 7 jours provisoires ; dépendra de l’offre (TASK-11))
 - `/profile` — Profil utilisateur + zone danger RGPD
 - `/focus` — Mode concentration (3 cartes minimalistes)
 - `/analytics` — Indice de lucidité + radar Eisenhower
