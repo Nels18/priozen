@@ -12,14 +12,14 @@ const expectedFolders = [
   makeDumbFolder({
     id: 'folder-2',
     name: 'Travail',
-    color: '#F59E0B',
+    color: '#0284C7',
     taskCount: 6,
     createdAt: '2026-01-11T00:00:00.000Z',
   }),
   makeDumbFolder({
     id: 'folder-3',
     name: 'Priozen App',
-    color: '#10B981',
+    color: '#0D9488',
     taskCount: 5,
     createdAt: '2026-01-12T00:00:00.000Z',
   }),
@@ -78,7 +78,7 @@ describe('POST /folders', () => {
       taskCount: number;
     };
     expect(body.name).toBe('Loisirs');
-    expect(body.color).toBe('#6366F1');
+    expect(body.color).toBe('#0D9488');
     expect(body.taskCount).toBe(0);
   });
 

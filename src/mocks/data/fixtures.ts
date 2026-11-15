@@ -1,3 +1,4 @@
+import { FOLDER_COLOR } from '../../theme/folderColors';
 import type { Folder, SubTask, Task, User } from '../../types/models';
 import { DAY_MS } from '../utils';
 
@@ -24,7 +25,7 @@ export const mockFolders: Folder[] = [
   {
     id: 'folder-1',
     name: 'Perso',
-    color: '#6366F1',
+    color: FOLDER_COLOR.pink,
     userId: MOCK_USER_ID,
     taskCount: 4,
     createdAt: '2026-01-10T00:00:00.000Z',
@@ -32,7 +33,7 @@ export const mockFolders: Folder[] = [
   {
     id: 'folder-2',
     name: 'Travail',
-    color: '#F59E0B',
+    color: FOLDER_COLOR.sky,
     userId: MOCK_USER_ID,
     taskCount: 6,
     createdAt: '2026-01-11T00:00:00.000Z',
@@ -40,7 +41,7 @@ export const mockFolders: Folder[] = [
   {
     id: 'folder-3',
     name: 'Priozen App',
-    color: '#10B981',
+    color: FOLDER_COLOR.teal,
     userId: MOCK_USER_ID,
     taskCount: 5,
     createdAt: '2026-01-12T00:00:00.000Z',

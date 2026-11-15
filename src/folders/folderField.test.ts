@@ -5,7 +5,7 @@ import { getFolderFieldState } from './folderField';
 const work: Folder = {
   id: 'folder-1',
   name: 'Travail',
-  color: '#6366F1',
+  color: '#0284C7',
   userId: 'user-1',
   taskCount: 3,
   createdAt: '2026-10-01T00:00:00.000Z',

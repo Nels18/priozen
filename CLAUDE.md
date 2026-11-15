@@ -57,6 +57,7 @@ Déclarées comme variables CSS dans `global.css` (bascule light/dark automatiqu
 
 - Couleurs identiques dans les deux thèmes (blanc, premier plan de la sidebar) : `src/theme/fixedColors.js`, utilisé par `tailwind.config.js` (`text-sidebar-text`, `bg-sidebar-active`…) et par les composants qui attendent une couleur brute
 - Props de couleur brute qui suivent le thème (`placeholderTextColor`…) : `useIconColors()` (`src/theme/useIconColors.ts`), à garder synchronisé avec `global.css` ; ses clés (`primary`, `muted`, `critical`, `white`, `sidebarText`, un par quadrant) sont aussi les couleurs du composant `Icon`
+- Couleurs de dossier : `FOLDER_COLOR` (`src/theme/folderColors.ts`), 8 couleurs nommées (`FOLDER_COLOR.teal`…, liste dans `FOLDER_COLORS`) et `DEFAULT_FOLDER_COLOR` ; le code s'y réfère par leur nom, jamais par leur hex. Une seule palette pour les deux thèmes, car la couleur est une donnée enregistrée en hex : contraste ≥ 3:1 sur les fonds clairs et sombres, sans rouge, ambre, indigo ni gris, pour qu'une pastille de dossier ne se lise jamais comme un quadrant. `folderColors.test.ts` vérifie toute nouvelle couleur ; les mocks utilisent cette palette
 - Couleurs par quadrant : `QUADRANT_CLASSES` (`src/tasks/quadrants.ts`) — pastille, badge, texte ; ne jamais réécrire les classes `bg-critical`… à la main
 
 ## Maquette

@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { foldersRoutes } from '../../api/routes';
+import { DEFAULT_FOLDER_COLOR } from '../../theme/folderColors';
 import type { Folder } from '../../types/models';
 import { MOCK_USER_ID } from '../data/fixtures';
 import { database } from '../database';
@@ -42,7 +43,7 @@ export const foldersHandler = [
     const newFolder: Folder = {
       id: createId('folder'),
       name: body.name,
-      color: body.color ?? '#6366F1',
+      color: body.color ?? DEFAULT_FOLDER_COLOR,
       userId: MOCK_USER_ID,
       taskCount: 0,
       createdAt: new Date().toISOString(),
