@@ -48,7 +48,8 @@ export const makeDumbTask = (overrides: Partial<Task> = {}): Task => ({
 // Randomized — realistic seed data, not for test assertions.
 export const makeTask = (overrides: Partial<Task> = {}): Task => {
   const createdAt = faker.date.past({ years: 1 }).toISOString();
-  const id = createId('task');
+  // The sub-tasks below point to this id: take the overridden one if given.
+  const id = overrides.id ?? createId('task');
 
   return {
     id,
