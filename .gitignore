@@ -42,6 +42,9 @@ yarn-error.log*
 .DS_Store
 *.pem
 
+# JetBrains IDEs (Android Studio, WebStorm…): personal settings and caches
+.idea/
+
 # local env files
 .env*.local
 .env
