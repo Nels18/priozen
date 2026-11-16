@@ -1,7 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { mutationOptions } from '@tanstack/react-query';
 import type { TaskInput, TaskUpdate } from '../api/tasks';
-import { createTask, updateTask } from '../api/tasks';
+import { createTask, setSubTaskDone, updateTask } from '../api/tasks';
 import { folderKeys } from '../folders/folderQueries';
 import type { Task } from '../types/models';
 import { taskKeys } from './taskQueries';
@@ -11,6 +11,7 @@ export interface SetTaskDoneVariables {
   isDone: boolean;
 }
 
+/** Shared by `setDone` and `setSubTaskDone`. */
 interface SetTaskDoneContext {
   /** Task list before the optimistic change, restored on failure. */
   previousTasks: Task[] | undefined;
@@ -21,7 +22,14 @@ export interface UpdateTaskVariables {
   changes: TaskUpdate;
 }
 
+export interface SetSubTaskDoneVariables {
+  taskId: string;
+  subTaskId: string;
+  isDone: boolean;
+}
+
 const SET_DONE_KEY = [...taskKeys.all, 'setDone'] as const;
+const SET_SUBTASK_DONE_KEY = [...taskKeys.all, 'setSubTaskDone'] as const;
 
 /**
  * After a save: the saved task goes straight into the cached list (added or
@@ -75,6 +83,49 @@ export const taskMutations = {
         // With several boxes ticked in a row, resync once, after the last
         // one: an earlier refetch would briefly undo the later ticks.
         if (queryClient.isMutating({ mutationKey: SET_DONE_KEY }) === 1) {
+          return queryClient.invalidateQueries({ queryKey: taskKeys.all });
+        }
+        return undefined;
+      },
+    }),
+
+  /**
+   * Checks or unchecks a sub-task (task detail), with the same optimistic
+   * update, rollback and single resync as `setDone`. Only the sub-task
+   * changes: the task stays open even when every sub-task is checked.
+   */
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/explicit-module-boundary-types
+  setSubTaskDone: (queryClient: QueryClient) =>
+    mutationOptions<Task, Error, SetSubTaskDoneVariables, SetTaskDoneContext>({
+      mutationKey: SET_SUBTASK_DONE_KEY,
+      mutationFn: ({ taskId, subTaskId, isDone }) =>
+        setSubTaskDone(taskId, subTaskId, isDone),
+      onMutate: async ({ taskId, subTaskId, isDone }) => {
+        await queryClient.cancelQueries({ queryKey: taskKeys.list() });
+        const previousTasks = queryClient.getQueryData<Task[]>(taskKeys.list());
+        queryClient.setQueryData<Task[]>(taskKeys.list(), (tasks) =>
+          tasks?.map((task) =>
+            task.id === taskId
+              ? {
+                  ...task,
+                  subTasks: task.subTasks.map((subTask) =>
+                    subTask.id === subTaskId ? { ...subTask, isDone } : subTask,
+                  ),
+                }
+              : task,
+          ),
+        );
+        return { previousTasks };
+      },
+      onError: (_error, _variables, context) => {
+        if (context?.previousTasks) {
+          queryClient.setQueryData(taskKeys.list(), context.previousTasks);
+        }
+      },
+      onSettled: () => {
+        if (
+          queryClient.isMutating({ mutationKey: SET_SUBTASK_DONE_KEY }) === 1
+        ) {
           return queryClient.invalidateQueries({ queryKey: taskKeys.all });
         }
         return undefined;

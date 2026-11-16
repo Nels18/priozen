@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TEST_API_URL } from '../../test/constants';
 import { tasksRoutes } from '../../api/routes';
 import type { Task } from '../../types/models';
+import { makeDumbSubTask } from '../factories/subTaskFactory';
 import { makeDumbTask } from '../factories/taskFactory';
 
 // Each test re-imports the mock server so the underlying database singleton
@@ -13,6 +14,14 @@ const expectedTasks: Task[] = [
     quadrant: 'critical',
     folderId: 'folder-3',
     description: 'Intégrer le formulaire avec validation et appel API.',
+    subTasks: [
+      makeDumbSubTask({ isDone: true }),
+      makeDumbSubTask({ id: 'subtask-2', title: 'Connexion API /auth/login' }),
+      makeDumbSubTask({
+        id: 'subtask-3',
+        title: 'Gestion erreurs & états de chargement',
+      }),
+    ],
   }),
   makeDumbTask({
     id: 'task-2',
@@ -226,6 +235,168 @@ describe('PATCH /tasks/:id', () => {
     );
 
     expect(response.status).toBe(404);
+  });
+});
+
+const patchTask = (id: string, body: unknown): Promise<Response> =>
+  fetch(`${TEST_API_URL}${tasksRoutes.detail(id)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+
+const patchSubTask = (
+  id: string,
+  subTaskId: string,
+  body: unknown,
+): Promise<Response> =>
+  fetch(`${TEST_API_URL}${tasksRoutes.subTask(id, subTaskId)}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  });
+
+const titlesAndStates = (task: Task): [string, boolean][] =>
+  task.subTasks.map((subTask) => [subTask.title, subTask.isDone]);
+
+describe('sub-tasks', () => {
+  it('come with their task, in creation order', async (): Promise<void> => {
+    const response = await fetch(
+      `${TEST_API_URL}${tasksRoutes.detail(firstTask.id)}`,
+    );
+    const body = (await response.json()) as Task;
+    expect(body.subTasks).toEqual(firstTask.subTasks);
+  });
+
+  it('checks one sub-task without checking the task', async (): Promise<void> => {
+    const response = await patchSubTask(firstTask.id, 'subtask-2', {
+      isDone: true,
+    });
+
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as Task;
+    expect(body.isDone).toBe(false);
+    expect(body.subTasks.map((subTask) => subTask.isDone)).toEqual([
+      true,
+      true,
+      false,
+    ]);
+  });
+
+  it('leaves the task open when every sub-task is checked', async (): Promise<void> => {
+    await patchSubTask(firstTask.id, 'subtask-2', { isDone: true });
+    const response = await patchSubTask(firstTask.id, 'subtask-3', {
+      isDone: true,
+    });
+
+    const body = (await response.json()) as Task;
+    expect(body.subTasks.every((subTask) => subTask.isDone)).toBe(true);
+    expect(body.isDone).toBe(false);
+  });
+
+  it('returns 404 for an unknown task or sub-task', async (): Promise<void> => {
+    expect(
+      (await patchSubTask('missing', 'subtask-1', { isDone: true })).status,
+    ).toBe(404);
+    expect(
+      (await patchSubTask(firstTask.id, 'missing', { isDone: true })).status,
+    ).toBe(404);
+  });
+
+  it('rejects a missing isDone with 422', async (): Promise<void> => {
+    const response = await patchSubTask(firstTask.id, 'subtask-1', {});
+    expect(response.status).toBe(422);
+  });
+
+  it('keeps the sub-tasks when the task is checked', async (): Promise<void> => {
+    const response = await patchTask(firstTask.id, { isDone: true });
+
+    const body = (await response.json()) as Task;
+    expect(body.isDone).toBe(true);
+    expect(body.subTasks).toEqual(firstTask.subTasks);
+  });
+
+  it('replaces the whole list: adds, renames and deletes in one request', async (): Promise<void> => {
+    const response = await patchTask(firstTask.id, {
+      subTasks: [
+        { id: 'subtask-1', title: 'Maquette validée', isDone: true },
+        // subtask-2 left out: deleted.
+        { id: 'subtask-3', title: 'Gestion des erreurs', isDone: false },
+        { title: '  Tests de bout en bout  ', isDone: false },
+      ],
+    });
+
+    expect(response.status).toBe(200);
+    const body = (await response.json()) as Task;
+    expect(titlesAndStates(body)).toEqual([
+      ['Maquette validée', true],
+      ['Gestion des erreurs', false],
+      ['Tests de bout en bout', false],
+    ]);
+    expect(body.subTasks.slice(0, 2).map((subTask) => subTask.id)).toEqual([
+      'subtask-1',
+      'subtask-3',
+    ]);
+    expect(body.subTasks[2].id).not.toMatch(/^subtask-[123]$/);
+    expect(
+      body.subTasks.every((subTask) => subTask.taskId === firstTask.id),
+    ).toBe(true);
+  });
+
+  it('removes every sub-task with an empty list', async (): Promise<void> => {
+    const response = await patchTask(firstTask.id, { subTasks: [] });
+    const body = (await response.json()) as Task;
+    expect(body.subTasks).toEqual([]);
+  });
+
+  it('rejects a blank title, an unknown id or an id sent twice with 422', async (): Promise<void> => {
+    const invalidLists = [
+      [{ title: '   ', isDone: false }],
+      [{ id: 'not-a-sub-task', title: 'Titre', isDone: false }],
+      [
+        { id: 'subtask-1', title: 'Un', isDone: false },
+        { id: 'subtask-1', title: 'Deux', isDone: false },
+      ],
+    ];
+
+    for (const subTasks of invalidLists) {
+      expect((await patchTask(firstTask.id, { subTasks })).status).toBe(422);
+    }
+    // Nothing saved by the rejected requests.
+    const response = await fetch(
+      `${TEST_API_URL}${tasksRoutes.detail(firstTask.id)}`,
+    );
+    expect(((await response.json()) as Task).subTasks).toEqual(
+      firstTask.subTasks,
+    );
+  });
+
+  it('creates a task with its sub-tasks, or with none', async (): Promise<void> => {
+    const withSubTasks = await fetch(`${TEST_API_URL}${tasksRoutes.list()}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        title: 'Préparer le déménagement',
+        subTasks: [
+          { title: 'Réserver le camion', isDone: false },
+          { title: 'Faire les cartons', isDone: false },
+        ],
+      }),
+    });
+    const created = (await withSubTasks.json()) as Task;
+    expect(titlesAndStates(created)).toEqual([
+      ['Réserver le camion', false],
+      ['Faire les cartons', false],
+    ]);
+    expect(
+      created.subTasks.every((subTask) => subTask.taskId === created.id),
+    ).toBe(true);
+
+    const withoutSubTasks = await fetch(
+      `${TEST_API_URL}${tasksRoutes.list()}`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ title: 'Arroser les plantes' }),
+      },
+    );
+    expect(((await withoutSubTasks.json()) as Task).subTasks).toEqual([]);
   });
 });
 

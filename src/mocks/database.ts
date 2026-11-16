@@ -1,12 +1,6 @@
 import type { Folder, SubTask, Task, User } from '../types/models';
-import {
-  mockFolders,
-  mockSubTasks,
-  mockTasks,
-  mockUser,
-} from './data/fixtures';
+import { mockFolders, mockTasks, mockUser } from './data/fixtures';
 import { makeFolders } from './factories/folderFactory';
-import { makeSubTasksForTasks } from './factories/subTaskFactory';
 import { makeTasks } from './factories/taskFactory';
 
 const isTestEnv = process.env.NODE_ENV === 'test';
@@ -27,7 +21,11 @@ interface Database {
   updateTask: (id: string, data: Partial<Task>) => Task | null;
   removeTask: (id: string) => boolean;
   emptyTrash: () => void;
-  getSubTasks: (taskId: string) => SubTask[];
+  setSubTaskDone: (
+    taskId: string,
+    subTaskId: string,
+    isDone: boolean,
+  ) => Task | null;
   reset: () => Database;
 }
 
@@ -38,11 +36,11 @@ const setup = (): Database => {
     ? mockFolders.map((f) => ({ ...f }))
     : makeFolders(DEV_FOLDER_COUNT);
   let tasks: Task[] = isTestEnv
-    ? mockTasks.map((t) => ({ ...t }))
+    ? mockTasks.map((t) => ({
+        ...t,
+        subTasks: t.subTasks.map((s) => ({ ...s })),
+      }))
     : makeTasks(DEV_TASK_COUNT, folders);
-  const subTasks: SubTask[] = isTestEnv
-    ? mockSubTasks.map((s) => ({ ...s }))
-    : makeSubTasksForTasks(tasks);
 
   if (!isTestEnv) {
     folders.forEach((folder) => {
@@ -103,8 +101,20 @@ const setup = (): Database => {
     },
 
     // ─── SubTasks ────────────────────────────────────────────────────────────
-    getSubTasks: (taskId: string): SubTask[] =>
-      subTasks.filter((s) => s.taskId === taskId),
+    // Only the sub-task changes: checking every sub-task leaves the task open.
+    setSubTaskDone: (
+      taskId: string,
+      subTaskId: string,
+      isDone: boolean,
+    ): Task | null => {
+      const i = tasks.findIndex((t) => t.id === taskId);
+      if (!tasks[i]?.subTasks.some((s) => s.id === subTaskId)) return null;
+      const subTasks: SubTask[] = tasks[i].subTasks.map((s) =>
+        s.id === subTaskId ? { ...s, isDone } : s,
+      );
+      tasks[i] = { ...tasks[i], subTasks, updatedAt: new Date().toISOString() };
+      return tasks[i];
+    },
 
     // ─── Test helpers ────────────────────────────────────────────────────────
     reset: (): Database => setup(),

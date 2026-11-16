@@ -1,5 +1,5 @@
 import { fakerFR as faker } from '@faker-js/faker';
-import type { SubTask, Task } from '../../types/models';
+import type { SubTask } from '../../types/models';
 import { createId, randomBool } from '../utils';
 
 const SUBTASK_TITLES = [
@@ -36,11 +36,3 @@ export const makeSubTask = (
 
 export const makeSubTasks = (taskId: string, count: number): SubTask[] =>
   Array.from({ length: count }, () => makeSubTask(taskId));
-
-// Gives a random subset of tasks 1-4 sub-tasks each — realistic seed data.
-export const makeSubTasksForTasks = (tasks: Task[]): SubTask[] =>
-  tasks.flatMap((task) =>
-    randomBool(0.4)
-      ? makeSubTasks(task.id, faker.number.int({ min: 1, max: 4 }))
-      : [],
-  );

@@ -3,6 +3,7 @@ import type { Folder, Task } from '../../types/models';
 import { EISENHOWER_QUADRANTS } from '../../types/models';
 import { MOCK_USER_ID } from '../data/fixtures';
 import { createId, DAY_MS, randomBool } from '../utils';
+import { makeSubTasks } from './subTaskFactory';
 
 const TASK_TITLES = [
   'Préparer la présentation client',
@@ -40,15 +41,18 @@ export const makeDumbTask = (overrides: Partial<Task> = {}): Task => ({
   deletedAt: null,
   createdAt: '2026-04-20T10:00:00.000Z',
   updatedAt: '2026-04-20T10:00:00.000Z',
+  subTasks: [],
   ...overrides,
 });
 
 // Randomized — realistic seed data, not for test assertions.
 export const makeTask = (overrides: Partial<Task> = {}): Task => {
   const createdAt = faker.date.past({ years: 1 }).toISOString();
+  // The sub-tasks below point to this id: take the overridden one if given.
+  const id = overrides.id ?? createId('task');
 
   return {
-    id: createId('task'),
+    id,
     title: faker.helpers.arrayElement(TASK_TITLES),
     description: randomBool(0.5) ? faker.lorem.sentence() : null,
     quadrant: faker.helpers.arrayElement(EISENHOWER_QUADRANTS),
@@ -67,6 +71,10 @@ export const makeTask = (overrides: Partial<Task> = {}): Task => {
     deletedAt: null,
     createdAt,
     updatedAt: createdAt,
+    // About 4 tasks in 10 get 1 to 4 sub-tasks.
+    subTasks: randomBool(0.4)
+      ? makeSubTasks(id, faker.number.int({ min: 1, max: 4 }))
+      : [],
     ...overrides,
   };
 };

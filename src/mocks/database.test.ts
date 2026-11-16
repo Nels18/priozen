@@ -29,11 +29,21 @@ const expectedFolders = [
 ];
 const [firstFolder] = expectedFolders;
 
+const expectedSubTasks = [
+  makeDumbSubTask({ isDone: true }),
+  makeDumbSubTask({ id: 'subtask-2', title: 'Connexion API /auth/login' }),
+  makeDumbSubTask({
+    id: 'subtask-3',
+    title: 'Gestion erreurs & états de chargement',
+  }),
+];
+
 const expectedTasks = [
   makeDumbTask({
     quadrant: 'critical',
     folderId: 'folder-3',
     description: 'Intégrer le formulaire avec validation et appel API.',
+    subTasks: expectedSubTasks,
   }),
   makeDumbTask({
     id: 'task-2',
@@ -103,18 +113,6 @@ const expectedTasks = [
 const [firstTask] = expectedTasks;
 const secondTask = expectedTasks[1];
 const trashedTask = expectedTasks.find((task) => task.deletedAt !== null)!;
-
-const expectedSubTasks = [
-  makeDumbSubTask({ isDone: true }),
-  makeDumbSubTask({ id: 'subtask-2', title: 'Connexion API /auth/login' }),
-  makeDumbSubTask({
-    id: 'subtask-3',
-    title: 'Gestion erreurs & états de chargement',
-  }),
-];
-const firstTaskSubTasks = expectedSubTasks.filter(
-  (subTask) => subTask.taskId === firstTask.id,
-);
 
 beforeEach(async (): Promise<void> => {
   vi.resetModules();
@@ -257,13 +255,38 @@ describe('tasks', () => {
 });
 
 describe('subTasks', () => {
-  it('lists sub-tasks belonging to a given task', () => {
-    expect(databaseModule.database.getSubTasks(firstTask.id)).toHaveLength(
-      firstTaskSubTasks.length,
+  it('seeds the sub-tasks inside their task', () => {
+    expect(databaseModule.database.getTask(firstTask.id)?.subTasks).toEqual(
+      expectedSubTasks,
+    );
+    expect(databaseModule.database.getTask(secondTask.id)?.subTasks).toEqual(
+      [],
     );
   });
 
-  it('returns an empty list for a task without sub-tasks', () => {
-    expect(databaseModule.database.getSubTasks(secondTask.id)).toEqual([]);
+  it('checks one sub-task and leaves the task and the others as they are', () => {
+    const updated = databaseModule.database.setSubTaskDone(
+      firstTask.id,
+      'subtask-2',
+      true,
+    );
+
+    expect(updated?.isDone).toBe(false);
+    expect(updated?.subTasks.map((subTask) => subTask.isDone)).toEqual([
+      true,
+      true,
+      false,
+    ]);
+    expect(databaseModule.database.getTask(firstTask.id)).toEqual(updated);
+  });
+
+  it('returns null for an unknown task or sub-task', () => {
+    const { database } = databaseModule;
+    expect(database.setSubTaskDone('missing', 'subtask-1', true)).toBeNull();
+    expect(database.setSubTaskDone(firstTask.id, 'missing', true)).toBeNull();
+    // A sub-task of another task is unknown too.
+    expect(
+      database.setSubTaskDone(secondTask.id, 'subtask-1', true),
+    ).toBeNull();
   });
 });

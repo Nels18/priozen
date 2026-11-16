@@ -18,6 +18,7 @@ const task: Task = {
   deletedAt: null,
   createdAt: '2026-11-01T00:00:00.000Z',
   updatedAt: '2026-11-01T00:00:00.000Z',
+  subTasks: [],
 };
 
 describe('EMPTY_TASK_FORM', () => {
