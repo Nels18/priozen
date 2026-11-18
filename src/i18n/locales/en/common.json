@@ -3,5 +3,9 @@
   "showPassword": "Show password",
   "hidePassword": "Hide password",
   "signOut": "Sign out",
-  "demoBanner": "Demo — fictitious data"
+  "demoBanner": "Demo — fictitious data",
+  "toast": {
+    "undo": "Undo",
+    "saveFailed": "Couldn't save. Please try again."
+  }
 }

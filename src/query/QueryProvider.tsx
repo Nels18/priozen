@@ -6,9 +6,11 @@ import {
 import { addNetworkStateListener, getNetworkStateAsync } from 'expo-network';
 import type { JSX, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppStateStatus } from 'react-native';
 import { AppState, Platform } from 'react-native';
-import { createQueryClient } from './queryClient';
+import { useToast } from '@/src/toast/ToastProvider';
+import { createQueryClient, subscribeToMutationErrors } from './queryClient';
 
 /**
  * On iOS / Android, tell TanStack Query when the app is in the foreground
@@ -47,14 +49,27 @@ const useNativeQueryManagers = (): void => {
   }, []);
 };
 
-/** Provides the app's QueryClient, created once for the app's lifetime. */
+/**
+ * Provides the app's QueryClient, created once for the app's lifetime. A
+ * failed save (mutation) shows an error toast; must sit inside ToastProvider.
+ */
 export function QueryProvider({
   children,
 }: {
   children: ReactNode;
 }): JSX.Element {
+  const { t } = useTranslation('common');
+  const { error: showErrorToast } = useToast();
   const [queryClient] = useState(createQueryClient);
   useNativeQueryManagers();
+
+  useEffect(
+    () =>
+      subscribeToMutationErrors(queryClient, (): void => {
+        showErrorToast(t('toast.saveFailed'));
+      }),
+    [queryClient, showErrorToast, t],
+  );
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

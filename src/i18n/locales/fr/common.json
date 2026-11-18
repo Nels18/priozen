@@ -3,5 +3,9 @@
   "showPassword": "Afficher le mot de passe",
   "hidePassword": "Masquer le mot de passe",
   "signOut": "Se déconnecter",
-  "demoBanner": "Démo — données fictives"
+  "demoBanner": "Démo — données fictives",
+  "toast": {
+    "undo": "Annuler",
+    "saveFailed": "Échec de l'enregistrement. Réessayez."
+  }
 }

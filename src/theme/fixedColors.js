@@ -16,6 +16,14 @@ module.exports = {
   },
   // Dimmed backdrop behind a modal (mockup), same in both themes.
   scrim: 'rgba(10, 9, 24, 0.5)',
+  // Success green (global.css --color-success), same in both themes.
+  success: '#10B981',
+  // Toasts stay dark in both themes (mockup): background, action link and
+  // countdown bar.
+  toast: {
+    DEFAULT: '#1E293B',
+    action: '#A5B4FC',
+  },
   // The sidebar stays dark in both themes, so its foreground colors are fixed.
   sidebar: {
     accent: '#818CF8',

@@ -14,6 +14,7 @@ import { AuthProvider } from '@/src/auth/AuthProvider';
 import { DemoBanner } from '@/src/components/layout/DemoBanner';
 import { isDemo, isMocksEnabled } from '@/src/config/demo';
 import { QueryProvider } from '@/src/query/QueryProvider';
+import { ToastProvider } from '@/src/toast/ToastProvider';
 import '@/src/i18n';
 import '../global.css';
 
@@ -58,16 +59,19 @@ export default function RootLayout(): JSX.Element | null {
 
   return (
     <MocksProvider>
-      <QueryProvider>
-        <AuthProvider>
-          <View className="flex-1 bg-page">
-            {/* The public demo is a web target; native preview builds (also
-                on the mocks) only reach testers who know it. */}
-            {isDemo && Platform.OS === 'web' && <DemoBanner />}
-            <Stack screenOptions={{ headerShown: false }} />
-          </View>
-        </AuthProvider>
-      </QueryProvider>
+      {/* Outside QueryProvider, which shows a toast when a save fails. */}
+      <ToastProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <View className="flex-1 bg-page">
+              {/* The public demo is a web target; native preview builds (also
+                  on the mocks) only reach testers who know it. */}
+              {isDemo && Platform.OS === 'web' && <DemoBanner />}
+              <Stack screenOptions={{ headerShown: false }} />
+            </View>
+          </AuthProvider>
+        </QueryProvider>
+      </ToastProvider>
     </MocksProvider>
   );
 }

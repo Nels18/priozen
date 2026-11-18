@@ -8,5 +8,7 @@
   "loading": "Chargement des tâches…",
   "loadError": "Impossible de charger les tâches.",
   "retry": "Réessayer",
-  "newTaskButton": "+ Nouvelle tâche"
+  "newTaskButton": "+ Nouvelle tâche",
+  "taskDone": "Terminée : {{title}}",
+  "taskReopened": "Rouverte : {{title}}"
 }

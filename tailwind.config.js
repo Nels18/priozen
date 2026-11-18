@@ -34,6 +34,7 @@ module.exports = {
         delegate: { DEFAULT: token('delegate'), bg: token('delegate-bg') },
         secondary: { DEFAULT: token('secondary'), bg: token('secondary-bg') },
         scrim: fixedColors.scrim,
+        toast: fixedColors.toast,
       },
       // Centered modal dialog on medium and large screens (mockup).
       maxWidth: {

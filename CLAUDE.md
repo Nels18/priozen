@@ -76,6 +76,7 @@ Décisions de design (maquette ; livrées par MOB-01 et DASH-06) :
 - **Pas d'émoji dans l'UI** : tout pictogramme passe par le composant `Icon` (`src/components/ui/Icon.tsx`, Ionicons) : `<Icon name="…" size={16} color="muted" />`, taille parmi celles de la maquette (`IconSize`), couleur = jeton du thème ; sans `label`, l'icône est décorative et masquée aux lecteurs d'écran, avec `label` elle est lue. Importer `@expo/vector-icons` ailleurs est refusé par ESLint, et `src/test/noEmoji.test.ts` échoue si un émoji apparaît dans `app/` ou `src/`
 - **Corbeille** : accessible par un item en bas de la sidebar (tablette, bureau) et par une ligne de l'écran Profil (mobile), avec badge compteur masqué à 0. Restaurer, ou supprimer définitivement avec confirmation ; indicateur « purge dans J-Y »
 - **Animations** : courtes (150 à 250 ms) et désactivées si « réduire les animations » est actif ; durées et liste dans UX-06 (PRIO-71)
+- **Toasts** (UX-02) : `useToast()` (`src/toast/ToastProvider.tsx`) → `toast.success(message, action?)` / `toast.error(…)`, message déjà traduit et qui nomme l'objet (« Terminée : {{title}} »), action facultative (« Annuler »). 3 au plus, 5 s chacun, en pause au survol ou au focus de l'action ; au-dessus des modales. Un échec de mutation affiche déjà un toast d'erreur (`QueryProvider`) : ne pas en ajouter un dans l'écran
 
 ## Badges Eisenhower
 
