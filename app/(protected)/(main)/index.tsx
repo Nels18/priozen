@@ -111,7 +111,9 @@ export default function TasksScreen(): JSX.Element | null {
   );
   // Toast at once, like the optimistic tick (mockup); "Annuler" sets the task
   // back. If the save fails, the error toast replaces this one. The title
-  // tells several toasts apart.
+  // tells several toasts apart. mutateAsync, not mutate's onError: that
+  // callback only fires for the latest call, so ticking A then B would leave
+  // A's toast up if A failed.
   const handleToggleDone = (task: Task): void => {
     const isDone = !task.isDone;
     const message = t(isDone ? 'taskDone' : 'taskReopened', {
@@ -121,10 +123,10 @@ export default function TasksScreen(): JSX.Element | null {
       label: t('common:toast.undo'),
       onPress: () => setDone.mutate({ id: task.id, isDone: task.isDone }),
     });
-    setDone.mutate(
-      { id: task.id, isDone },
-      { onError: () => toast.dismiss(toastId) },
-    );
+    // The failure itself is reported by the global error toast.
+    setDone
+      .mutateAsync({ id: task.id, isDone })
+      .catch((): void => toast.dismiss(toastId));
   };
 
   if (!session) return null;

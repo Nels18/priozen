@@ -1,5 +1,6 @@
 import type { JSX, ReactNode } from 'react';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, Text, View } from 'react-native';
 import Animated, {
   cancelAnimation,
@@ -124,6 +125,7 @@ function ToastItem({
   onRelease,
   onAction,
 }: ToastItemProps): JSX.Element {
+  const { t } = useTranslation('common');
   // 1 → 0 over the toast's lifetime: the countdown bar empties, and stops
   // where it is during a pause.
   const remaining = useSharedValue(1);
@@ -172,6 +174,11 @@ function ToastItem({
         {toast.action && (
           <Pressable
             accessibilityRole="button"
+            // Up to 3 "Annuler" buttons at once: the label says which toast.
+            accessibilityLabel={t('toast.actionLabel', {
+              action: toast.action.label,
+              message: toast.message,
+            })}
             onPress={onAction}
             // Reached with Tab: the button must not vanish while focused.
             onFocus={(): void => onHold('focus')}

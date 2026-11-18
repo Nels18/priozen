@@ -6,6 +6,7 @@
   "demoBanner": "Demo — fictitious data",
   "toast": {
     "undo": "Undo",
+    "actionLabel": "{{action}}: {{message}}",
     "saveFailed": "Couldn't save. Please try again."
   }
 }

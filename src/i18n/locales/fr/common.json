@@ -6,6 +6,7 @@
   "demoBanner": "Démo — données fictives",
   "toast": {
     "undo": "Annuler",
+    "actionLabel": "{{action}} : {{message}}",
     "saveFailed": "Échec de l'enregistrement. Réessayez."
   }
 }
