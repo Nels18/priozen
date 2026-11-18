@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useScreenSize } from '@/src/layout/screenSize';
 import { getActiveNavItem } from '@/src/navigation/navItems';
 import { ROUTES } from '@/src/navigation/routes';
+import { useToastBottomOffset } from '@/src/toast/ToastProvider';
 import type { User } from '@/src/types/models';
 import { BottomNav } from './BottomNav';
 import { Fab } from './Fab';
@@ -17,6 +18,12 @@ import { Sidebar } from './Sidebar';
 const SIDEBAR_WIDTH = { medium: 240, large: 260 } as const;
 // Bottom nav height without the safe-area inset (icon + label + paddings).
 const BOTTOM_NAV_HEIGHT = 64;
+// Space between the bottom nav and the "+" button, and above the button.
+const FAB_GAP = 16;
+const FAB_SIZE = 52;
+const TOAST_GAP = 12;
+// Toasts on medium and large screens: bottom right corner (mockup).
+const WIDE_TOAST_OFFSET = 24;
 
 interface AppShellProps {
   user: User;
@@ -35,6 +42,16 @@ export function AppShell({ user, children }: AppShellProps): JSX.Element {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const isTasksView = getActiveNavItem(usePathname()).key === 'tasks';
+  const fabBottom = BOTTOM_NAV_HEIGHT + insets.bottom + FAB_GAP;
+  // Toasts stay above the bottom nav and the "+" button (UX-02).
+  const smallToastOffset = isTasksView
+    ? fabBottom + FAB_SIZE + TOAST_GAP
+    : fabBottom;
+  useToastBottomOffset(
+    screenSize === 'small'
+      ? smallToastOffset
+      : insets.bottom + WIDE_TOAST_OFFSET,
+  );
 
   if (screenSize === 'small') {
     return (
@@ -46,7 +63,7 @@ export function AppShell({ user, children }: AppShellProps): JSX.Element {
           <Fab
             label={t('newTask')}
             onPress={(): void => router.push(ROUTES.newTask)}
-            bottom={BOTTOM_NAV_HEIGHT + insets.bottom + 16}
+            bottom={fabBottom}
           />
         )}
       </View>

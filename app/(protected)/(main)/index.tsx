@@ -18,6 +18,7 @@ import { EISENHOWER_QUADRANTS, QUADRANT_CLASSES } from '@/src/tasks/quadrants';
 import { taskMutations } from '@/src/tasks/taskMutations';
 import { taskQueries } from '@/src/tasks/taskQueries';
 import { useTaskSummary } from '@/src/tasks/useTaskSummary';
+import { useToast } from '@/src/toast/ToastProvider';
 import { useStartOfToday } from '@/src/utils/startOfToday';
 
 // Large screens show the quadrants as the Eisenhower matrix: two rows of two.
@@ -89,7 +90,7 @@ function TaskGroups({
 
 /** Tasks view: tasks grouped by Eisenhower quadrant, plus the done ones. */
 export default function TasksScreen(): JSX.Element | null {
-  const { t } = useTranslation('dashboard');
+  const { t } = useTranslation(['dashboard', 'common']);
   const { session } = useAuth();
   const screenSize = useScreenSize();
   const startOfToday = useStartOfToday();
@@ -102,13 +103,31 @@ export default function TasksScreen(): JSX.Element | null {
   // Folder names are a bonus: the list still shows if they fail to load.
   const folders = useQuery(folderQueries.list());
   const setDone = useMutation(taskMutations.setDone(queryClient));
+  const toast = useToast();
 
   // No useMemo / useCallback: the React Compiler (app.json) memoizes.
   const foldersById = new Map(
     (folders.data ?? []).map((folder) => [folder.id, folder]),
   );
-  const handleToggleDone = (task: Task): void =>
-    setDone.mutate({ id: task.id, isDone: !task.isDone });
+  // Toast at once, like the optimistic tick (mockup); "Annuler" sets the task
+  // back. If the save fails, the error toast replaces this one. The title
+  // tells several toasts apart. mutateAsync, not mutate's onError: that
+  // callback only fires for the latest call, so ticking A then B would leave
+  // A's toast up if A failed.
+  const handleToggleDone = (task: Task): void => {
+    const isDone = !task.isDone;
+    const message = t(isDone ? 'taskDone' : 'taskReopened', {
+      title: task.title,
+    });
+    const toastId = toast.success(message, {
+      label: t('common:toast.undo'),
+      onPress: () => setDone.mutate({ id: task.id, isDone: task.isDone }),
+    });
+    // The failure itself is reported by the global error toast.
+    setDone
+      .mutateAsync({ id: task.id, isDone })
+      .catch((): void => toast.dismiss(toastId));
+  };
 
   if (!session) return null;
 

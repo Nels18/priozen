@@ -8,5 +8,7 @@
   "loading": "Loading your tasks…",
   "loadError": "Couldn't load your tasks.",
   "retry": "Try again",
-  "newTaskButton": "+ New task"
+  "newTaskButton": "+ New task",
+  "taskDone": "Done: {{title}}",
+  "taskReopened": "Reopened: {{title}}"
 }

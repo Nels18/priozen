@@ -17,7 +17,7 @@ export const QUERY_STALE_TIME_MS = 30 * 1000;
 /** Retries after a failed request: 3 attempts in total. */
 export const QUERY_RETRY_COUNT = 2;
 
-/** Default handler: no toast system yet (UX-02), so failures are logged. */
+/** Default handler: failures are logged, for debugging. */
 const logQueryError: QueryErrorHandler = (error, key) => {
   // eslint-disable-next-line no-console
   console.error('[query] request failed', key, error);
@@ -51,4 +51,19 @@ export const createQueryClient = (
         retry: QUERY_RETRY_COUNT,
       },
     },
+  });
+
+/**
+ * Calls `onError` once per failed mutation (a save), never for a failed
+ * query: a read keeps the error state of its screen. The app shows an error
+ * toast this way (UX-02). Returns the unsubscribe function.
+ */
+export const subscribeToMutationErrors = (
+  queryClient: QueryClient,
+  onError: (error: unknown) => void,
+): (() => void) =>
+  queryClient.getMutationCache().subscribe((event) => {
+    if (event.type === 'updated' && event.action.type === 'error') {
+      onError(event.action.error);
+    }
   });
