@@ -40,7 +40,7 @@ const exiting = FadeOut.duration(150).reduceMotion(ReduceMotion.System);
 const layout = LinearTransition.duration(180).reduceMotion(ReduceMotion.System);
 
 interface ToastViewportProps {
-  toasts: Toast[];
+  toasts: readonly Toast[];
   /** From the layout (bottom nav, "+" button); null for the default spot. */
   bottomOffset: number | null;
   /** Countdowns stopped: a toast is hovered or its action focused. */

@@ -1,25 +1,27 @@
 import type { JSX, ReactNode } from 'react';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import { AccessibilityInfo, Platform } from 'react-native';
 import { ToastViewport } from '@/src/components/ui/ToastViewport';
-import type { Toast, ToastAction, ToastHold } from './toastQueue';
-import { addToast, droppedToastIds, removeToast } from './toastQueue';
-import { ToastTimers } from './toastTimers';
+import type { ToastApi } from './toastStore';
+import { ToastStore } from './toastStore';
 
-export interface ToastApi {
-  /** Shows a green-check toast; returns its id (to dismiss it early). */
-  success: (message: string, action?: ToastAction) => string;
-  /** Shows a red-alert toast; returns its id. */
-  error: (message: string, action?: ToastAction) => string;
-  dismiss: (id: string) => void;
-}
+export type { ToastApi } from './toastStore';
 
-interface ToastContextValue extends ToastApi {
-  /** Distance from the bottom edge, set by the screen layout (AppShell). */
-  setBottomOffset: (offset: number | null) => void;
-}
+// The store never changes: consumers never rerender because of it.
+const toastContext = createContext<ToastStore | null>(null);
 
-const toastContext = createContext<ToastContextValue | null>(null);
+// The web reads the role="status" region; Android its live region.
+const announce = (message: string): void => {
+  if (Platform.OS === 'ios') {
+    AccessibilityInfo.announceForAccessibility(message);
+  }
+};
 
 /**
  * Holds the toasts of the whole app and draws them above every screen,
@@ -32,96 +34,47 @@ export function ToastProvider({
 }: {
   children: ReactNode;
 }): JSX.Element {
-  const [toasts, setToasts] = useState<Toast[]>([]);
-  const [bottomOffset, setBottomOffset] = useState<number | null>(null);
-  const [timers] = useState(() => new ToastTimers());
-  // Mirrors timers.isPaused, to redraw the countdown bars.
-  const [isPaused, setIsPaused] = useState(false);
-  // Mirrors `toasts` so timers and quick successive calls see the latest list.
-  const toastsRef = useRef<Toast[]>([]);
-  const nextIdRef = useRef(0);
+  const [store] = useState(() => new ToastStore(announce));
+  const { toasts, isPaused, bottomOffset } = useSyncExternalStore(
+    store.subscribe,
+    store.getSnapshot,
+  );
 
-  const update = (next: Toast[]): void => {
-    droppedToastIds(toastsRef.current, next).forEach((id) => timers.forget(id));
-    toastsRef.current = next;
-    setToasts(next);
-    setIsPaused(timers.isPaused);
-  };
-
-  const dismiss = (id: string): void =>
-    update(removeToast(toastsRef.current, id));
-
-  const show = (
-    kind: Toast['kind'],
-    message: string,
-    action?: ToastAction,
-  ): string => {
-    nextIdRef.current += 1;
-    const id = `toast-${nextIdRef.current}`;
-    update(addToast(toastsRef.current, { id, kind, message, action }));
-    timers.start(id, () => dismiss(id));
-    // The web reads the role="status" region; Android its live region.
-    if (Platform.OS === 'ios') {
-      AccessibilityInfo.announceForAccessibility(message);
-    }
-    return id;
-  };
-
-  const hold = (id: string, reason: ToastHold): void => {
-    timers.hold(id, reason);
-    setIsPaused(timers.isPaused);
-  };
-
-  const release = (id: string, reason: ToastHold): void => {
-    timers.release(id, reason);
-    setIsPaused(timers.isPaused);
-  };
-
-  useEffect(() => (): void => timers.clear(), [timers]);
-
-  const value: ToastContextValue = {
-    success: (message, action) => show('success', message, action),
-    error: (message, action) => show('error', message, action),
-    dismiss,
-    setBottomOffset,
-  };
+  useEffect(() => (): void => store.clear(), [store]);
 
   return (
-    <toastContext.Provider value={value}>
+    <toastContext.Provider value={store}>
       {children}
       <ToastViewport
         toasts={toasts}
         bottomOffset={bottomOffset}
         isPaused={isPaused}
-        onHold={hold}
-        onRelease={release}
-        onAction={(toast): void => {
-          dismiss(toast.id);
-          toast.action?.onPress();
-        }}
+        onHold={store.hold}
+        onRelease={store.release}
+        onAction={store.runAction}
       />
     </toastContext.Provider>
   );
 }
 
-const useToastContext = (): ToastContextValue => {
-  const context = useContext(toastContext);
-  if (!context) throw new Error('useToast must be used inside ToastProvider');
-  return context;
+const useToastStore = (): ToastStore => {
+  const store = useContext(toastContext);
+  if (!store) throw new Error('useToast must be used inside ToastProvider');
+  return store;
 };
 
-/** Shows toasts from any component: `toast.success(t('…'), action)`. */
-export const useToast = (): ToastApi => {
-  const { success, error, dismiss } = useToastContext();
-  return { success, error, dismiss };
-};
+/**
+ * Shows toasts from any component: `toast.success(t('…'), action)`. The
+ * functions are the same on every render: safe in effect dependencies.
+ */
+export const useToast = (): ToastApi => useToastStore().api;
 
 /**
  * Keeps toasts above the layout's bottom bars (bottom nav, "+" button) while
  * the calling layout is mounted. Without it, toasts sit near the bottom edge.
  */
 export const useToastBottomOffset = (offset: number): void => {
-  const { setBottomOffset } = useToastContext();
+  const { setBottomOffset } = useToastStore();
   useEffect(() => {
     setBottomOffset(offset);
     return (): void => setBottomOffset(null);
