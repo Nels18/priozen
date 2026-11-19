@@ -144,7 +144,7 @@ export function TaskForm({
           className="flex-row items-center gap-2 rounded-sm bg-critical-bg px-3 py-2.5"
         >
           <Icon name="warning-outline" size={16} color="critical" />
-          <Text className="flex-1 font-sans text-caption text-critical">
+          <Text className="flex-1 font-sans text-caption text-critical-text">
             {t('form.errors.saveFailed')}
           </Text>
         </View>

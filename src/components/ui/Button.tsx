@@ -1,6 +1,5 @@
 import type { JSX } from 'react';
 import { ActivityIndicator, Pressable, Text } from 'react-native';
-import fixedColors from '@/src/theme/fixedColors';
 import { useIconColors } from '@/src/theme/useIconColors';
 
 type ButtonVariant = 'primary' | 'outline';
@@ -17,7 +16,7 @@ interface ButtonProps {
 const VARIANT_CLASSES: Record<ButtonVariant, { box: string; label: string }> = {
   primary: {
     box: 'bg-primary active:bg-primary-hover',
-    label: 'text-white',
+    label: 'text-on-primary',
   },
   outline: {
     box: 'border-[1.5px] border-border bg-transparent active:bg-input',
@@ -48,7 +47,9 @@ export function Button({
     >
       {isLoading ? (
         <ActivityIndicator
-          color={variant === 'primary' ? fixedColors.white : iconColors.muted}
+          color={
+            variant === 'primary' ? iconColors.onPrimary : iconColors.muted
+          }
         />
       ) : (
         <Text className={`font-sans-semibold text-[15px] ${classes.label}`}>

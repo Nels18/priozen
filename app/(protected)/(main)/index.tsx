@@ -155,7 +155,7 @@ export default function TasksScreen(): JSX.Element | null {
 
       {tasks.isError && (
         <View className="items-center gap-4 rounded-md border border-border bg-card px-6 py-10">
-          <Text className="text-center font-sans text-sm text-critical">
+          <Text className="text-center font-sans text-sm text-critical-text">
             {t('loadError')}
           </Text>
           <Button

@@ -21,7 +21,7 @@ export function Avatar({ user, size = 'sm' }: AvatarProps): JSX.Element {
       accessible={false}
       className={`items-center justify-center rounded-full bg-primary ${classes.box}`}
     >
-      <Text className={`font-sans-bold text-white ${classes.text}`}>
+      <Text className={`font-sans-bold text-on-primary ${classes.text}`}>
         {getInitials(user)}
       </Text>
     </View>

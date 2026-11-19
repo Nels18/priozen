@@ -41,22 +41,32 @@ Workflows EAS (`.eas/workflows/`) :
 
 ## Palette de couleurs
 
-| Token             | Light   | Dark    |
-| ----------------- | ------- | ------- |
-| `--primary`       | #4F46E5 | #818CF8 |
-| `--primary-hover` | #4338CA | #6366F1 |
-| `--success`       | #10B981 | #10B981 |
-| `--bg-page`       | #F9FAFB | #0A0918 |
-| `--bg-card`       | #FFFFFF | #13111F |
-| `--bg-sidebar`    | #1E1B4B | #0A0918 |
-| `--text-primary`  | #1E293B | #E0E7FF |
-| `--text-muted`    | #64748B | #94A3B8 |
-| `--border`        | #E2E8F0 | #312E81 |
+| Token                    | Light   | Dark    |
+| ------------------------ | ------- | ------- |
+| `--primary`              | #4F46E5 | #818CF8 |
+| `--primary-hover`        | #4338CA | #6366F1 |
+| `--success`              | #10B981 | #10B981 |
+| `--bg-page`              | #F9FAFB | #0A0918 |
+| `--bg-card`              | #FFFFFF | #13111F |
+| `--bg-sidebar`           | #1E1B4B | #0A0918 |
+| `--text-primary`         | #1E293B | #E0E7FF |
+| `--text-muted`           | #64748B | #94A3B8 |
+| `--border`               | #E2E8F0 | #312E81 |
+| `--on-primary`           | #FFFFFF | #1E1B4B |
+| `--primary-gradient-end` | #818CF8 | #818CF8 |
+| `--critical-text`        | #B91C1C | #EF4444 |
+| `--delegate-text`        | #B45309 | #F59E0B |
+| `--secondary-text`       | #475569 | #94A3B8 |
 
-Déclarées comme variables CSS dans `global.css` (bascule light/dark automatique via `prefers-color-scheme`) et exposées en classes NativeWind dans `tailwind.config.js` : `bg-page`, `bg-card`, `bg-input`, `bg-sidebar`, `text-text`, `text-muted`, `border-border`, `bg-primary` / `primary-hover` / `primary-light`, et par quadrant `critical`, `schedule`, `delegate`, `secondary` (+ variante `-bg`). Toujours utiliser ces classes sémantiques, jamais de couleur en dur ni de variante `dark:`.
+Source de vérité du style : le design system https://claude.ai/artifact/NukmG4wAL3XoSWJNUVG79R (`schedule` y est un alias de `primary`, donc #818CF8 en sombre).
+
+Déclarées comme variables CSS dans `global.css` (bascule light/dark automatique via `prefers-color-scheme`) et exposées en classes NativeWind dans `tailwind.config.js` : `bg-page`, `bg-card`, `bg-input`, `bg-sidebar`, `text-text`, `text-muted`, `border-border`, `bg-primary` / `primary-hover` / `primary-light` / `primary-gradient-end`, `text-on-primary`, et par quadrant `critical`, `schedule`, `delegate`, `secondary` (+ variante `-bg`, et `-text` pour critical, delegate et secondary). Toujours utiliser ces classes sémantiques, jamais de couleur en dur ni de variante `dark:`.
+
+- **Contraste (UX-07)** : tout texte ≥ 4,5:1, toute bordure de contrôle ou icône ≥ 3:1. **Tout texte rouge en `text-critical-text`** (de même `text-delegate-text`, `text-secondary-text`) : la couleur vive `critical`… reste pour les pastilles et bordures. `text-schedule` reste en `primary`, déjà conforme. Même règle pour une couleur brute (`useIconColors()`) : un texte rouge prend `criticalText` ; une icône peut garder `critical` (3,76:1 sur blanc, ≥ 3:1). **Tout texte ou icône sur `bg-primary` en `on-primary`** (`text-on-primary`, `color="onPrimary"`), jamais en blanc. Case à cocher non cochée : bordure `border-muted`. `src/theme/textContrast.test.ts` vérifie chaque paire texte/fond dans les deux thèmes (lue dans `global.css`), la synchronisation de `useIconColors()` et l'absence de `text-critical` / `text-delegate` / `text-secondary`
+- Barre de progression : dégradé de `primary` à `primary-gradient-end` (90°) avec `expo-linear-gradient`, couleurs tirées de `useIconColors()`
 
 - Couleurs identiques dans les deux thèmes (blanc, premier plan de la sidebar) : `src/theme/fixedColors.js`, utilisé par `tailwind.config.js` (`text-sidebar-text`, `bg-sidebar-active`…) et par les composants qui attendent une couleur brute
-- Props de couleur brute qui suivent le thème (`placeholderTextColor`…) : `useIconColors()` (`src/theme/useIconColors.ts`), à garder synchronisé avec `global.css` ; ses clés (`primary`, `muted`, `critical`, `white`, `sidebarText`, un par quadrant) sont aussi les couleurs du composant `Icon`
+- Props de couleur brute qui suivent le thème (`placeholderTextColor`…) : `useIconColors()` (`src/theme/useIconColors.ts`), à garder synchronisé avec `global.css` ; ses clés (`primary`, `onPrimary`, `muted`, `critical`, `criticalText`…, `white`, `sidebarText`, un par quadrant) sont aussi les couleurs du composant `Icon`
 - Couleurs de dossier : `FOLDER_COLOR` (`src/theme/folderColors.ts`), 8 couleurs nommées (`FOLDER_COLOR.teal`…, liste dans `FOLDER_COLORS`) et `DEFAULT_FOLDER_COLOR` ; le code s'y réfère par leur nom, jamais par leur hex. Une seule palette pour les deux thèmes, car la couleur est une donnée enregistrée en hex : contraste ≥ 3:1 sur les fonds clairs et sombres, sans rouge, ambre, indigo ni gris, pour qu'une pastille de dossier ne se lise jamais comme un quadrant. `folderColors.test.ts` vérifie toute nouvelle couleur ; les mocks utilisent cette palette
 - Couleurs par quadrant : `QUADRANT_CLASSES` (`src/tasks/quadrants.ts`) — pastille, badge, texte ; ne jamais réécrire les classes `bg-critical`… à la main
 

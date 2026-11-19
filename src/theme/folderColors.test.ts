@@ -1,32 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import { contrast, MIN_MARK_CONTRAST, toRgb } from '../test/contrast';
 import fixedColors from './fixedColors';
 import { DEFAULT_FOLDER_COLOR, FOLDER_COLORS } from './folderColors';
 
 // Page and card backgrounds, light and dark (global.css --color-page / -card).
 const BACKGROUNDS = ['#F9FAFB', '#FFFFFF', '#0A0918', '#13111F'];
-// WCAG AA for a non-text mark (1.4.11).
-const MIN_CONTRAST = 3;
 // Hue gap with the red, indigo and amber quadrants, in degrees.
 const MIN_HUE_GAP = 25;
 // The secondary quadrant is a gray, which has no meaningful hue: folder colors
 // stay away from it by being saturated (HSL saturation, 0 to 1).
 const MIN_SATURATION = 0.5;
 const { secondary, ...colorfulQuadrants } = fixedColors.quadrant;
-
-const toRgb = (hex: string): number[] =>
-  [1, 3, 5].map((start) => parseInt(hex.slice(start, start + 2), 16) / 255);
-
-const luminance = (hex: string): number => {
-  const [r, g, b] = toRgb(hex).map((c) =>
-    c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4,
-  );
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-};
-
-const contrast = (a: string, b: string): number => {
-  const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (light + 0.05) / (dark + 0.05);
-};
 
 const hue = (hex: string): number => {
   const [r, g, b] = toRgb(hex);
@@ -66,7 +50,7 @@ describe('FOLDER_COLORS', () => {
     (color): void => {
       BACKGROUNDS.forEach((background) => {
         expect(contrast(color, background)).toBeGreaterThanOrEqual(
-          MIN_CONTRAST,
+          MIN_MARK_CONTRAST,
         );
       });
     },

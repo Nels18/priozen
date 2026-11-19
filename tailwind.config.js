@@ -19,7 +19,10 @@ module.exports = {
           DEFAULT: token('primary'),
           hover: token('primary-hover'),
           light: token('primary-light'),
+          'gradient-end': token('primary-gradient-end'),
         },
+        // Text and icons on bg-primary (white in light, dark indigo in dark).
+        'on-primary': token('on-primary'),
         success: token('success'),
         page: token('page'),
         card: token('card'),
@@ -29,10 +32,24 @@ module.exports = {
         text: token('text'),
         muted: token('muted'),
         border: token('border'),
-        critical: { DEFAULT: token('critical'), bg: token('critical-bg') },
+        // DEFAULT for dots and borders; -text for any text in that color
+        // (text-critical-text…), which needs more contrast (4.5:1, UX-07).
+        critical: {
+          DEFAULT: token('critical'),
+          bg: token('critical-bg'),
+          text: token('critical-text'),
+        },
         schedule: { DEFAULT: token('schedule'), bg: token('schedule-bg') },
-        delegate: { DEFAULT: token('delegate'), bg: token('delegate-bg') },
-        secondary: { DEFAULT: token('secondary'), bg: token('secondary-bg') },
+        delegate: {
+          DEFAULT: token('delegate'),
+          bg: token('delegate-bg'),
+          text: token('delegate-text'),
+        },
+        secondary: {
+          DEFAULT: token('secondary'),
+          bg: token('secondary-bg'),
+          text: token('secondary-text'),
+        },
         scrim: fixedColors.scrim,
         toast: fixedColors.toast,
       },

@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -19,14 +20,19 @@
   --bg-sidebar-hover: #2D2A6E;
   --bg-input: #F1F5F9;
   --success: #10B981;
-  --critique: #EF4444;
-  --critique-bg: #FEF2F2;
+  --critical: #EF4444;
+  --critical-bg: #FEF2F2;
   --schedule: #4F46E5;
   --schedule-bg: #EEF2FF;
   --delegate: #F59E0B;
   --delegate-bg: #FFFBEB;
   --secondary-c: #94A3B8;
   --secondary-bg: #F8FAFC;
+  --on-primary: #FFFFFF;
+  --critical-text: #B91C1C;
+  --delegate-text: #B45309;
+  --secondary-text: #475569;
+  --primary-gradient-end: #818CF8;
   --text-primary: #1E293B;
   --text-muted: #64748B;
   --border: #E2E8F0;
@@ -55,10 +61,14 @@
     --text-primary: #E0E7FF;
     --text-muted: #94A3B8;
     --border: #312E81;
-    --critique-bg: #2D1515;
+    --critical-bg: #2D1515;
     --schedule-bg: #1E1B4B;
     --delegate-bg: #2D1F00;
     --secondary-bg: #0F0E1A;
+    --on-primary: #1E1B4B;
+    --critical-text: #EF4444;
+    --delegate-text: #F59E0B;
+    --secondary-text: #94A3B8;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
   }
@@ -75,10 +85,14 @@
   --text-primary: #E0E7FF;
   --text-muted: #94A3B8;
   --border: #312E81;
-  --critique-bg: #2D1515;
+  --critical-bg: #2D1515;
   --schedule-bg: #1E1B4B;
   --delegate-bg: #2D1F00;
   --secondary-bg: #0F0E1A;
+  --on-primary: #1E1B4B;
+  --critical-text: #EF4444;
+  --delegate-text: #F59E0B;
+  --secondary-text: #94A3B8;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
 }
@@ -499,7 +513,7 @@ body {
   width: 100%;
   padding: 12px;
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
   border: none;
   border-radius: var(--radius-sm);
   font-size: 15px;
@@ -568,7 +582,7 @@ body {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid var(--border);
+  border: 2px solid var(--text-muted);
   flex-shrink: 0;
   margin-top: 2px;
   display: flex;
@@ -606,7 +620,7 @@ body {
   border-radius: 20px;
 }
 .task-date.today { background: var(--schedule-bg); color: var(--primary); }
-.task-date.late { background: var(--critique-bg); color: var(--critique); }
+.task-date.late { background: var(--critical-bg); color: var(--critical-text); }
 .task-date.future { background: var(--secondary-bg); color: var(--text-muted); }
 .task-subtasks { font-size: 11px; color: var(--text-muted); }
 
@@ -653,14 +667,14 @@ body {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
-.quadrant-card.critique .quadrant-dot { background: var(--critique); }
-.quadrant-card.critique .quadrant-name { color: var(--critique); }
+.quadrant-card.critical .quadrant-dot { background: var(--critical); }
+.quadrant-card.critical .quadrant-name { color: var(--critical); }
 .quadrant-card.schedule .quadrant-dot { background: var(--primary); }
 .quadrant-card.schedule .quadrant-name { color: var(--primary); }
 .quadrant-card.delegate .quadrant-dot { background: var(--delegate); }
-.quadrant-card.delegate .quadrant-name { color: var(--delegate); }
+.quadrant-card.delegate .quadrant-name { color: var(--delegate-text); }
 .quadrant-card.secondary .quadrant-dot { background: var(--secondary-c); }
-.quadrant-card.secondary .quadrant-name { color: var(--secondary-c); }
+.quadrant-card.secondary .quadrant-name { color: var(--secondary-text); }
 
 /* ============================================================
    BADGE
@@ -673,10 +687,10 @@ body {
   font-size: 11px;
   font-weight: 600;
 }
-.badge.critique { background: var(--critique-bg); color: var(--critique); }
+.badge.critical { background: var(--critical-bg); color: var(--critical-text); }
 .badge.schedule { background: var(--schedule-bg); color: var(--schedule); }
-.badge.delegate { background: var(--delegate-bg); color: var(--delegate); }
-.badge.secondary { background: var(--secondary-bg); color: var(--secondary-c); }
+.badge.delegate { background: var(--delegate-bg); color: var(--delegate-text); }
+.badge.secondary { background: var(--secondary-bg); color: var(--secondary-text); }
 
 /* ============================================================
    SECTION TITLE (shared)
@@ -723,7 +737,7 @@ body {
 .progress-bar-fill {
   height: 100%;
   border-radius: 8px;
-  background: linear-gradient(90deg, var(--primary), #818CF8);
+  background: linear-gradient(90deg, var(--primary), var(--primary-gradient-end));
   transition: width 0.4s;
 }
 
@@ -898,7 +912,7 @@ body {
   justify-content: center;
   transition: opacity 0.15s;
 }
-.focus-btn.play { background: #818CF8; color: #fff; }
+.focus-btn.play { background: #818CF8; color: #1E1B4B; }
 .focus-btn.stop { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.65); }
 .focus-btn:hover { opacity: 0.85; }
 .focus-subtask { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 32px; }
@@ -950,7 +964,7 @@ body {
 .btn-primary-sm {
   padding: 10px 24px;
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
   border: none;
   border-radius: var(--radius-sm);
   font-size: 14px;
@@ -1084,7 +1098,7 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
   height: 52px;
   border-radius: 50%;
   background: var(--primary);
-  color: #fff;
+  color: var(--on-primary);
   font-size: 26px;
   display: flex;
   align-items: center;
@@ -1151,7 +1165,7 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
 .ov-tab[aria-selected="true"] { color:var(--primary); border-bottom-color:var(--primary); }
 .ov-tab-count { min-width:20px; padding:1px 6px; border-radius:10px; background:var(--border); color:var(--text-primary); font-size:12px; font-weight:700; text-align:center; }
 .ov-tab[aria-selected="true"] .ov-tab-count { background:var(--primary-light); color:var(--primary); }
-.ov-tab.has-late .ov-tab-count { background:var(--critique-bg); color:var(--critique); }
+.ov-tab.has-late .ov-tab-count { background:var(--critical-bg); color:var(--critical-text); }
 .ov-empty { padding:20px 16px; font-size:13px; color:var(--text-muted); text-align:center; }
 .screen-inner { padding: 20px; }
 .screen-inner-lg { padding: 0; }
@@ -1209,7 +1223,7 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
 .sk-l i:last-child { width:55%; }
 @keyframes skp { 50% { opacity:.45; } }
 @media (prefers-reduced-motion: reduce) { .sk-l i { animation:none; } }
-.m-btn-danger { margin-right:auto; background:transparent; border:0; color:var(--critique); font:inherit; font-weight:600; cursor:pointer; padding:0 8px; }
+.m-btn-danger { margin-right:auto; background:transparent; border:0; color:var(--critical-text); font:inherit; font-weight:600; cursor:pointer; padding:0 8px; }
 .task-check { padding:0; background:transparent; cursor:pointer; position:relative; color:inherit; }
 .task-check.done { background:var(--success); }
 .task-check::after { content:''; position:absolute; inset:-12px; }
@@ -1246,9 +1260,9 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
 .dt-desc-ro.empty { color:var(--text-muted); }
 .trash-item { opacity:1; flex-wrap:wrap; }
 .trash-meta { flex-basis:100%; font-size:12px; color:var(--text-muted); margin:-6px 0 0 32px; }
-.trash-meta .soon { color:var(--critique); font-weight:600; }
+.trash-meta .soon { color:var(--critical-text); font-weight:600; }
 .trash-btn { border:0; background:transparent; font:inherit; font-size:13px; font-weight:600; min-height:44px; padding:0 10px; cursor:pointer; color:var(--primary); border-radius:8px; }
-.trash-btn.danger { color:var(--critique); }
+.trash-btn.danger { color:var(--critical-text); }
 .trash-btn:hover { background:var(--bg-input); }
 .trash-plan { display:flex; align-items:center; justify-content:space-between; gap:10px; background:var(--primary-light); border-radius:10px; padding:10px 12px; font-size:13px; margin-bottom:12px; }
 .trash-empty { padding:28px 0; text-align:center; color:var(--text-muted); font-size:14px; }
@@ -1414,7 +1428,7 @@ const TASKS = [
   {
     id: 1,
     title: "Finaliser la page de connexion",
-    quadrant: "critique",
+    quadrant: "critical",
     folder: "Priozen App",
     folderIcon: ic('laptop', 13),
     subtasks: [{t:'Maquetter l\'écran',d:true},{t:'Brancher l\'API d\'authentification',d:false},{t:'Gérer les messages d\'erreur',d:false}],
@@ -1426,7 +1440,7 @@ const TASKS = [
   {
     id: 2,
     title: "Préparer la réunion client",
-    quadrant: "critique",
+    quadrant: "critical",
     folder: "Travail",
     folderIcon: ic('briefcase', 13),
     subtasks: null,
@@ -1599,7 +1613,7 @@ function renderDetailPanel() {
 }
 
 const QUADRANTS = [
-  { key: "critique", label: "Critique", description: "Important & urgent" },
+  { key: "critical", label: "Critique", description: "Important & urgent" },
   { key: "schedule", label: "À planifier", description: "Important, non urgent" },
   { key: "delegate", label: "Déléguer", description: "Urgent, moins important" },
   { key: "secondary", label: "Secondaire", description: "Ni urgent ni important" }
@@ -1714,7 +1728,7 @@ function buildSidebars() {
 // ---- Task item HTML ----
 function taskItemHTML(task, showQuadrant) {
   const q = showQuadrant ? QUADRANTS.find(x => x.key === task.quadrant) : null;
-  const qDot = { critique: 'var(--critique)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
+  const qDot = { critical: 'var(--critical)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
   const pr = subProg(task);
   return `
     <div class="task-item" onclick="openDetail(${task.id})">
@@ -1756,7 +1770,7 @@ function quadrantCardHTML(q, tasks, isDesktop) {
 let taskTab = 'todo';      // 'todo' | 'late' | 'done'
 let mobileFilter = null;   // null | clé de quadrant
 const TAB_LABELS = { todo: 'À faire', late: 'En retard', done: 'Terminées' };
-const Q_DOT = { critique: 'var(--critique)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
+const Q_DOT = { critical: 'var(--critical)', schedule: 'var(--primary)', delegate: '#F59E0B', secondary: '#94A3B8' };
 function tabTasks(tab) { return tabTasksRaw(tab).filter(t => !searchQuery || t.title.toLowerCase().includes(searchQuery.toLowerCase())); }
 function tabTasksRaw(tab) {
   if (tab === 'done') return TASKS.filter(t => t.done);
@@ -1806,7 +1820,7 @@ function taskListHTML(device) {
   }
   const empty = taskTab === 'late' ? 'Aucune tâche en retard' : 'Aucune tâche terminée pour le moment';
   const title = TAB_LABELS[taskTab];
-  return filterBar + `<div class="quadrant-card"><div class="quadrant-header"><div class="quadrant-label"><span class="quadrant-name" style="color:${taskTab === 'late' ? 'var(--critique)' : 'var(--text-primary)'}">${title}</span></div><span class="quadrant-count">${list.length}</span></div>${list.length ? list.map(t => taskItemHTML(t, true)).join('') : `<div class="ov-empty">${empty}</div>`}</div>`;
+  return filterBar + `<div class="quadrant-card"><div class="quadrant-header"><div class="quadrant-label"><span class="quadrant-name" style="color:${taskTab === 'late' ? 'var(--critical-text)' : 'var(--text-primary)'}">${title}</span></div><span class="quadrant-count">${list.length}</span></div>${list.length ? list.map(t => taskItemHTML(t, true)).join('') : `<div class="ov-empty">${empty}</div>`}</div>`;
 }
 
 // ---- SCREEN: Dashboard ----
@@ -1871,7 +1885,7 @@ function rightPanelContent(screen) {
     QUADRANTS.forEach(q => {
       counts[q.key] = TASKS.filter(t => t.quadrant === q.key && !t.done).length;
     });
-    const colors = { critique: '#EF4444', schedule: '#4F46E5', delegate: '#F59E0B', secondary: '#94A3B8' };
+    const colors = { critical: '#EF4444', schedule: '#4F46E5', delegate: '#F59E0B', secondary: '#94A3B8' };
     return `
       <div class="rp-section">
         <div class="rp-title">Vue d'ensemble</div>
@@ -1896,9 +1910,9 @@ function rightPanelContent(screen) {
       <div class="rp-section">
         <div class="rp-title">En retard</div>
         ${TASKS.filter(t => t.dateType === 'late').map(t => `
-          <div style="background:var(--critique-bg);border-radius:8px;padding:10px 12px;margin-bottom:8px;display:flex;gap:8px;align-items:flex-start">
-            <span style="color:var(--critique);margin-top:1px;display:inline-flex">${ic('alert', 14)}</span>
-            <span style="font-size:13px;color:var(--critique);font-weight:500">${t.title}</span>
+          <div style="background:var(--critical-bg);border-radius:8px;padding:10px 12px;margin-bottom:8px;display:flex;gap:8px;align-items:flex-start">
+            <span style="color:var(--critical-text);margin-top:1px;display:inline-flex">${ic('alert', 14)}</span>
+            <span style="font-size:13px;color:var(--critical-text);font-weight:500">${t.title}</span>
           </div>`).join('')}
       </div>`;
   }
@@ -2052,7 +2066,7 @@ function screenProfile() {
       <div class="profile-row"><span class="profile-row-label">${ic('shield', 18)}<span>Politique de confidentialité</span></span><span class="profile-row-value">›</span></div>
     </div>
     <div class="profile-section">
-      <div class="profile-row" style="color:var(--critique)"><span class="profile-row-label" style="color:var(--critique)">${ic('logout', 18)}<span>Se déconnecter</span></span></div>
+      <div class="profile-row" style="color:var(--critical-text)"><span class="profile-row-label" style="color:var(--critical-text)">${ic('logout', 18)}<span>Se déconnecter</span></span></div>
     </div>`;
 }
 
@@ -2061,7 +2075,7 @@ function screenFocus(device) {
   const task = TASKS[0];
   const innerContent = `
     <div style="margin-bottom:12px">
-      <span class="badge critique">Critique</span>
+      <span class="badge critical">Critique</span>
     </div>
     <div class="focus-ring">
       <div class="focus-timer">24:13</div>
@@ -2218,7 +2232,7 @@ function screenTrash(device) {
   const content = `
     <div class="section-title">Corbeille</div>
     <div class="section-subtitle">Les tâches supprimées sont conservées ${PLAN.retention} jours, puis effacées définitivement.</div>
-    <div class="trash-plan"><span>Offre ${PLAN.name} : conservation ${PLAN.retention} jours. Avec Premium : ${PLAN.premiumRetention} jours.</span><button class="btn-primary-sm" style="height:44px;padding:0 14px">Découvrir Premium</button></div>
+    <div class="trash-plan"><span>La durée de conservation dépend de votre offre.</span><button class="btn-primary-sm" style="height:44px;padding:0 14px">Voir les offres</button></div>
     ${TRASH.length ? `<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:4px 16px;box-shadow:var(--shadow-sm)">${rows}</div>
     <div style="margin-top:16px;text-align:center">${trashConfirm === 'all'
       ? `<span style="font-size:13px">Supprimer définitivement ${TRASH.length} tâche(s) ?</span> <button class="trash-btn danger" onclick="purge('all')">Confirmer</button><button class="trash-btn" onclick="askPurge(null)">Annuler</button>`
@@ -2494,3 +2508,5 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
+</body></html>

@@ -8,6 +8,8 @@ module.exports = {
   critical: '#EF4444',
   // Quadrant colors (global.css --color-<quadrant>), same in both themes:
   // only their -bg tint changes. For icons drawn in a quadrant's color.
+  // Except schedule, the primary color: light value here (folder palette
+  // test); icons take it per theme from useIconColors.
   quadrant: {
     critical: '#EF4444',
     schedule: '#4F46E5',
