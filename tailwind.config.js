@@ -24,6 +24,8 @@ module.exports = {
         // Text and icons on bg-primary (white in light, dark indigo in dark).
         'on-primary': token('on-primary'),
         success: token('success'),
+        // Icons and text on bg-success (the check of a done task).
+        'on-success': token('on-success'),
         page: token('page'),
         card: token('card'),
         // Background follows the theme; foreground colors are fixed.

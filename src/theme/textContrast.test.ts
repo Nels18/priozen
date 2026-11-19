@@ -80,12 +80,19 @@ describe.each(THEMES)('%s theme', (theme) => {
     );
   });
 
+  it('keeps the check mark visible on a checked box (3:1)', (): void => {
+    expect(
+      contrast(tokens['on-success'], tokens.success),
+    ).toBeGreaterThanOrEqual(MIN_MARK_CONTRAST);
+  });
+
   it('gives useIconColors the same colors as global.css', (): void => {
     const icons = ICON_COLORS[theme];
     expect({
       primary: icons.primary,
       primaryGradientEnd: icons.primaryGradientEnd,
       onPrimary: icons.onPrimary,
+      onSuccess: icons.onSuccess,
       schedule: icons.schedule,
       muted: icons.muted,
       criticalText: icons.criticalText,
@@ -95,6 +102,7 @@ describe.each(THEMES)('%s theme', (theme) => {
       primary: tokens.primary,
       primaryGradientEnd: tokens['primary-gradient-end'],
       onPrimary: tokens['on-primary'],
+      onSuccess: tokens['on-success'],
       schedule: tokens.schedule,
       muted: tokens.muted,
       criticalText: tokens['critical-text'],

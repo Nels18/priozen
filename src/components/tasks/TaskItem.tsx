@@ -51,7 +51,7 @@ export function TaskItem({
           task.isDone ? 'border-success bg-success' : 'border-muted'
         }`}
       >
-        {task.isDone && <Icon name="checkmark" size={12} color="white" />}
+        {task.isDone && <Icon name="checkmark" size={12} color="onSuccess" />}
       </Pressable>
 
       <Link href={editTaskRoute(task.id)} asChild>
