@@ -79,7 +79,11 @@ export function TextField({
           }}
           placeholderTextColor={iconColors.muted}
           textAlignVertical={multiline ? 'top' : 'center'}
-          className={`flex-1 px-3.5 py-2.5 font-sans text-sm text-text outline-none ${
+          // 16 px on the web: Safari on iPhone zooms into any field whose
+          // text is smaller, and the page stays zoomed (BUG-01). Not with
+          // maximum-scale=1 in the viewport: it would block pinch-zoom.
+          // leading-5 keeps the field's height.
+          className={`flex-1 px-3.5 py-2.5 font-sans text-sm text-text outline-none web:text-base web:leading-5 ${
             multiline ? 'min-h-20' : ''
           }`}
         />
