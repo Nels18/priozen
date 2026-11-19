@@ -62,7 +62,7 @@ Source de vérité du style : le design system https://claude.ai/artifact/NukmG4
 
 Déclarées comme variables CSS dans `global.css` (bascule light/dark automatique via `prefers-color-scheme`) et exposées en classes NativeWind dans `tailwind.config.js` : `bg-page`, `bg-card`, `bg-input`, `bg-sidebar`, `text-text`, `text-muted`, `border-border`, `bg-primary` / `primary-hover` / `primary-light` / `primary-gradient-end`, `text-on-primary`, et par quadrant `critical`, `schedule`, `delegate`, `secondary` (+ variante `-bg`, et `-text` pour critical, delegate et secondary). Toujours utiliser ces classes sémantiques, jamais de couleur en dur ni de variante `dark:`.
 
-- **Contraste (UX-07)** : tout texte ≥ 4,5:1, toute bordure de contrôle ou icône ≥ 3:1. **Tout texte rouge en `text-critical-text`** (de même `text-delegate-text`, `text-secondary-text`) : la couleur vive `critical`… reste pour les pastilles et bordures. `text-schedule` reste en `primary`, déjà conforme. Même règle pour une couleur brute (`useIconColors()`) : un texte rouge prend `criticalText` ; une icône peut garder `critical` (3,76:1 sur blanc, ≥ 3:1). **Tout texte ou icône sur `bg-primary` en `on-primary`** (`text-on-primary`, `color="onPrimary"`), jamais en blanc. Case à cocher non cochée : bordure `border-muted`. `src/theme/textContrast.test.ts` vérifie chaque paire texte/fond dans les deux thèmes (lue dans `global.css`), la synchronisation de `useIconColors()` et l'absence de `text-critical` / `text-delegate` / `text-secondary`
+- **Contraste (UX-07)** : tout texte ≥ 4,5:1, toute bordure de contrôle ou icône ≥ 3:1. **Tout texte rouge en `text-critical-text`** (de même `text-delegate-text`, `text-secondary-text`) : la couleur vive `critical`… reste pour les pastilles et bordures. `text-schedule` reste en `primary`, déjà conforme. Même règle pour une couleur brute (`useIconColors()`) : un texte rouge prend `criticalText` ; une icône peut garder `critical` (3,76:1 sur blanc, ≥ 3:1). **Tout texte ou icône sur `bg-primary` en `on-primary`** (`text-on-primary`, `color="onPrimary"`), jamais en blanc. Case à cocher non cochée : bordure `border-muted`. `src/theme/textContrast.test.ts` vérifie chaque paire texte/fond dans les deux thèmes (lue dans `global.css`) et la synchronisation de `useIconColors()` ; une règle ESLint refuse `text-critical` / `text-delegate` / `text-secondary` sans suffixe
 - Barre de progression : dégradé de `primary` à `primary-gradient-end` (90°) avec `expo-linear-gradient`, couleurs tirées de `useIconColors()`
 
 - Couleurs identiques dans les deux thèmes (blanc, premier plan de la sidebar) : `src/theme/fixedColors.js`, utilisé par `tailwind.config.js` (`text-sidebar-text`, `bg-sidebar-active`…) et par les composants qui attendent une couleur brute
@@ -72,7 +72,7 @@ Déclarées comme variables CSS dans `global.css` (bascule light/dark automatiqu
 
 ## Maquette
 
-Maquette de référence (responsive mobile / tablette / bureau) : **`design/maquettes/index.html`**, à lire avant de coder un écran (onglets Mobile / Tablette / Bureau, clair et sombre). C'est une copie de l'artefact https://claude.ai/artifact/9VQRagpRfadYQL5Hrg4AUt, où se fait la conception : à recopier après chaque mise à jour de la maquette, avec ses fichiers `modal.css` et `modal.js` (modale « Nouvelle tâche »), en remplaçant le vrai nom par l'utilisateur fictif. Dossier exclu de Prettier et d'ESLint, pour que le diff d'une nouvelle copie reste lisible.
+Maquette de référence (responsive mobile / tablette / bureau) : **`design/maquettes/index.html`**, à lire avant de coder un écran (onglets Mobile / Tablette / Bureau, clair et sombre). C'est une copie de l'artefact https://claude.ai/artifact/9VQRagpRfadYQL5Hrg4AUt, où se fait la conception : à recopier après chaque mise à jour de la maquette, avec ses fichiers `modal.css` et `modal.js` (modale « Nouvelle tâche »), en remplaçant le vrai nom par l'utilisateur fictif et en retirant l'enveloppe ajoutée par l'export (`<!doctype html><html><head>…` avant le vrai `<!DOCTYPE html>`, `</body></html>` en trop à la fin). Dossier exclu de Prettier et d'ESLint, pour que le diff d'une nouvelle copie reste lisible.
 
 Décisions de design (maquette ; livrées par MOB-01 et DASH-06) :
 
@@ -139,8 +139,9 @@ Vues :
 - Les mocks importent les types depuis `src/types/models.ts` ; le code de l'app n'importe **jamais** depuis `src/mocks/`
 - Tests : URL d'API `TEST_API_URL` (`src/test/constants.ts`) ; les valeurs attendues des assertions restent écrites en dur
 - Composants en PascalCase, hooks en camelCase avec préfixe `use`
-- ESLint (`eslint.config.js`) fait respecter quatre de ces règles :
+- ESLint (`eslint.config.js`) fait respecter cinq de ces règles :
   - pas de couleur hexadécimale ni de variante `dark:` dans une prop `*ClassName` (sauf `src/theme/**`) ;
+  - pas de `text-critical`, `text-delegate` ni `text-secondary` sans suffixe, dans toute chaîne (constantes comprises) : le message indique la classe `-text` à utiliser ;
   - pas de texte brut affiché dans le JSX (`i18next/no-literal-string`, sauf tests et `src/mocks/**`) : tout texte passe par `t()`, un nom de marque passe par une constante nommée (cf. `Logo`) ;
   - pas d'URL `http(s)://` écrite en dur (sauf tests, `src/test/**` et `src/mocks/**`) ;
   - pas d'import de `@expo/vector-icons` hors du composant `Icon`

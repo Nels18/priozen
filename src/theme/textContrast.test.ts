@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
@@ -101,27 +101,5 @@ describe.each(THEMES)('%s theme', (theme) => {
       delegateText: tokens['delegate-text'],
       secondaryText: tokens['secondary-text'],
     });
-  });
-});
-
-// The bright quadrant colors are for dots and borders: text in red, amber
-// or gray must use the -text shade (text-critical-text…).
-const SCANNED_DIRS = ['app', 'src'];
-const BRIGHT_TEXT = /\btext-(critical|delegate|secondary)(?![\w-])/;
-
-const findBrightText = (dir: string): string[] =>
-  readdirSync(join(ROOT, dir), { recursive: true, encoding: 'utf8' })
-    .filter((path) => /\.tsx?$/.test(path) && !path.includes('.test.'))
-    .flatMap((path) =>
-      readFileSync(join(ROOT, dir, path), 'utf8')
-        .split('\n')
-        .flatMap((line, index) =>
-          BRIGHT_TEXT.test(line) ? [`${dir}/${path}:${index + 1}`] : [],
-        ),
-    );
-
-describe('quadrant text classes', () => {
-  it('never uses text-critical, text-delegate or text-secondary', (): void => {
-    expect(SCANNED_DIRS.flatMap(findBrightText)).toEqual([]);
   });
 });
