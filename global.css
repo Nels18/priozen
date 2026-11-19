@@ -14,7 +14,7 @@
   --color-primary-light: 238 242 255; /* #EEF2FF */
   /* Text and icons on a primary background (buttons, "+" button, avatar). */
   --color-on-primary: 255 255 255; /* #FFFFFF */
-  /* End of the progress bar gradient (primary → this), both themes. */
+  /* End of the progress bar gradient (primary → this). */
   --color-primary-gradient-end: 129 140 248; /* #818CF8 */
   --color-success: 16 185 129; /* #10B981 */
   --color-page: 249 250 251; /* #F9FAFB */
@@ -48,6 +48,8 @@
     --color-primary-light: 30 27 75; /* #1E1B4B */
     /* White on the light indigo is 2.98:1: dark indigo instead. */
     --color-on-primary: 30 27 75; /* #1E1B4B */
+    /* Primary is already #818CF8 here: a lighter end keeps a visible gradient. */
+    --color-primary-gradient-end: 165 180 252; /* #A5B4FC */
     --color-page: 10 9 24; /* #0A0918 */
     --color-card: 19 17 31; /* #13111F */
     --color-sidebar: 10 9 24; /* #0A0918 */

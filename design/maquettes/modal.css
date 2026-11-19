@@ -4,9 +4,9 @@
    ============================================================ */
 :root { --text-soft: #55657A; --err: var(--critical-text); }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --text-soft: #94A3B8; --err: #F87171; --on-primary: #0A0918; }
+  :root:not([data-theme="light"]) { --text-soft: #94A3B8; }
 }
-:root[data-theme="dark"] { --text-soft: #94A3B8; --err: #F87171; --on-primary: #0A0918; }
+:root[data-theme="dark"] { --text-soft: #94A3B8; }
 
 .tablet-frame, .desktop-frame { position: relative; }
 .phone-notch { z-index: 60; }

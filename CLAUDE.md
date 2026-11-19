@@ -53,7 +53,7 @@ Workflows EAS (`.eas/workflows/`) :
 | `--text-muted`           | #64748B | #94A3B8 |
 | `--border`               | #E2E8F0 | #312E81 |
 | `--on-primary`           | #FFFFFF | #1E1B4B |
-| `--primary-gradient-end` | #818CF8 | #818CF8 |
+| `--primary-gradient-end` | #818CF8 | #A5B4FC |
 | `--critical-text`        | #B91C1C | #EF4444 |
 | `--delegate-text`        | #B45309 | #F59E0B |
 | `--secondary-text`       | #475569 | #94A3B8 |

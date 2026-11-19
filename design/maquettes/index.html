@@ -32,6 +32,7 @@
   --delegate-text: #B45309;
   --secondary-text: #475569;
   --primary-gradient-end: #818CF8;
+  --on-success: #1E1B4B;
   --text-primary: #1E293B;
   --text-muted: #64748B;
   --border: #E2E8F0;
@@ -68,6 +69,7 @@
     --critical-text: #EF4444;
     --delegate-text: #F59E0B;
     --secondary-text: #94A3B8;
+    --primary-gradient-end: #A5B4FC;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
   }
@@ -92,6 +94,7 @@
   --critical-text: #EF4444;
   --delegate-text: #F59E0B;
   --secondary-text: #94A3B8;
+  --primary-gradient-end: #A5B4FC;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
 }
@@ -589,7 +592,7 @@ body {
   justify-content: center;
   transition: all 0.15s;
 }
-.task-check.done { background: var(--success); border-color: var(--success); color: #fff; font-size: 12px; }
+.task-check.done { background: var(--success); border-color: var(--success); color: var(--on-success); font-size: 12px; }
 .task-body { flex: 1; min-width: 0; }
 .task-title {
   font-size: 14px;
@@ -1331,7 +1334,7 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
           <div class="sidebar-avatar">MD</div>
           <div class="sidebar-user-info">
             <div class="sidebar-user-name">Martin Dupont</div>
-            <div class="sidebar-user-email">martin@priozen.app</div>
+            <div class="sidebar-user-email">martin.dupont@exemple.fr</div>
           </div>
         </div>
       </div>
@@ -1360,7 +1363,7 @@ body.sim-tablet .quadrant-grid-2x2 { grid-template-columns: 1fr; }
           <div class="sidebar-avatar">MD</div>
           <div class="sidebar-user-info">
             <div class="sidebar-user-name">Martin Dupont</div>
-            <div class="sidebar-user-email">martin@priozen.app</div>
+            <div class="sidebar-user-email">martin.dupont@exemple.fr</div>
           </div>
         </div>
       </div>
@@ -1935,7 +1938,7 @@ function screenLogin() {
       <div class="auth-tagline">Gérez vos priorités avec méthode</div>
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-input" type="email" value="martin@priozen.app" placeholder="vous@exemple.com">
+        <input class="form-input" type="email" value="martin.dupont@exemple.fr" placeholder="vous@exemple.com">
       </div>
       <div class="form-group">
         <label class="form-label">Mot de passe</label>
@@ -1963,7 +1966,7 @@ function screenRegister() {
       </div>
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-input" type="email" value="martin@priozen.app" placeholder="vous@exemple.com">
+        <input class="form-input" type="email" value="martin.dupont@exemple.fr" placeholder="vous@exemple.com">
       </div>
       <div class="form-group">
         <label class="form-label">Mot de passe</label>
@@ -1987,7 +1990,7 @@ function screenForgot() {
       <div class="auth-tagline">Entrez votre email pour recevoir un lien de réinitialisation</div>
       <div class="form-group">
         <label class="form-label">Email</label>
-        <input class="form-input" type="email" value="martin@priozen.app" placeholder="vous@exemple.com">
+        <input class="form-input" type="email" value="martin.dupont@exemple.fr" placeholder="vous@exemple.com">
       </div>
       <button class="btn-primary">Envoyer le lien</button>
       <div class="auth-link"><a onclick="switchScreen('login')">← Retour à la connexion</a></div>
@@ -2047,7 +2050,7 @@ function screenProfile() {
     <div style="padding-bottom:24px">
       <div class="profile-avatar-big">MD</div>
       <div class="profile-name-big">Martin Dupont</div>
-      <div class="profile-email">martin@priozen.app</div>
+      <div class="profile-email">martin.dupont@exemple.fr</div>
     </div>
     <div class="profile-section">
       <div class="profile-row"><span class="profile-row-label">${ic('pen', 18)}<span>Modifier le profil</span></span><span class="profile-row-value">›</span></div>
@@ -2359,7 +2362,7 @@ function renderTablet() {
             <div class="sidebar-avatar">MD</div>
             <div class="sidebar-user-info">
               <div class="sidebar-user-name">Martin Dupont</div>
-              <div class="sidebar-user-email">martin@priozen.app</div>
+              <div class="sidebar-user-email">martin.dupont@exemple.fr</div>
             </div>
           </div>
         </div>
@@ -2428,7 +2431,7 @@ function renderDesktop() {
             <div class="sidebar-avatar">MD</div>
             <div class="sidebar-user-info">
               <div class="sidebar-user-name">Martin Dupont</div>
-              <div class="sidebar-user-email">martin@priozen.app</div>
+              <div class="sidebar-user-email">martin.dupont@exemple.fr</div>
             </div>
           </div>
         </div>

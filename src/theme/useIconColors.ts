@@ -31,7 +31,7 @@ export const ICON_COLORS = {
   },
   dark: {
     primary: '#818CF8',
-    primaryGradientEnd: '#818CF8',
+    primaryGradientEnd: '#A5B4FC',
     onPrimary: '#1E1B4B',
     schedule: '#818CF8',
     muted: '#94A3B8',
