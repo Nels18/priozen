@@ -46,6 +46,7 @@ Workflows EAS (`.eas/workflows/`) :
 | `--primary`              | #4F46E5 | #818CF8 |
 | `--primary-hover`        | #4338CA | #6366F1 |
 | `--success`              | #10B981 | #10B981 |
+| `--on-success`           | #1E1B4B | #1E1B4B |
 | `--bg-page`              | #F9FAFB | #0A0918 |
 | `--bg-card`              | #FFFFFF | #13111F |
 | `--bg-sidebar`           | #1E1B4B | #0A0918 |
@@ -62,7 +63,7 @@ Source de vérité du style : le design system https://claude.ai/artifact/NukmG4
 
 Déclarées comme variables CSS dans `global.css` (bascule light/dark automatique via `prefers-color-scheme`) et exposées en classes NativeWind dans `tailwind.config.js` : `bg-page`, `bg-card`, `bg-input`, `bg-sidebar`, `text-text`, `text-muted`, `border-border`, `bg-primary` / `primary-hover` / `primary-light` / `primary-gradient-end`, `text-on-primary`, et par quadrant `critical`, `schedule`, `delegate`, `secondary` (+ variante `-bg`, et `-text` pour critical, delegate et secondary). Toujours utiliser ces classes sémantiques, jamais de couleur en dur ni de variante `dark:`.
 
-- **Contraste (UX-07)** : tout texte ≥ 4,5:1, toute bordure de contrôle ou icône ≥ 3:1. **Tout texte rouge en `text-critical-text`** (de même `text-delegate-text`, `text-secondary-text`) : la couleur vive `critical`… reste pour les pastilles et bordures. `text-schedule` reste en `primary`, déjà conforme. Même règle pour une couleur brute (`useIconColors()`) : un texte rouge prend `criticalText` ; une icône peut garder `critical` (3,76:1 sur blanc, ≥ 3:1). **Tout texte ou icône sur `bg-primary` en `on-primary`** (`text-on-primary`, `color="onPrimary"`), jamais en blanc. Case à cocher non cochée : bordure `border-muted`. `src/theme/textContrast.test.ts` vérifie chaque paire texte/fond dans les deux thèmes (lue dans `global.css`) et la synchronisation de `useIconColors()` ; une règle ESLint refuse `text-critical` / `text-delegate` / `text-secondary` sans suffixe
+- **Contraste (UX-07)** : tout texte ≥ 4,5:1, toute bordure de contrôle ou icône ≥ 3:1. **Tout texte rouge en `text-critical-text`** (de même `text-delegate-text`, `text-secondary-text`) : la couleur vive `critical`… reste pour les pastilles et bordures. `text-schedule` reste en `primary`, déjà conforme. Même règle pour une couleur brute (`useIconColors()`) : un texte rouge prend `criticalText` ; une icône peut garder `critical` (3,76:1 sur blanc, ≥ 3:1). **Tout texte ou icône sur `bg-primary` en `on-primary`** (`text-on-primary`, `color="onPrimary"`), jamais en blanc. Case à cocher non cochée : bordure `border-muted` ; cochée : fond `bg-success`, coche en `on-success` (`color="onSuccess"`, 6,3:1), jamais en blanc (2,54:1). `src/theme/textContrast.test.ts` vérifie chaque paire texte/fond dans les deux thèmes (lue dans `global.css`) et la synchronisation de `useIconColors()` ; une règle ESLint refuse `text-critical` / `text-delegate` / `text-secondary` sans suffixe
 - Barre de progression : dégradé de `primary` à `primary-gradient-end` (90°) avec `expo-linear-gradient`, couleurs tirées de `useIconColors()`
 
 - Couleurs identiques dans les deux thèmes (blanc, premier plan de la sidebar) : `src/theme/fixedColors.js`, utilisé par `tailwind.config.js` (`text-sidebar-text`, `bg-sidebar-active`…) et par les composants qui attendent une couleur brute

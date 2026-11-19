@@ -20,6 +20,8 @@ module.exports = {
   scrim: 'rgba(10, 9, 24, 0.5)',
   // Success green (global.css --color-success), same in both themes.
   success: '#10B981',
+  // Check mark on success (global.css --color-on-success), same in both themes.
+  onSuccess: '#1E1B4B',
   // Toasts stay dark in both themes (mockup): background, action link and
   // countdown bar.
   toast: {

@@ -8,6 +8,7 @@ const SHARED_COLORS = {
   critical: fixedColors.critical,
   white: fixedColors.white,
   success: fixedColors.success,
+  onSuccess: fixedColors.onSuccess,
   // Sidebar foreground: the sidebar stays dark in both themes.
   sidebarText: fixedColors.sidebar.text,
   // Quadrant colors, named after the quadrant (critical is the red above;
