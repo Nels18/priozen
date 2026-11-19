@@ -2,11 +2,11 @@
    MODALE « NOUVELLE TÂCHE » (TASK-01)
    Réutilise les tokens de la page ; ajoute 3 tokens locaux.
    ============================================================ */
-:root { --text-soft: #55657A; --err: #B91C1C; --on-primary: #FFFFFF; }
+:root { --text-soft: #55657A; --err: var(--critical-text); }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --text-soft: #94A3B8; --err: #F87171; --on-primary: #0A0918; }
+  :root:not([data-theme="light"]) { --text-soft: #94A3B8; }
 }
-:root[data-theme="dark"] { --text-soft: #94A3B8; --err: #F87171; --on-primary: #0A0918; }
+:root[data-theme="dark"] { --text-soft: #94A3B8; }
 
 .tablet-frame, .desktop-frame { position: relative; }
 .phone-notch { z-index: 60; }
@@ -62,7 +62,7 @@
 }
 .m-input:focus { border-color: var(--primary); }
 .m-input::placeholder { color: var(--text-soft); }
-.m-input.has-error { border-color: var(--critique); }
+.m-input.has-error { border-color: var(--critical); }
 textarea.m-input { height: 76px; padding: 12px 14px; line-height: 1.4; resize: none; }
 .m-error { display: flex; align-items: center; gap: 6px; margin: 6px 0 0; font-size: 12px; color: var(--err); }
 .m-error[hidden] { display: none; }

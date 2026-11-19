@@ -141,14 +141,14 @@ function submitModal(event) {
 function modalHTML(state) {
   const hasError = state === 'error';
   const v = state === 'filled'
-    ? { title: 'Préparer la réunion client', desc: 'Envoyer le support avant jeudi et préparer les questions.', due: '12/11/2026', folder: 'Travail', q: 'critique' }
+    ? { title: 'Préparer la réunion client', desc: 'Envoyer le support avant jeudi et préparer les questions.', due: '12/11/2026', folder: 'Travail', q: 'critical' }
     : { title: '', desc: '', due: '', folder: 'Aucun', q: 'schedule' };
 
   const src = state === 'filled' && editId !== null ? TASKS.find((x) => x.id === editId) : null;
   if (src) { v.title = src.title; v.desc = src.description || ''; v.folder = src.folder || 'Aucun'; v.q = src.quadrant; }
 
   const quadrants = [
-    { key: 'critique', label: 'Critique', desc: 'Urgent et important', c: '--critique', bg: '--critique-bg' },
+    { key: 'critical', label: 'Critique', desc: 'Urgent et important', c: '--critical', bg: '--critical-bg' },
     { key: 'schedule', label: 'À planifier', desc: 'Important, pas urgent', c: '--primary', bg: '--schedule-bg' },
     { key: 'delegate', label: 'À déléguer', desc: 'Urgent, pas important', c: '--delegate', bg: '--delegate-bg' },
     { key: 'secondary', label: 'Secondaire', desc: 'Ni urgent ni important', c: '--secondary-c', bg: '--secondary-bg' }

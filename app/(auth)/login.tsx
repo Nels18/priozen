@@ -51,7 +51,7 @@ export default function LoginScreen(): JSX.Element {
           className="mb-4 flex-row items-center gap-2 rounded-sm border border-critical/40 bg-critical-bg px-3.5 py-2.5"
         >
           <Icon name="warning-outline" size={16} color="critical" />
-          <Text className="flex-1 font-sans text-caption text-critical">
+          <Text className="flex-1 font-sans text-caption text-critical-text">
             {t(submitError)}
           </Text>
         </View>

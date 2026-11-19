@@ -47,7 +47,8 @@ export function TaskItem({
         hitSlop={12}
         onPress={() => onToggleDone(task)}
         className={`mt-0.5 h-5 w-5 items-center justify-center rounded-full border-2 ${
-          task.isDone ? 'border-success bg-success' : 'border-border'
+          // Unchecked: muted border, 4.5:1 on the card (border was 1.2:1).
+          task.isDone ? 'border-success bg-success' : 'border-muted'
         }`}
       >
         {task.isDone && <Icon name="checkmark" size={12} color="white" />}

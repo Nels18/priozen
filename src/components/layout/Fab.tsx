@@ -19,7 +19,7 @@ export function Fab({ label, onPress, bottom }: FabProps): JSX.Element {
       style={{ bottom }}
       className="absolute right-5 h-[52px] w-[52px] items-center justify-center rounded-full bg-primary shadow-lg active:bg-primary-hover"
     >
-      <Icon name="add" size={28} color="white" />
+      <Icon name="add" size={28} color="onPrimary" />
     </Pressable>
   );
 }

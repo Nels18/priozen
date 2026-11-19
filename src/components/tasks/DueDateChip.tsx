@@ -6,7 +6,7 @@ import { getDueDateDisplay } from '@/src/tasks/dueDate';
 import { formatShortDate } from '@/src/utils/format';
 
 const TONE_CLASSES: Record<DueDateStatus, string> = {
-  overdue: 'bg-critical-bg text-critical',
+  overdue: 'bg-critical-bg text-critical-text',
   today: 'bg-schedule-bg text-primary',
   upcoming: 'bg-secondary-bg text-muted',
 };

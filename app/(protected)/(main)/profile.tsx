@@ -12,7 +12,7 @@ export default function ProfileScreen(): JSX.Element {
   return (
     <ScreenPlaceholder ticket="PROF-01">
       <Pressable accessibilityRole="button" onPress={signOut} className="mt-4">
-        <Text className="font-sans-medium text-caption text-critical">
+        <Text className="font-sans-medium text-caption text-critical-text">
           {t('signOut')}
         </Text>
       </Pressable>

@@ -16,11 +16,13 @@ interface QuadrantClasses {
 // Single place mapping each quadrant to its theme colors (global.css tokens).
 // Full literal class names so Tailwind finds them when scanning the code.
 // Labels live in the "tasks" i18n namespace: t(`quadrants.${quadrant}`).
+// Text uses the -text shade (4.5:1) where the bright color is too light;
+// dots and borders keep the bright one. Indigo text already reaches 4.5:1.
 export const QUADRANT_CLASSES: Record<EisenhowerQuadrant, QuadrantClasses> = {
   critical: {
     dot: 'bg-critical',
-    badge: 'bg-critical-bg text-critical',
-    text: 'text-critical',
+    badge: 'bg-critical-bg text-critical-text',
+    text: 'text-critical-text',
     selected: 'border-critical bg-critical-bg',
   },
   schedule: {
@@ -31,14 +33,14 @@ export const QUADRANT_CLASSES: Record<EisenhowerQuadrant, QuadrantClasses> = {
   },
   delegate: {
     dot: 'bg-delegate',
-    badge: 'bg-delegate-bg text-delegate',
-    text: 'text-delegate',
+    badge: 'bg-delegate-bg text-delegate-text',
+    text: 'text-delegate-text',
     selected: 'border-delegate bg-delegate-bg',
   },
   secondary: {
     dot: 'bg-secondary',
-    badge: 'bg-secondary-bg text-secondary',
-    text: 'text-secondary',
+    badge: 'bg-secondary-bg text-secondary-text',
+    text: 'text-secondary-text',
     selected: 'border-secondary bg-secondary-bg',
   },
 };

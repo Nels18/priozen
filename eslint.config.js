@@ -35,6 +35,25 @@ const THEME_COLOR_RESTRICTIONS = [
   },
 ];
 
+/**
+ * Text in a quadrant color takes the -text token (4.5:1, UX-07): text-critical
+ * and co. are the bright colors meant for dots and borders. Checked in every
+ * string, not only className, since class names also live in constants
+ * (QUADRANT_CLASSES). A prefix such as active: or a /50 opacity still matches.
+ */
+const QUADRANT_TEXT_RESTRICTIONS = [
+  'critical',
+  'delegate',
+  'secondary',
+].flatMap((color) => {
+  const pattern = `(^|[\\s:])text-${color}(?![\\w-])`;
+  const message = `Use text-${color}-text for text: text-${color} is the bright ${color} color, too light for text (dots and borders only).`;
+  return [
+    { selector: `Literal[value=/${pattern}/]`, message },
+    { selector: `TemplateElement[value.raw=/${pattern}/]`, message },
+  ];
+});
+
 /** URLs come from env variables (EXPO_PUBLIC_API_URL) or route constants. */
 const HARDCODED_URL_RESTRICTIONS = [
   {
@@ -159,6 +178,7 @@ module.exports = defineConfig([
       'no-restricted-syntax': [
         'error',
         ...THEME_COLOR_RESTRICTIONS,
+        ...QUADRANT_TEXT_RESTRICTIONS,
         ...HARDCODED_URL_RESTRICTIONS,
       ],
     },
@@ -186,14 +206,22 @@ module.exports = defineConfig([
     // Raw colors are allowed where the theme is defined.
     files: ['src/theme/**'],
     rules: {
-      'no-restricted-syntax': ['error', ...HARDCODED_URL_RESTRICTIONS],
+      'no-restricted-syntax': [
+        'error',
+        ...QUADRANT_TEXT_RESTRICTIONS,
+        ...HARDCODED_URL_RESTRICTIONS,
+      ],
     },
   },
   {
     // Tests and mocks need fake URLs (test host, mocked API).
     files: TEST_AND_MOCK_FILES,
     rules: {
-      'no-restricted-syntax': ['error', ...THEME_COLOR_RESTRICTIONS],
+      'no-restricted-syntax': [
+        'error',
+        ...THEME_COLOR_RESTRICTIONS,
+        ...QUADRANT_TEXT_RESTRICTIONS,
+      ],
     },
   },
   {

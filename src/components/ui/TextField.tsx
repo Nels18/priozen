@@ -112,7 +112,7 @@ export function TextField({
           className="mt-1.5 flex-row items-center gap-1.5"
         >
           <Icon name="alert-circle-outline" size={14} color="critical" />
-          <Text className="flex-1 font-sans text-xs text-critical">
+          <Text className="flex-1 font-sans text-xs text-critical-text">
             {error}
           </Text>
         </View>

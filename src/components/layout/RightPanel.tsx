@@ -87,7 +87,7 @@ function SummaryContent({ summary }: { summary: TaskSummary }): JSX.Element {
               className="mb-2 flex-row items-start gap-2 rounded-sm bg-critical-bg px-3 py-2.5"
             >
               <Icon name="warning-outline" size={14} color="critical" />
-              <Text className="flex-1 font-sans-medium text-caption text-critical">
+              <Text className="flex-1 font-sans-medium text-caption text-critical-text">
                 {task.title}
               </Text>
             </View>
@@ -112,7 +112,7 @@ export function RightPanel(): JSX.Element {
         <ActivityIndicator accessibilityLabel={t('rightPanel.loading')} />
       )}
       {summary.isError && (
-        <Text className="font-sans text-caption text-critical">
+        <Text className="font-sans text-caption text-critical-text">
           {t('rightPanel.loadError')}
         </Text>
       )}

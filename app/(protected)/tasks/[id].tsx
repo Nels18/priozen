@@ -46,7 +46,7 @@ export default function EditTaskScreen(): JSX.Element {
         <View className="items-start gap-4 pb-10 pt-4">
           <Text
             accessibilityRole="alert"
-            className="font-sans text-sm text-critical"
+            className="font-sans text-sm text-critical-text"
           >
             {t('form.loadFailed')}
           </Text>
